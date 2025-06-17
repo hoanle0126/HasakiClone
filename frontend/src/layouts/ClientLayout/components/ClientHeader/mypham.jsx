@@ -1,0 +1,55 @@
+export const MyPhamList = [
+  {
+    title: "Nước Hoa Cao Cấp",
+    children: [
+      { title: "Armaf" },
+      { title: "Calvin Klein" },
+      { title: "Carolina Herrera" },
+      { title: "Chloé" },
+      { title: "Giorgio Armani" },
+      { title: "Issey Miyake" },
+      { title: "Lancôme" },
+      { title: "Marc Jacobs" },
+      { title: "MCM" },
+      { title: "Moschino" },
+      { title: "Narciso Rodriguez" },
+      { title: "Tommy Hilfiger" },
+      { title: "Versace" },
+      { title: "Yves Saint Laurent" },
+      { title: "Paco Rabanne" },
+    ],
+  },
+  {
+    title: "Mỹ Phẩm Cao Cấp",
+    children: [
+      { title: "Elasten" },
+      { title: "Elixir" },
+      { title: "L'Oreal Professionnel" },
+      { title: "Martiderm" },
+      { title: "Marvis" },
+      { title: "Obagi" },
+    ],
+  },
+  {
+    title: "Mỹ Phẩm Cao Cấp",
+    children: [
+      { title: "Elasten" },
+      { title: "Elixir" },
+      { title: "L'Oreal Professionnel" },
+      { title: "Martiderm" },
+      { title: "Marvis" },
+      { title: "Obagi" },
+    ],
+  },
+  {
+    title: "Mỹ Phẩm Cao Cấp",
+    children: [
+      { title: "Elasten" },
+      { title: "Elixir" },
+      { title: "L'Oreal Professionnel" },
+      { title: "Martiderm" },
+      { title: "Marvis" },
+      { title: "Obagi" },
+    ],
+  },
+];
