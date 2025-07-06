@@ -58,16 +58,17 @@ export const logout = () => async (dispatch) => {
 export const getUser = () => async (dispatch) => {
   dispatch({ type: GET_USER_REQUEST });
   axiosClient.get("/user").then((data) => {
-    console.log(data.data);
+    console.log("User: ", data.data);
     dispatch({ type: GET_USER_SUCCESS, payload: data.data });
   });
 };
 
 export const addCart = (cart) => async (dispatch) => {
   dispatch({ type: ADD_CART_REQUEST });
-  axiosClient
+  await axiosClient
     .post("/carts", cart)
     .then((data) => {
+    console.log("User: ", data.data);
       dispatch({ type: ADD_CART_SUCCESS, payload: data.data });
     })
     .catch((e) => {

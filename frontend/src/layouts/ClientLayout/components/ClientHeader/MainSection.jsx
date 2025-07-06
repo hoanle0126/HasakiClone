@@ -5,6 +5,7 @@ import { MuiTheme } from "@/theme";
 import { Icon } from "@iconify/react";
 import {
   AppBar,
+  Badge,
   Button,
   ButtonBase,
   Popover,
@@ -177,11 +178,15 @@ const MainSection = () => {
           </Stack>
         </Stack>
         <Stack justifyContent="end" height="100%">
-          <Icon
-            icon="solar:cart-large-minimalistic-linear"
-            width="32"
-            height="32"
-          />
+          <Link to="/checkout/cart">
+            <Badge badgeContent={user.cart?.length || 0} color="error">
+              <Icon
+                icon="solar:cart-large-minimalistic-linear"
+                width="32"
+                height="32"
+              />
+            </Badge>
+          </Link>
         </Stack>
       </Stack>
       <Popover

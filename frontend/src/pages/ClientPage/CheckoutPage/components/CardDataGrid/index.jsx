@@ -1,31 +1,24 @@
-import { Box, Button, Stack, useMediaQuery } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useContext } from "react";
+import React, { useRef } from "react";
 import DataGridHeader from "./DataGridHeader";
 import DataGridToolbar from "./DataGridToolbar";
 import { MuiTheme } from "@/Theme";
-import { typography } from "@/Theme/elements/typography";
-import { Icon } from "@iconify/react";
-import { useStateContext } from "../../../../../Context";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CardDataGrid = () => {
-  const { cart, setCart } = useStateContext();
-  const navigate = useNavigate();
-  const [products, setProducts] = React.useState(cart.products);
-  const downSm = useMediaQuery(MuiTheme().breakpoints.down("sm"));
+  const { user } = useSelector((store) => store.user);
+  // const navigate = useNavigate();
+  const [products, setProducts] = React.useState(user?.cart);
 
-  React.useEffect(() => {
-    setCart({ ...cart, products: products });
-  }, [products]);
+  React.useEffect(() => console.log(user.cart));
 
   return (
     <>
       <Box>
         <DataGrid
-          rows={cart.products}
-          columns={DataGridHeader(products, setProducts)
-          }
+          rows={user?.cart || []}
+          columns={DataGridHeader(products, setProducts)}
           hideFooter
           rowHeight={120}
           disableColumnSorting
@@ -35,7 +28,7 @@ const CardDataGrid = () => {
             toolbar: DataGridToolbar,
           }}
           sx={{
-            border:"none",
+            border: "none",
             outline: "none",
             backgroundColor: "background.paper",
             "--unstable_DataGrid-headWeight": 500,
@@ -55,7 +48,7 @@ const CardDataGrid = () => {
             "& .MuiDataGrid-columnHeader": {
               cursor: "default",
               color: "text.secondary",
-              backgroundColor:"background.neutral",
+              backgroundColor: "background.neutral",
               "&:focus": {
                 outline: "none",
               },

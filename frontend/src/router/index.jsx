@@ -20,8 +20,8 @@ import HotDealsPage from "@/pages/AdminPage/HotDealsPage";
 import FlashDealsPage from "@/pages/AdminPage/FlashDealsPage";
 import HotDealsAddPage from "@/pages/AdminPage/HotDealsPage/AddPage";
 import HotDealsViewPage from "@/pages/AdminPage/HotDealsPage/ViewPage";
-import OrderClientPage from "@/pages/ClientPage/OrderPage";
 import ProductDetail from "@/pages/ClientPage/ProductDetail";
+import CheckoutPage from "@/pages/ClientPage/CheckoutPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -33,12 +33,12 @@ export const MainRouter = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "/checkouts",
-        element: <OrderClientPage />,
-      },
-      {
         path: "/san-pham/:id",
         element: <ProductDetail />,
+      },
+      {
+        path: "/checkout/cart",
+        element: <CheckoutPage />,
       },
     ],
   },

@@ -1,12 +1,11 @@
 import { formatCurrency } from "@/Function/formatCurrency";
+import { addCart } from "@/store/users/action";
 import { Icon } from "@iconify/react";
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
-import { useStateContext } from "../../../../../Context";
+import { useDispatch, useSelector } from "react-redux";
 
 function RenderProduct({ row }) {
-  const { language } = useStateContext();
-
   return (
     <Box
       sx={{
@@ -17,10 +16,7 @@ function RenderProduct({ row }) {
         paddingY: "8px",
       }}
     >
-      <img
-        src={row.thumbnail}
-        className="h-full object-cover aspect-square"
-      />
+      <img src={row.thumbnail} className="h-full object-cover aspect-square" />
       <Stack
         sx={{
           justifyContent: "flex-start",
@@ -28,9 +24,7 @@ function RenderProduct({ row }) {
           width: "100%",
         }}
       >
-        <Typography variant="subtitle2">
-          asdasd
-        </Typography>
+        <Typography variant="subtitle2">{row.brand.name}</Typography>
         <Typography
           variant="body2"
           sx={{
@@ -45,7 +39,7 @@ function RenderProduct({ row }) {
             width: "100%",
           }}
         >
-          asdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsadasdsadsad
+          {row.name}
         </Typography>
         <Button
           size="small"
@@ -59,33 +53,30 @@ function RenderProduct({ row }) {
 }
 
 function RenderQuantity(props) {
-  const { row, rows, setRows } = props;
+  const { row } = props;
+  const productRef = React.useRef(row);
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = React.useState(row.quantity_cart);
 
-  function addQuantity() {
-    setRows((preCarts) => {
-      const updateCarts = preCarts.map((cart) => {
-        if (cart.id == row.id) {
-          return { ...cart, quantity_cart: cart.quantity_cart + 1 };
-        }
-        return cart;
-      });
+  const addQuantity = async () => {
+    await dispatch(
+      addCart({
+        product: row.id,
+        quantity: 1,
+      })
+    );
+    setQuantity((prev) => prev + 1);
+  };
 
-      return updateCarts;
-    });
-  }
-
-  function decQuantity() {
-    setRows((preCarts) => {
-      const updateCarts = preCarts.map((cart) => {
-        if (cart.id == row.id) {
-          return { ...cart, quantity_cart: cart.quantity_cart - 1 };
-        }
-        return cart;
-      });
-
-      return updateCarts;
-    });
-  }
+  const decQuantity = async () => {
+    await dispatch(
+      addCart({
+        product: row.id,
+        quantity: -1,
+      })
+    );
+    setQuantity((prev) => prev - 1);
+  };
 
   return (
     <Box
@@ -113,16 +104,16 @@ function RenderQuantity(props) {
           size="small"
           sx={{ borderRadius: "8px" }}
           onClick={() => decQuantity()}
-          disabled={row.quantity_cart == 1}
+          disabled={quantity == 1}
         >
           <Icon icon="eva:minus-fill" width={16} height={16} />
         </IconButton>
-        <Typography>{row.quantity_cart}</Typography>
+        <Typography>{quantity}</Typography>
         <IconButton
           size="small"
           sx={{ borderRadius: "8px" }}
           onClick={() => addQuantity()}
-          disabled={row.quantity_cart == row.remain}
+          disabled={quantity == row.remain}
         >
           <Icon icon="eva:plus-fill" width={16} height={16} />
         </IconButton>
@@ -131,6 +122,62 @@ function RenderQuantity(props) {
         available: {row.remain}
       </Typography>
     </Box>
+  );
+}
+
+function RenderPrice(props) {
+  const { row } = props;
+
+  return (
+    <Stack
+      sx={{
+        gap: "4px",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "end",
+      }}
+    >
+      <Typography variant="subtitle1">
+        {formatCurrency(row.total_price)}
+      </Typography>
+      <Typography
+        variant="body2"
+        color="text.disabled"
+        sx={{
+          textDecoration: "line-through",
+        }}
+      >
+        {formatCurrency(row.price)}
+      </Typography>
+    </Stack>
+  );
+}
+
+function RenderTotal(props) {
+  const { row } = props;
+
+  return (
+    <Stack
+      sx={{
+        gap: "4px",
+        height: "100%",
+        justifyContent: "center",
+        alignItems: "end",
+      }}
+    >
+      <Typography variant="subtitle1">
+        {formatCurrency(row.total_price * row.quantity_cart)}
+      </Typography>
+      <Typography
+        variant="body2"
+        color="text.disabled"
+        sx={{
+          textDecoration: "line-through",
+        }}
+      >
+        {formatCurrency(row.price * row.quantity_cart)}
+      </Typography>
+    </Stack>
   );
 }
 
@@ -146,12 +193,7 @@ const DataGridHeader = (rows, setRows) => {
       field: "price",
       headerName: "Price",
       width: 90,
-      valueGetter: (value, row) => {
-        if (row.sales === null) {
-          return formatCurrency(row.price * row.quantity_cart);
-        }
-        return formatCurrency(row.sales * row.quantity_cart);
-      },
+      renderCell: (params) => <RenderPrice {...params} />,
     },
     {
       field: "quantity",
@@ -167,12 +209,7 @@ const DataGridHeader = (rows, setRows) => {
       width: 130,
       headerAlign: "right",
       align: "right",
-      valueGetter: (value, row) => {
-        if (row.sales === null) {
-          return formatCurrency(row.price * row.quantity_cart);
-        }
-        return formatCurrency(row.sales * row.quantity_cart);
-      },
+      renderCell: (params) => <RenderTotal {...params} />,
     },
   ];
 };

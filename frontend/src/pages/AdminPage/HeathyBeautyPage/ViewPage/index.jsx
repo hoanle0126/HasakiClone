@@ -421,9 +421,9 @@ const HeathyBeautyViewPage = () => {
               color="common"
               sx={{ boxShadow: "main.z1" }}
               endIcon={<Icon icon="eva:save-fill" />}
-              onClick={() => {
-                dispatch(updateCategory(id, category));
-                navigate("/admin/categories/heathy-&-beauty");
+              onClick={async () => {
+                await dispatch(updateCategory(id, category));
+                // navigate("/admin/categories/heathy-&-beauty");
               }}
             >
               Save
