@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\UserResource;
 use App\Models\Cart;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -48,7 +49,7 @@ class CartController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Product added to cart']);
+        return new UserResource($request->user());
     }
 
     /**
