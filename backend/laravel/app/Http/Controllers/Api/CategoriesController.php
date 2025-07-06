@@ -83,14 +83,12 @@ class CategoriesController extends Controller
             "type" => $request['type']
         ]);
 
-        $this->deleteChildren($category);
-
         // // Đệ quy thêm children nếu có
         $children = $request['children'] ?? [];
         if (!empty($children)) {
             foreach ($children as $child) {
                 $childRequest = new Request($child); // Tạo request mới cho child
-                $this->store($childRequest, $category->id);
+                $this->update($childRequest, $child['id']);
             }
         }
 

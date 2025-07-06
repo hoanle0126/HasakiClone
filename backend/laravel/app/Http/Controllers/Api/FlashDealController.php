@@ -38,7 +38,6 @@ class FlashDealController extends Controller
             "end_time" => Carbon::parse($request->end_time)
         ]);
         if (!empty($request->products)) {
-            $flashDeal->products()->detach();
             foreach ($request->products as $product) {
                 $existing = $flashDeal->Products()->where('product_id', $product['id'])->first();
                 if ($existing) {

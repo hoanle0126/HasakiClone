@@ -47,13 +47,13 @@ Route::post("/add-products", function (Request $request) {
                 "categories_id" => $categories_id->id,
                 "brand_id" => $brand_id->id,
                 "price" => $product['price'] ? $product['price'] : 100000,
-                // "sales" => $product['sales'],
-                // "images" => $product['images'],
-                // "quantity" => $product['quantity'],
-                // "description" => $product['description'],
-                // "parameters" => $product['parameters'],
-                // "guide" => $product['guide'],
-                "thumbnail" => $product['thumbnail'],
+                "sales" => $product['sales'],
+                "images" => $product['images'],
+                "quantity" => $product['quantity'],
+                "description" => $product['description'],
+                "parameters" => $product['parameters'],
+                "ingredients" => $product['ingredients'],
+                "guide" => $product['guide']
             ]);
         }
     }
