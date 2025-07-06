@@ -217,8 +217,16 @@ const ClientFooter = () => {
               alt=""
             />
             <Stack gap="16px">
-                <img src="https://media.hcdn.vn/hsk/icons/dl_apple.png" alt="" className="h-[32px]"/>
-                <img src="https://media.hcdn.vn/hsk/icons/dl_google.png" alt="" className="h-[32px]"/>
+              <img
+                src="https://media.hcdn.vn/hsk/icons/dl_apple.png"
+                alt=""
+                className="h-[32px]"
+              />
+              <img
+                src="https://media.hcdn.vn/hsk/icons/dl_google.png"
+                alt=""
+                className="h-[32px]"
+              />
             </Stack>
           </Stack>
         </Stack>

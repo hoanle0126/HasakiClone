@@ -1,0 +1,76 @@
+import { axiosClient } from "@/axios/axiosClient";
+import {
+  ADD_CART_FAILURE,
+  ADD_CART_REQUEST,
+  ADD_CART_SUCCESS,
+  GET_USER_REQUEST,
+  GET_USER_SUCCESS,
+  LOGIN_FAILURE,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT_FAILURE,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  REGISTER_FAILURE,
+  REGISTER_REQUEST,
+  REGISTER_SUCCESS,
+} from "./actionType";
+
+export const login = (user) => async (dispatch) => {
+  dispatch({ type: LOGIN_REQUEST });
+  axiosClient
+    .post("/login", user)
+    .then((data) => {
+      localStorage.setItem("token", data.data.token);
+      dispatch({ type: LOGIN_SUCCESS, payload: data.data.user });
+      console.log(data);
+    })
+    .catch((e) => {
+      dispatch({ type: LOGIN_FAILURE, error: e });
+    });
+};
+
+export const register = (user) => async (dispatch) => {
+  dispatch({ type: REGISTER_REQUEST });
+  axiosClient
+    .post("/register", user)
+    .then((data) => {
+      dispatch({ type: REGISTER_SUCCESS, payload: data.data });
+    })
+    .catch((e) => {
+      dispatch({ type: REGISTER_FAILURE, error: e });
+    });
+};
+
+export const logout = () => async (dispatch) => {
+  dispatch({ type: LOGOUT_REQUEST });
+  axiosClient
+    .post("/logout")
+    .then(() => {
+      localStorage.removeItem("token");
+      dispatch({ type: LOGOUT_SUCCESS });
+    })
+    .catch((e) => {
+      dispatch({ type: LOGOUT_FAILURE, error: e });
+    });
+};
+
+export const getUser = () => async (dispatch) => {
+  dispatch({ type: GET_USER_REQUEST });
+  axiosClient.get("/user").then((data) => {
+    console.log(data.data);
+    dispatch({ type: GET_USER_SUCCESS, payload: data.data });
+  });
+};
+
+export const addCart = (cart) => async (dispatch) => {
+  dispatch({ type: ADD_CART_REQUEST });
+  axiosClient
+    .post("/carts", cart)
+    .then((data) => {
+      dispatch({ type: ADD_CART_SUCCESS, payload: data.data });
+    })
+    .catch((e) => {
+      dispatch({ type: ADD_CART_FAILURE, error: e });
+    });
+};

@@ -1,0 +1,103 @@
+<?php
+
+use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CategoriesController;
+use App\Http\Controllers\Api\FlashDealController;
+use App\Http\Controllers\Api\HotDealController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Resources\BrandResource;
+use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\ProductResource;
+use App\Http\Resources\UserResource;
+use App\Models\Brand;
+use App\Models\Categories;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::apiResource("/categories", CategoriesController::class);
+Route::apiResource("/brands", BrandController::class);
+Route::post("/add-brands", function (Request $request) {
+    foreach ($request->brands as $brand) {
+        Brand::create([
+            "name" => $brand['name'],
+            "thumbnail" => $brand['thumbnail'],
+            "logo" => $brand['logo']
+        ]);
+
+    }
+    return BrandResource::collection(Brand::all());
+});
+Route::post("/add-products", function (Request $request) {
+
+    foreach ($request->all() as $product) {
+        $categories_id = Categories::where("name", $product['category'])->first();
+        $brand_id = Brand::where("name", $product['brand'])->first();
+        $existing = Product::where('name', $product['name'])->exists();
+        if ($categories_id && $brand_id && !$existing) {
+            Product::create([
+                "name" => $product['name'],
+                "english_name" => $product['english_name'] ? $product['english_name'] : "",
+                "categories_id" => $categories_id->id,
+                "brand_id" => $brand_id->id,
+                "price" => $product['price'] ? $product['price'] : 100000,
+                // "sales" => $product['sales'],
+                // "images" => $product['images'],
+                // "quantity" => $product['quantity'],
+                // "description" => $product['description'],
+                // "parameters" => $product['parameters'],
+                // "guide" => $product['guide'],
+                "thumbnail" => $product['thumbnail'],
+            ]);
+        }
+    }
+    $products = collect($request->all());
+
+
+    return $products->count();
+});
+Route::post("/add-products2", function (Request $request) {
+    $products = Product::all();
+    foreach ($products as $product) {
+        $images = collect($product['images']);
+
+        if ($images->isNotEmpty()) {
+            $product->update([
+                "thumbnail" => $images[0],
+            ]);
+        }
+    }
+
+
+    return $products->count();
+});
+Route::apiResource("/products", ProductController::class);
+Route::apiResource("/carts", CartController::class)->middleware('auth:sanctum');
+Route::apiResource("/hot-deals", HotDealController::class);
+Route::apiResource("/flash-deals", FlashDealController::class);
+Route::get('/categories-children', function (Request $request) {
+    $categories = Categories::where("type", "Heath & Beauty")
+        ->get()
+        ->filter(function ($item) {
+            return $item->children->isEmpty();
+        });
+    return CategoriesResource::collection($categories);
+});
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest')
+    ->name('login');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth:sanctum')
+    ->name('logout');
+Route::get('/user', function () {
+
+    return new UserResource(request()->user());
+})
+    ->middleware('auth:sanctum')
+    ->name('login');

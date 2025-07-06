@@ -1,6 +1,9 @@
 import EmblaCarousel from "@/components/carousel";
+import { getAllHotDeals } from "@/store/hotDeals/action";
 import { Box, Grid, Stack, Typography } from "@mui/material";
+import useEmblaCarousel from "embla-carousel-react";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const OPTIONS = { align: "start" };
 const SLIDE_COUNT = 6;
@@ -17,6 +20,14 @@ const listImage = [
 ];
 
 const BannerSection = () => {
+  const [emblaRef] = useEmblaCarousel();
+  const dispatch = useDispatch();
+  const { hot_deals, loading } = useSelector((store) => store.hotDeals);
+
+  React.useEffect(() => {
+    dispatch(getAllHotDeals());
+  }, []);
+
   return (
     <Box
       sx={{
@@ -29,7 +40,14 @@ const BannerSection = () => {
     >
       <Grid container className="w-full" spacing="8px">
         <Grid size={8}>
-          <EmblaCarousel slides={listImage} options={OPTIONS} />
+          <EmblaCarousel
+            lists={hot_deals}
+            options={{ loop: true, align: "start" }}
+          >
+            {(item) => (
+              <img src={item.banners[0]} className="w-full h-[260px]" />
+            )}
+          </EmblaCarousel>
         </Grid>
         <Grid size={4}>
           <Stack gap="8px" height="260px">

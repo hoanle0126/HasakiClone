@@ -12,8 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { DaMatList } from "./damat";
-import { MyPhamList } from "./mypham";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "@/store/categories/action";
+import Banner from "./Banner";
+import MainSection from "./MainSection";
+import LoginPage from "@/pages/AuthPage/LoginPage";
+import RegisterPage from "@/pages/AuthPage/RegisterPage";
+import { getUser } from "@/store/users/action";
 
 const ClientHeader = () => {
   const containerRef = React.useRef(null);
@@ -40,142 +45,24 @@ const ClientHeader = () => {
     };
   }, []);
   const [onDanhMuc, setOnDanhMuc] = React.useState(false);
+  const dispatch = useDispatch();
+  const categoriesReducer = useSelector((store) => store.categories);
+  const [categoriesChildren, setCategoriesChildren] = React.useState({
+    children: [],
+  });
+
+  React.useEffect(() => {
+    dispatch(getAllCategories());
+    dispatch(getUser());
+  }, []);
+
+  React.useEffect(() => {
+    console.log(categoriesReducer.categories);
+  }, [categoriesReducer.loading]);
 
   return (
     <>
-      <AppBar
-        sx={{
-          boxShadow: "none",
-          top: 0,
-          left: 0,
-        }}
-        position="sticky"
-      >
-        <Stack
-          sx={{
-            paddingX: "120px",
-            backgroundColor: "#084322",
-          }}
-        >
-          <img
-            src="https://media.hcdn.vn/hsk/1749726223top14156.jpg"
-            width="100%"
-            height="50px"
-          />
-        </Stack>
-        <Stack
-          direction="row"
-          sx={{
-            alignItems: "end",
-            height: "84px",
-            paddingX: "120px",
-            gap: "24px",
-            paddingBottom: "16px",
-          }}
-        >
-          <img
-            src="https://media.hcdn.vn/hsk/icon/logo_site_v2.png?v=2025061316"
-            className="h-[42px] w-[180px]"
-          />
-          <Stack gap="4px" flex={1}>
-            <Stack direction="row" gap="12px">
-              {[
-                "Kem chống nắng",
-                "Tẩy trang",
-                "Sửa rửa mặt",
-                "Tẩy tế bào chết",
-                "Kem chống nắng Sunplay",
-              ].map((item, index) => (
-                <Typography
-                  key={index}
-                  variant="captiontext"
-                  color="background.paper"
-                >
-                  {item}
-                </Typography>
-              ))}
-            </Stack>
-            <Stack
-              sx={{
-                flexDirection: "row",
-                width: "100%",
-                height: "36px",
-                backgroundColor: "#fff",
-                borderRadius: "36px",
-                alignItems: "center",
-                paddingRight: "8px",
-              }}
-            >
-              <TextField
-                placeholder="Tìm sản phẩm, thương hiệu bạn mong muốn..."
-                sx={{
-                  flex: 1,
-                  "& input::placeholder": {
-                    fontSize: "12px",
-                  },
-                  "& input": {
-                    fontSize: "12px",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      border: "none",
-                    },
-                    "&:hover fieldset": {
-                      border: "none",
-                    },
-                    "&.Mui-focused fieldset": {
-                      border: "none",
-                    },
-                  },
-                }}
-              />
-              <Icon
-                icon="eva:search-fill"
-                width="32"
-                height="32"
-                color={MuiTheme().palette.primary.main}
-              />
-            </Stack>
-          </Stack>
-          <Stack direction="row" gap="12px" alignItems="center">
-            <Icon icon="solar:user-circle-outline" width="32" height="32" />
-            <Stack>
-              <Typography variant="captiontext">Đăng nhập / Đăng ký</Typography>
-              <Stack direction="row" gap="12px">
-                <Typography variant="captiontext">Tài khoản</Typography>
-              </Stack>
-            </Stack>
-          </Stack>
-          <Stack direction="row" gap="12px" alignItems="center">
-            <Icon icon="solar:shop-linear" width="32" height="32" />
-            <Stack>
-              <Typography variant="captiontext">Hệ thống</Typography>
-              <Typography variant="captiontext">cửa hàng</Typography>
-            </Stack>
-          </Stack>
-          <Stack direction="row" gap="12px" alignItems="center">
-            <Icon icon="solar:shield-check-bold" width="32" height="32" />
-            <Stack>
-              <Typography variant="captiontext">Bảo</Typography>
-              <Typography variant="captiontext">hành</Typography>
-            </Stack>
-          </Stack>
-          <Stack direction="row" gap="12px" alignItems="center">
-            <Icon icon="solar:phone-bold" width="32" height="32" />
-            <Stack>
-              <Typography variant="captiontext">Hỗ trợ</Typography>
-              <Typography variant="captiontext">khách hàng</Typography>
-            </Stack>
-          </Stack>
-          <Stack justifyContent="end" height="100%">
-            <Icon
-              icon="solar:cart-large-minimalistic-linear"
-              width="32"
-              height="32"
-            />
-          </Stack>
-        </Stack>
-      </AppBar>
+      <MainSection />
       <Stack
         sx={{
           flexDirection: "row",
@@ -187,11 +74,14 @@ const ClientHeader = () => {
           height: "36px",
         }}
       >
-        <Button
+        <Stack
           direction="row"
           gap="4px"
           alignItems="center"
           height="100%"
+          sx={{
+            cursor: "pointer",
+          }}
           onMouseEnter={() => setOnDanhMuc(true)}
           onMouseLeave={() => setOnDanhMuc(false)}
         >
@@ -207,9 +97,10 @@ const ClientHeader = () => {
             color="primary.main"
             fontWeight={600}
           >
-            Danh mục |
+            Danh mục
           </Typography>
-        </Button>
+          <Icon icon="fluent:divider-tall-20-regular" width="18" height="18" />
+        </Stack>
         {[
           { title: "Hasaki deals" },
           { title: "hot deals" },
@@ -276,18 +167,15 @@ const ClientHeader = () => {
               >
                 Sức Khỏe - Làm Đẹp
               </Typography>
-              {[
-                { title: "Mỹ phẩm High-End" },
-                { title: "Chăm sóc da mặt" },
-                { title: "Trang điểm" },
-                { title: "Chăm sóc tóc và da đầu" },
-                { title: "chăm sóc cơ thể" },
-                { title: "chăm sóc cá nhân" },
-                { title: "nước hoa" },
-                { title: "thực phẩm chức năng" },
-              ].map((item, index) => (
+              {categoriesReducer.categories?.map((item, index) => (
                 <Stack
                   key={index}
+                  onMouseEnter={() => {
+                    setCategoriesChildren(item);
+                  }}
+                  onMouseLeave={() => {
+                    setCategoriesChildren({ children: [] });
+                  }}
                   sx={{
                     padding: "8px 12px",
                     flexDirection: "row",
@@ -299,7 +187,7 @@ const ClientHeader = () => {
                   }}
                 >
                   <Typography variant="captiontext" textTransform="capitalize">
-                    {item.title}
+                    {item.name}
                   </Typography>
                   <div className="flex-1"></div>
                   <Icon
@@ -338,11 +226,11 @@ const ClientHeader = () => {
                 sx={{
                   padding: "8px 12px",
                   flexDirection: "row",
-                    cursor: "pointer",
-                    "&:hover": {
-                      backgroundColor: "secondary.main",
-                      color: "grey.0",
-                    },
+                  cursor: "pointer",
+                  "&:hover": {
+                    backgroundColor: "secondary.main",
+                    color: "grey.0",
+                  },
                 }}
               >
                 <Typography
@@ -356,76 +244,87 @@ const ClientHeader = () => {
             </Stack>
           </Grid>
         )}
-        {/* <Grid size={6}>
-          <Grid
-            container
-            sx={{
-              border: "1px solid black",
-              height: "100%",
-            }}
-          >
-            <Grid size={8}>
-              <Box
-                ref={containerRef}
-                sx={{
-                  paddingY: "16px",
-                  maxHeight: "392px",
-                  columnCount: 2,
-                  overflowX: "auto",
-                  "&::-webkit-scrollbar": {
-                    display: "none", // Chrome, Safari
-                  },
-                }}
-              >
-                {MyPhamList.map((item, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      breakInside: "avoid",
-                    }}
-                  >
-                    <Typography
-                      variant="captiontext"
-                      padding="2px 12px"
-                      display="block"
-                      fontWeight={600}
+        {categoriesChildren.children.length > 0 && (
+          <Grid size={6}>
+            <Grid
+              container
+              sx={{
+                border: "1px solid black",
+                height: "100%",
+                backgroundColor: "background.paper",
+              }}
+              onMouseEnter={() => {
+                setOnDanhMuc(true);
+                setCategoriesChildren(categoriesChildren);
+              }}
+              onMouseLeave={() => {
+                setOnDanhMuc(false);
+                setCategoriesChildren({ children: [] });
+              }}
+            >
+              <Grid size={8}>
+                <Box
+                  ref={containerRef}
+                  sx={{
+                    paddingY: "16px",
+                    maxHeight: "392px",
+                    columnCount: 2,
+                    overflowX: "auto",
+                    "&::-webkit-scrollbar": {
+                      display: "none", // Chrome, Safari
+                    },
+                  }}
+                >
+                  {categoriesChildren.children.map((item, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        breakInside: "avoid",
+                      }}
                     >
-                      {item.title}
-                    </Typography>
-                    {item.children &&
-                      item.children.map((itemChild, indexChild) => (
-                        <Typography
-                          key={indexChild}
-                          variant="captiontext"
-                          padding="2px 12px"
-                          textTransform="capitalize"
-                          display="block"
-                        >
-                          {itemChild.title}
-                        </Typography>
-                      ))}
-                  </Box>
-                ))}
-              </Box>
-            </Grid>
-            <Grid size={4}>
-              <Stack
-                sx={{
-                  position: "relative",
-                  flexDirection: "column",
-                  alignItems: "end",
-                  height: "100%",
-                }}
-              >
-                <img
-                  src="https://hasaki.vn/img/hsk/banner/menu-category-my-pham-high-end-210x400---02012025.png"
-                  alt=""
-                  className="absolute -right-[50px] bottom-0  h-full"
-                />
-              </Stack>
+                      <Typography
+                        variant="captiontext"
+                        padding="2px 12px"
+                        display="block"
+                        fontWeight={600}
+                      >
+                        {item.name}
+                      </Typography>
+                      {item.children &&
+                        item.children.map((itemChild, indexChild) => (
+                          <Typography
+                            key={indexChild}
+                            variant="captiontext"
+                            padding="2px 12px"
+                            textTransform="capitalize"
+                            display="block"
+                          >
+                            {itemChild.name}
+                          </Typography>
+                        ))}
+                    </Box>
+                  ))}
+                </Box>
+              </Grid>
+              <Grid size={4}>
+                <Stack
+                  sx={{
+                    position: "relative",
+                    flexDirection: "column",
+                    alignItems: "end",
+                    height: "100%",
+                  }}
+                >
+                  <img
+                    src={categoriesChildren.thumbnail}
+                    alt=""
+                    className="absolute -right-[50px] bottom-0  h-full"
+                  />
+                </Stack>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid> */}
+        )}
       </Grid>
     </>
   );

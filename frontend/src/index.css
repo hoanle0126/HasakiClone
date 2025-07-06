@@ -7,12 +7,12 @@
   font-style: normal;
   font-display: swap;
 }
-
 .embla {
   margin: auto;
+  position: relative;
   --slide-height: 19rem;
   --slide-spacing: 0rem;
-  --slide-size: 100%;
+  --slide-size: calc(100% / 1);
   --slide-spacing-sm: 1.6rem;
   --slide-size-sm: 50%;
   --slide-spacing-lg: 0rem;
@@ -60,7 +60,7 @@
   touch-action: pan-y pinch-zoom;
   /* margin-left: calc(var(--slide-spacing) * -1); */
 }
-@media (min-width: 750px) {
+/* @media (min-width: 750px) {
   .embla__container {
     margin-left: calc(var(--slide-spacing-sm) * -1);
   }
@@ -69,7 +69,7 @@
   .embla__container {
     margin-left: calc(16px * -1);
   }
-}
+} */
 .embla__slide {
   min-width: 0;
   flex: 0 0 var(--slide-size);

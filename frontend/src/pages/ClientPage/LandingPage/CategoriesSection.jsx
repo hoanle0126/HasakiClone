@@ -1,9 +1,73 @@
-import { Stack, Typography } from "@mui/material";
+import EmblaCarousel from "@/components/carousel";
+import { getCategoriesChildren } from "@/store/categories/action";
+import { MuiTheme } from "@/theme";
+import { Icon } from "@iconify/react";
+import {
+  alpha,
+  Avatar,
+  Box,
+  ButtonBase,
+  Stack,
+  Typography,
+} from "@mui/material";
 import useEmblaCarousel from "embla-carousel-react";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+export const usePrevNextButtons = (emblaApi) => {
+  const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true);
+
+  const onPrevButtonClick = React.useCallback(() => {
+    if (!emblaApi) return;
+    emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const onNextButtonClick = React.useCallback(() => {
+    if (!emblaApi) return;
+    emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = React.useCallback((emblaApi) => {
+    setPrevBtnDisabled(!emblaApi.canScrollPrev());
+    setNextBtnDisabled(!emblaApi.canScrollNext());
+  }, []);
+
+  React.useEffect(() => {
+    if (!emblaApi) return;
+
+    onSelect(emblaApi);
+    emblaApi.on("reInit", onSelect).on("select", onSelect);
+  }, [emblaApi, onSelect]);
+
+  return {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  };
+};
 
 const CategoriesSection = () => {
-  const [listCategoriesRef] = useEmblaCarousel();
+  const [listCategoriesRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "start",
+  });
+  const dispatch = useDispatch();
+  const { categoriesChildren } = useSelector((store) => store.categories);
+
+  React.useEffect(() => {
+    dispatch(getCategoriesChildren());
+  }, []);
+  const onNextButtonClick = React.useCallback(() => {
+    if (!emblaApi) return;
+    emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onPrevButtonClick = React.useCallback(() => {
+    if (!emblaApi) return;
+    emblaApi.scrollPrev();
+  }, [emblaApi]);
 
   return (
     <Stack
@@ -17,103 +81,58 @@ const CategoriesSection = () => {
       <Typography variant="h6" color="primary.main">
         Danh mục
       </Typography>
-      <section className="embla" ref={listCategoriesRef}>
-        <div className="embla__viewport">
-          <div className="embla__container">
-            {[
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-              {
-                name: "Trang điểm môi",
-                thumbnail:
-                  "https://media.hcdn.vn/catalog/category/c24-trang-diem-moi_img_120x120_17b03c_fit_center.jpg",
-                color: "#F1F1F5",
-              },
-            ].map((item, index) => (
+      <div className="w-full">
+        {
+          <EmblaCarousel
+            lists={categoriesChildren}
+            size={8}
+            spacing="16px"
+            options={{
+              align: "start",
+              loop: true,
+            }}
+          >
+            {(item) => (
               <Stack
                 sx={{
-                  flex: "0 0 calc(100%/8)",
-                  paddingLeft: "16px",
+                  padding: "8px",
+                  backgroundColor: "background.neutral",
+                  borderRadius: "8px",
+                  gap: "8px",
+                  paddingBottom: "16px",
+                  border: "1px solid black",
+                  borderColor: "divider",
+                  height:"100%"
                 }}
-                key={index}
               >
-                <Stack
+                <div className="w-full aspect-square">
+                  <Avatar
+                    src={item.thumbnail}
+                    alt=""
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    variant="rounded"
+                  />
+                </div>
+                <Typography
+                  textAlign="center"
+                  variant="body1"
                   sx={{
-                    padding: "8px",
-                    backgroundColor: item.color,
-                    borderRadius: "8px",
-                    gap: "8px",
-                    paddingBottom: "16px",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    width: "120px",
                   }}
                 >
-                  <img src={item.thumbnail} alt="" />
-                  <Typography textAlign="center" variant="body1">
-                    {item.name}
-                  </Typography>
-                </Stack>
+                  {item.name}
+                </Typography>
               </Stack>
-            ))}
-          </div>
-        </div>
-      </section>
+            )}
+          </EmblaCarousel>
+        }
+      </div>
     </Stack>
   );
 };
