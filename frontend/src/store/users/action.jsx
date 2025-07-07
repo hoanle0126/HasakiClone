@@ -1,8 +1,14 @@
 import { axiosClient } from "@/axios/axiosClient";
 import {
+  ADD_ADDRESS_FAILURE,
+  ADD_ADDRESS_REQUEST,
+  ADD_ADDRESS_SUCCESS,
   ADD_CART_FAILURE,
   ADD_CART_REQUEST,
   ADD_CART_SUCCESS,
+  GET_CITIES_FAILURE,
+  GET_CITIES_REQUEST,
+  GET_CITIES_SUCCESS,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
   LOGIN_FAILURE,
@@ -68,10 +74,36 @@ export const addCart = (cart) => async (dispatch) => {
   await axiosClient
     .post("/carts", cart)
     .then((data) => {
-    console.log("User: ", data.data);
+      console.log("User: ", data.data);
       dispatch({ type: ADD_CART_SUCCESS, payload: data.data });
     })
     .catch((e) => {
       dispatch({ type: ADD_CART_FAILURE, error: e });
+    });
+};
+
+export const getAllCities = () => async (dispatch) => {
+  dispatch({ type: GET_CITIES_REQUEST });
+  await axiosClient
+    .get("/list_cities")
+    .then((data) => {
+      console.log("User: ", data.data);
+      dispatch({ type: GET_CITIES_SUCCESS, payload: data.data });
+    })
+    .catch((e) => {
+      dispatch({ type: GET_CITIES_FAILURE, error: e });
+    });
+};
+
+export const addNewAddress = (address) => async (dispatch) => {
+  dispatch({ type: ADD_ADDRESS_REQUEST });
+  await axiosClient
+    .post("/addresses", address)
+    .then((data) => {
+      console.log("User: ", data.data);
+      dispatch({ type: ADD_ADDRESS_SUCCESS, payload: data.data });
+    })
+    .catch((e) => {
+      dispatch({ type: ADD_ADDRESS_FAILURE, error: e });
     });
 };
