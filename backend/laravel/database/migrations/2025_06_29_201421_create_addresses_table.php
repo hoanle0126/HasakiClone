@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->integer("phone");
             $table->string("name");
             $table->string("province");
+            $table->string("district");
             $table->string("ward");
             $table->string("street_address");
-            $table->string("type");
             $table->boolean("default")->default(false);
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

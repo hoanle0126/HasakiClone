@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoriesController;
@@ -9,11 +10,15 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\CityResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\UserResource;
 use App\Models\Brand;
 use App\Models\Categories;
+use App\Models\City;
+use App\Models\District;
 use App\Models\Product;
+use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,7 +82,9 @@ Route::post("/add-products2", function (Request $request) {
 
     return $products->count();
 });
+
 Route::apiResource("/products", ProductController::class);
+Route::apiResource("/addresses", AddressController::class)->middleware('auth:sanctum');
 Route::apiResource("/carts", CartController::class)->middleware('auth:sanctum');
 Route::apiResource("/hot-deals", HotDealController::class);
 Route::apiResource("/flash-deals", FlashDealController::class);
@@ -101,3 +108,7 @@ Route::get('/user', function () {
 })
     ->middleware('auth:sanctum')
     ->name('login');
+
+Route::get("/list_cities", function () {
+    return CityResource::collection(City::all());
+});
