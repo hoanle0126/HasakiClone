@@ -6,9 +6,6 @@ import {
   ADD_CART_FAILURE,
   ADD_CART_REQUEST,
   ADD_CART_SUCCESS,
-  GET_CITIES_FAILURE,
-  GET_CITIES_REQUEST,
-  GET_CITIES_SUCCESS,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
   LOGIN_FAILURE,
@@ -20,6 +17,12 @@ import {
   REGISTER_FAILURE,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  SHOW_ADDRESS_FAILURE,
+  SHOW_ADDRESS_REQUEST,
+  SHOW_ADDRESS_SUCCESS,
+  UPDATE_ADDRESS_FAILURE,
+  UPDATE_ADDRESS_REQUEST,
+  UPDATE_ADDRESS_SUCCESS,
 } from "./actionType";
 
 export const login = (user) => async (dispatch) => {
@@ -74,24 +77,11 @@ export const addCart = (cart) => async (dispatch) => {
   await axiosClient
     .post("/carts", cart)
     .then((data) => {
-      console.log("User: ", data.data);
+      console.log(data.data);
       dispatch({ type: ADD_CART_SUCCESS, payload: data.data });
     })
     .catch((e) => {
       dispatch({ type: ADD_CART_FAILURE, error: e });
-    });
-};
-
-export const getAllCities = () => async (dispatch) => {
-  dispatch({ type: GET_CITIES_REQUEST });
-  await axiosClient
-    .get("/list_cities")
-    .then((data) => {
-      console.log("User: ", data.data);
-      dispatch({ type: GET_CITIES_SUCCESS, payload: data.data });
-    })
-    .catch((e) => {
-      dispatch({ type: GET_CITIES_FAILURE, error: e });
     });
 };
 
@@ -100,10 +90,43 @@ export const addNewAddress = (address) => async (dispatch) => {
   await axiosClient
     .post("/addresses", address)
     .then((data) => {
-      console.log("User: ", data.data);
       dispatch({ type: ADD_ADDRESS_SUCCESS, payload: data.data });
     })
     .catch((e) => {
       dispatch({ type: ADD_ADDRESS_FAILURE, error: e });
     });
+};
+
+export const showAddress = (id) => async (dispatch) => {
+  dispatch({ type: SHOW_ADDRESS_REQUEST });
+  await axiosClient
+    .get("/addresses/" + id)
+    .then((data) => {
+      console.log(data.data);
+      dispatch({ type: SHOW_ADDRESS_SUCCESS, payload: data.data });
+
+      return data.data;
+    })
+    .catch((e) => {
+      dispatch({ type: SHOW_ADDRESS_FAILURE, error: e });
+    });
+
+  return {};
+};
+
+export const updateAddress = (address, id) => async (dispatch) => {
+  dispatch({ type: UPDATE_ADDRESS_REQUEST });
+  await axiosClient
+    .put("/addresses/" + id, address)
+    .then((data) => {
+      console.log(data.data);
+      dispatch({ type: UPDATE_ADDRESS_SUCCESS, payload: data.data });
+
+      return data.data;
+    })
+    .catch((e) => {
+      dispatch({ type: UPDATE_ADDRESS_FAILURE, error: e });
+    });
+
+  return {};
 };

@@ -110,5 +110,5 @@ Route::get('/user', function () {
     ->name('login');
 
 Route::get("/list_cities", function () {
-    return CityResource::collection(City::all());
+    return City::all();
 });

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\AddressRequest;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\UserResource;
 use App\Models\Address;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -42,7 +44,7 @@ class AddressController extends Controller
      */
     public function show(Address $address)
     {
-        //
+        return new AddressResource($address);
     }
 
     /**
@@ -56,9 +58,12 @@ class AddressController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Address $address)
+    public function update(AddressRequest $request, Address $address)
     {
-        //
+        $addressValidate = $request->validated();
+        $addressValidate['user_id'] = Auth::id();
+        $address->update($addressValidate);
+        return new UserResource(request()->user());
     }
 
     /**

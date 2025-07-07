@@ -1,10 +1,14 @@
 import CustomerLayout from "@/layouts/ClientLayout/CustomerLayout";
+import { showAddress } from "@/store/users/action";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddressPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((store) => store.user);
 
   return (
     <Stack
@@ -17,7 +21,7 @@ const AddressPage = () => {
     >
       <Typography variant="h6">Sổ địa chỉ</Typography>
       <Grid container spacing="20px">
-        {[1, 2, 3, 4].map((item, index) => (
+        {user.address?.map((item, index) => (
           <Grid size={6} key={index}>
             <Stack
               sx={{
@@ -29,15 +33,24 @@ const AddressPage = () => {
               }}
             >
               <Stack direction="row" gap="4px">
-                <Typography variant="subtitle2">Lê Văn Xuân Hoàn</Typography>
+                <Typography variant="subtitle2">{item.name}</Typography>
                 <Typography variant="body2">-</Typography>
-                <Typography variant="body2">0705079830</Typography>
+                <Typography variant="body2">0{item.phone}</Typography>
                 <div className="flex-1"></div>
-                <Typography variant="body2">Chỉnh sửa</Typography>
+                <Typography
+                  className="cursor-pointer"
+                  variant="body2"
+                  onClick={async () => {
+                    await dispatch(showAddress(item.id));
+                    navigate("/customer/address/edit/" + item.id);
+                  }}
+                >
+                  Chỉnh sửa
+                </Typography>
               </Stack>
               <Typography variant="body2">
-                Lô 15 C10 Văn Tiến Dũng, Phường Điện Ngọc, Thị xã Điện Bàn,
-                Quảng Nam
+                {item.street_address}, {item.ward}, {item.district},
+                {item.province}
               </Typography>
             </Stack>
           </Grid>
@@ -59,7 +72,7 @@ const AddressPage = () => {
           sx={{
             borderRadius: "20px",
           }}
-          onClick={()=>navigate("/customer/address/new")}
+          onClick={() => navigate("/customer/address/new")}
         >
           Thêm địa chỉ mới
         </Button>

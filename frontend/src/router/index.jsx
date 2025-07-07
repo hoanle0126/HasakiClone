@@ -32,6 +32,7 @@ import WishlistPage from "@/pages/ClientPage/WishlistPage";
 import RepurchasePage from "@/pages/ClientPage/RepurchasePage";
 import QuestionPage from "@/pages/ClientPage/QuestionPage";
 import AddressAddPage from "@/pages/ClientPage/AddressPage/AddPage";
+import AddressViewPage from "@/pages/ClientPage/AddressPage/ViewPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -56,6 +57,7 @@ export const MainRouter = createBrowserRouter([
         children: [
           { path: "address/index", element: <AddressPage /> },
           { path: "address/new", element: <AddressAddPage /> },
+          { path: "address/edit/:id", element: <AddressViewPage /> },
           { path: "account/index", element: <AccountPage /> },
           { path: "account/edit", element: <AccountEditPage /> },
           { path: "loyalty/home", element: <LoyaltyPage /> },
