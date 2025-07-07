@@ -102,17 +102,15 @@ const CategoriesSection = () => {
                   paddingBottom: "16px",
                   border: "1px solid black",
                   borderColor: "divider",
-                  height:"100%"
+                  height:"100%",
+                  width:"100%"
                 }}
               >
                 <div className="w-full aspect-square">
-                  <Avatar
+                  <img
                     src={item.thumbnail}
                     alt=""
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                    }}
+                    className="size-full aspect-square"
                     variant="rounded"
                   />
                 </div>

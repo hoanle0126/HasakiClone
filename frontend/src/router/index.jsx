@@ -8,7 +8,6 @@ import HeathyBeautyPage from "@/pages/AdminPage/HeathyBeautyPage";
 import HeathyBeautyAddPage from "@/pages/AdminPage/HeathyBeautyPage/AddPage";
 import HeathyBeautyViewPage from "@/pages/AdminPage/HeathyBeautyPage/ViewPage";
 import BrandPage from "@/pages/AdminPage/BrandPage";
-import DealsPage from "@/pages/AdminPage/DealsPage";
 import OrderPage from "@/pages/AdminPage/OrderPage";
 import DermaHairPage from "@/pages/AdminPage/DermaHairPage";
 import ClinicPage from "@/pages/AdminPage/ClinicPage";
@@ -22,6 +21,17 @@ import HotDealsAddPage from "@/pages/AdminPage/HotDealsPage/AddPage";
 import HotDealsViewPage from "@/pages/AdminPage/HotDealsPage/ViewPage";
 import ProductDetail from "@/pages/ClientPage/ProductDetail";
 import CheckoutPage from "@/pages/ClientPage/CheckoutPage";
+import AddressPage from "@/pages/ClientPage/AddressPage";
+import CustomerLayout from "@/layouts/ClientLayout/CustomerLayout";
+import AccountPage from "@/pages/ClientPage/AccountPage";
+import AccountEditPage from "@/pages/ClientPage/AccountEditPage";
+import LoyaltyPage from "@/pages/ClientPage/LoyaltyPage";
+import ListOrderPage from "@/pages/ClientPage/ListOrderPage";
+import BookingPage from "@/pages/ClientPage/BookingPage";
+import WishlistPage from "@/pages/ClientPage/WishlistPage";
+import RepurchasePage from "@/pages/ClientPage/RepurchasePage";
+import QuestionPage from "@/pages/ClientPage/QuestionPage";
+import AddressAddPage from "@/pages/ClientPage/AddressPage/AddPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -39,6 +49,22 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/checkout/cart",
         element: <CheckoutPage />,
+      },
+      {
+        path: "customer",
+        element: <CustomerLayout />,
+        children: [
+          { path: "address/index", element: <AddressPage /> },
+          { path: "address/new", element: <AddressAddPage /> },
+          { path: "account/index", element: <AccountPage /> },
+          { path: "account/edit", element: <AccountEditPage /> },
+          { path: "loyalty/home", element: <LoyaltyPage /> },
+          { path: "order/history", element: <ListOrderPage /> },
+          { path: "booking/history", element: <BookingPage /> },
+          { path: "wishlist/index", element: <WishlistPage /> },
+          { path: "repurchase-product", element: <RepurchasePage /> },
+          { path: "question", element: <QuestionPage /> },
+        ],
       },
     ],
   },

@@ -275,22 +275,30 @@ const MainSection = () => {
             },
           }}
         >
-          <Stack direction="row" alignItems="center" gap="8px">
-            <Icon icon="solar:user-circle-linear" width={20} height={20} />
-            <Typography variant="body2">Tài khoản của bạn</Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center" gap="8px">
-            <Icon icon="solar:reorder-outline" width={20} height={20} />
-            <Typography variant="body2">Quản lí đơn hàng</Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center" gap="8px">
-            <Icon icon="solar:heart-linear" width={20} height={20} />
-            <Typography variant="body2">Sản phẩm yêu thích</Typography>
-          </Stack>
-          <Stack direction="row" alignItems="center" gap="8px">
-            <Icon icon="solar:map-point-linear" width={20} height={20} />
-            <Typography variant="body2">Địa chỉ giao hàng</Typography>
-          </Stack>
+          <Link to="/customer/account/index">
+            <Stack direction="row" alignItems="center" gap="8px">
+              <Icon icon="solar:user-circle-linear" width={20} height={20} />
+              <Typography variant="body2">Tài khoản của bạn</Typography>
+            </Stack>
+          </Link>
+          <Link to="/customer/order/history">
+            <Stack direction="row" alignItems="center" gap="8px">
+              <Icon icon="solar:reorder-outline" width={20} height={20} />
+              <Typography variant="body2">Quản lí đơn hàng</Typography>
+            </Stack>
+          </Link>
+          <Link to="/customer/wishlist/index">
+            <Stack direction="row" alignItems="center" gap="8px">
+              <Icon icon="solar:heart-linear" width={20} height={20} />
+              <Typography variant="body2">Sản phẩm yêu thích</Typography>
+            </Stack>
+          </Link>
+          <Link to="/customer/address/index">
+            <Stack direction="row" alignItems="center" gap="8px">
+              <Icon icon="solar:map-point-linear" width={20} height={20} />
+              <Typography variant="body2">Địa chỉ giao hàng</Typography>
+            </Stack>
+          </Link>
           <Stack
             direction="row"
             alignItems="center"
