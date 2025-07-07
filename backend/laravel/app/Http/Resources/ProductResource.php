@@ -28,7 +28,7 @@ class ProductResource extends JsonResource
             "price" => $this->price,
             "total_price" => $this->price - $this->price * $this->sales / 100,
             "quantity" => $this->quantity,
-            "quantity_cart" => $this->pivot->quantity,
+            "quantity_cart" => $this->pivot ? $this->pivot->quantity : 0,
             "remain" => $this->remain,
             "description" => $this->description,
             "sales" => $this->sales,
