@@ -33,6 +33,8 @@ import RepurchasePage from "@/pages/ClientPage/RepurchasePage";
 import QuestionPage from "@/pages/ClientPage/QuestionPage";
 import AddressAddPage from "@/pages/ClientPage/AddressPage/AddPage";
 import AddressViewPage from "@/pages/ClientPage/AddressPage/ViewPage";
+import CartPage from "@/pages/ClientPage/CartPage";
+import CheckoutLayout from "@/layouts/CheckoutLayout";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -49,7 +51,7 @@ export const MainRouter = createBrowserRouter([
       },
       {
         path: "/checkout/cart",
-        element: <CheckoutPage />,
+        element: <CartPage />,
       },
       {
         path: "customer",
@@ -141,6 +143,16 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/admin/orders",
         element: <OrderPage />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <CheckoutLayout />,
+    children: [
+      {
+        path: "/checkout",
+        element: <CheckoutPage />,
       },
     ],
   },

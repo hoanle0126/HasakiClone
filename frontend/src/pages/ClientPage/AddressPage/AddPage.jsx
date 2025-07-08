@@ -1,4 +1,4 @@
-import CustomerLayout from "@/layouts/ClientLayout/CustomerLayout";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { getAllCities } from "@/store/cities/action";
 import { addNewAddress } from "@/store/users/action";
 import {
@@ -6,7 +6,6 @@ import {
   Checkbox,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
@@ -87,7 +86,7 @@ const AddressAddPage = () => {
               <FormControl fullWidth size="small">
                 <Select
                   displayEmpty
-                  value={address.province}
+                  value={String(address.province)}
                   onChange={(e) => {
                     setAddress({ ...address, province: e.target.value });
                     setDistricts(
@@ -118,20 +117,20 @@ const AddressAddPage = () => {
               >
                 <Select
                   displayEmpty
-                  value={address.district}
+                  value={String(address.district)}
                   onChange={(e) => {
                     setAddress({ ...address, district: e.target.value });
                     setWards(
                       districts.filter(
                         (item) => item.name === e.target.value
-                      )[0].wards
+                      )[0]?.wards
                     );
                   }}
                 >
                   <MenuItem disabled value={-1}>
                     Vui lòng chọn quận/ huyện
                   </MenuItem>
-                  {districts.map((item, index) => (
+                  {districts?.map((item, index) => (
                     <MenuItem key={index} value={item.name}>
                       {item.name}
                     </MenuItem>
@@ -150,15 +149,15 @@ const AddressAddPage = () => {
               >
                 <Select
                   displayEmpty
-                  value={address.ward}
-                  onChange={(e) =>
-                    setAddress({ ...address, ward: e.target.value })
-                  }
+                  value={String(address.ward)}
+                  onChange={(e) => {
+                    setAddress({ ...address, ward: e.target.value });
+                  }}
                 >
                   <MenuItem disabled value={-1}>
                     Vui lòng chọn phường/ xã
                   </MenuItem>
-                  {wards.map((item, index) => (
+                  {wards?.map((item, index) => (
                     <MenuItem value={item.name} key={index}>
                       {item.name}
                     </MenuItem>
@@ -183,7 +182,13 @@ const AddressAddPage = () => {
             {/* End địa chỉ nhận hàng */}
             {/* Default */}
             <Stack direction="row" alignItems="center" gap="4px">
-              <Checkbox sx={{ padding: 0 }} size="small" />
+              <input
+                type="checkbox"
+                checked={address?.default}
+                onChange={(e) =>
+                  setAddress({ ...address, default: e.target.checked })
+                }
+              />
               <Typography variant="body2">Đặt làm địa chỉ mặt định</Typography>
             </Stack>
             {/* End default */}
@@ -208,7 +213,7 @@ const AddressAddPage = () => {
                 }}
                 onClick={async () => {
                   await dispatch(addNewAddress(address));
-                  alert("success!");
+                  navigate(-1);
                 }}
               >
                 Cập nhật

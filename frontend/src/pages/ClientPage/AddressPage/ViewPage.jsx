@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import CustomerLayout from "@/layouts/ClientLayout/CustomerLayout";
 import { getAllCities } from "@/store/cities/action";
 import {
   addNewAddress,
@@ -11,7 +10,6 @@ import {
   Checkbox,
   FormControl,
   Grid,
-  InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
@@ -24,40 +22,30 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const AddressViewPage = () => {
   const navigate = useNavigate();
-  const { addressValue, loading } = useSelector((store) => store.user);
-  const { cities } = useSelector((store) => store.cities);
-  const [listCities, setListCities] = React.useState({
-    districts: [],
-    wards: [],
+  const [address, setAddress] = React.useState({
+    province: -1,
+    district: -1,
+    ward: -1,
+    default: false,
   });
-  const [address, setAddress] = React.useState();
+  const [districts, setDistricts] = React.useState([]);
+  const [wards, setWards] = React.useState([]);
+
+  const { cities } = useSelector((store) => store.cities);
+  const { addressValue } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const getDistrics = (value) => {
-    return cities.filter((item) => item.name === value)[0]?.districts;
-  };
-
-  const getWards = (value) => {
-    return listCities.districts.filter((item) => item.name === value)[0].wards;
-  };
-
-  const getValue = async () => {
-    await dispatch(getAllCities());
-    await dispatch(showAddress(id));
-  };
-
   React.useEffect(() => {
-    getValue();
+    dispatch(getAllCities());
+    dispatch(showAddress(id));
   }, []);
 
   React.useEffect(() => {
     setAddress(addressValue);
-  }, [addressValue, loading]);
-
-  React.useEffect(() => {
-    console.log("Address", address);
-  }, [address]);
+    setDistricts(addressValue.districts);
+    setWards(addressValue.wards);
+  }, [addressValue]);
 
   return (
     <Stack
@@ -77,7 +65,7 @@ const AddressViewPage = () => {
               <Typography variant="subtitle2">Tên</Typography>
               <OutlinedInput
                 size="small"
-                value={address?.name}
+                value={address.name}
                 onChange={(e) =>
                   setAddress({ ...address, name: e.target.value })
                 }
@@ -94,7 +82,7 @@ const AddressViewPage = () => {
                 size="small"
                 placeholder="Số điện thoại"
                 type="number"
-                value={address?.phone}
+                value={address.phone}
                 onChange={(e) =>
                   setAddress({ ...address, phone: e.target.value })
                 }
@@ -107,19 +95,23 @@ const AddressViewPage = () => {
           <Stack gap="20px">
             {/* Tỉnh/ thành phố */}
             <Stack gap="4px">
-              <Typography variant="subtitle2">Tỉnh/ Thành phố</Typography>
+              <Typography variant="subtitle2">Tỉnh/ thành phố</Typography>
               <FormControl fullWidth size="small">
                 <Select
                   displayEmpty
-                  value={String(address?.province)}
+                  value={String(address.province)}
                   onChange={(e) => {
                     setAddress({ ...address, province: e.target.value });
+                    setDistricts(
+                      cities.filter((item) => item.name === e.target.value)[0]
+                        .districts
+                    );
                   }}
                 >
-                  {/* <MenuItem disabled value={""}>
+                  <MenuItem disabled value={-1}>
                     Vui lòng chọn tỉnh/ thành phố
-                  </MenuItem> */}
-                  {cities?.map((item, index) => (
+                  </MenuItem>
+                  {cities.map((item, index) => (
                     <MenuItem key={index} value={item.name}>
                       {item.name}
                     </MenuItem>
@@ -131,18 +123,27 @@ const AddressViewPage = () => {
             {/* Quận/ huyện */}
             <Stack gap="4px">
               <Typography variant="subtitle2">Quận/ huyện</Typography>
-              <FormControl fullWidth size="small">
+              <FormControl
+                fullWidth
+                size="small"
+                disabled={address.province === -1}
+              >
                 <Select
                   displayEmpty
-                  value={String(address?.district)}
+                  value={String(address.district)}
                   onChange={(e) => {
                     setAddress({ ...address, district: e.target.value });
+                    setWards(
+                      districts.filter(
+                        (item) => item.name === e.target.value
+                      )[0]?.wards
+                    );
                   }}
                 >
-                  <MenuItem disabled value={""}>
+                  <MenuItem disabled value={-1}>
                     Vui lòng chọn quận/ huyện
                   </MenuItem>
-                  {address?.districts?.map((item, index) => (
+                  {districts?.map((item, index) => (
                     <MenuItem key={index} value={item.name}>
                       {item.name}
                     </MenuItem>
@@ -154,18 +155,22 @@ const AddressViewPage = () => {
             {/* Phường/ xã */}
             <Stack gap="4px">
               <Typography variant="subtitle2">Phường/ xã</Typography>
-              <FormControl fullWidth size="small">
+              <FormControl
+                fullWidth
+                size="small"
+                disabled={address.district === -1}
+              >
                 <Select
                   displayEmpty
-                  value={String(address?.ward)}
-                  onChange={(e) =>
-                    setAddress({ ...address, ward: e.target.value })
-                  }
+                  value={String(address.ward)}
+                  onChange={(e) => {
+                    setAddress({ ...address, ward: e.target.value });
+                  }}
                 >
-                  <MenuItem disabled value={""}>
+                  <MenuItem disabled value={-1}>
                     Vui lòng chọn phường/ xã
                   </MenuItem>
-                  {address?.wards?.map((item, index) => (
+                  {wards?.map((item, index) => (
                     <MenuItem value={item.name} key={index}>
                       {item.name}
                     </MenuItem>
@@ -180,7 +185,8 @@ const AddressViewPage = () => {
               <OutlinedInput
                 size="small"
                 placeholder="Số nhà + Tên đường"
-                value={address?.street_address}
+                disabled={address.ward === -1}
+                value={address.street_address}
                 onChange={(e) =>
                   setAddress({ ...address, street_address: e.target.value })
                 }
@@ -188,23 +194,13 @@ const AddressViewPage = () => {
             </Stack>
             {/* End địa chỉ nhận hàng */}
             {/* Default */}
-            <Stack
-              direction="row"
-              alignItems="center"
-              gap="8px"
-              sx={{
-                "& .default__checkbox": {
-                  bgcolor: "#333",
-                },
-              }}
-            >
+            <Stack direction="row" alignItems="center" gap="4px">
               <input
                 type="checkbox"
                 checked={address?.default}
-                onChange={(e) => {
-                  setAddress({ ...address, default: e.target.checked });
-                }}
-                className="w-[16px] h-[16px] default__checkbox"
+                onChange={(e) =>
+                  setAddress({ ...address, default: e.target.checked })
+                }
               />
               <Typography variant="body2">Đặt làm địa chỉ mặt định</Typography>
             </Stack>

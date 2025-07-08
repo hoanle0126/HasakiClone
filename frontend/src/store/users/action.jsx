@@ -6,6 +6,9 @@ import {
   ADD_CART_FAILURE,
   ADD_CART_REQUEST,
   ADD_CART_SUCCESS,
+  DELETE_ADDRESS_FAILURE,
+  DELETE_ADDRESS_REQUEST,
+  DELETE_ADDRESS_SUCCESS,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
   LOGIN_FAILURE,
@@ -126,6 +129,23 @@ export const updateAddress = (address, id) => async (dispatch) => {
     })
     .catch((e) => {
       dispatch({ type: UPDATE_ADDRESS_FAILURE, error: e });
+    });
+
+  return {};
+};
+
+export const deleteAddress = (id) => async (dispatch) => {
+  dispatch({ type: DELETE_ADDRESS_REQUEST });
+  await axiosClient
+    .delete("/addresses/" + id)
+    .then((data) => {
+      console.log(data.data);
+      dispatch({ type: DELETE_ADDRESS_SUCCESS, payload: data.data });
+
+      return data.data;
+    })
+    .catch((e) => {
+      dispatch({ type: DELETE_ADDRESS_FAILURE, error: e });
     });
 
   return {};

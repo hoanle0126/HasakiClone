@@ -1,5 +1,5 @@
 import CustomerLayout from "@/layouts/ClientLayout/CustomerLayout";
-import { showAddress } from "@/store/users/action";
+import { deleteAddress, showAddress } from "@/store/users/action";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,7 +26,7 @@ const AddressPage = () => {
             <Stack
               sx={{
                 borderWidth: 1,
-                borderStyle: "dashed",
+                borderStyle: item.default ? "solid" : "dashed",
                 borderColor: "text.secondary",
                 padding: "8px",
                 gap: "4px",
@@ -46,6 +46,16 @@ const AddressPage = () => {
                   }}
                 >
                   Chỉnh sửa
+                </Typography>
+                <Typography
+                  className="cursor-pointer"
+                  variant="body2"
+                  onClick={async () => {
+                    await dispatch(deleteAddress(item.id));
+                    // navigate("/customer/address/edit/" + item.id);
+                  }}
+                >
+                  Xóa
                 </Typography>
               </Stack>
               <Typography variant="body2">

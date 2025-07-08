@@ -12,15 +12,13 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ThemeContext from "./Context";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <ThemeContext>
-        <Provider store={store}>
-          <ThemeProvider theme={MuiTheme}>
-            <RouterProvider router={MainRouter} />
-          </ThemeProvider>
-        </Provider>
-      </ThemeContext>
-    </LocalizationProvider>
-  </StrictMode>
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <ThemeContext>
+      <Provider store={store}>
+        <ThemeProvider theme={MuiTheme}>
+          <RouterProvider router={MainRouter} />
+        </ThemeProvider>
+      </Provider>
+    </ThemeContext>
+  </LocalizationProvider>
 );
