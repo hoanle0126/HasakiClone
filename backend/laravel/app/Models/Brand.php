@@ -19,4 +19,14 @@ class Brand extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function DiscountCode()
+    {
+        return $this->belongsToMany(DiscountCode::class);
+    }
+
+    public function Voucher()
+    {
+        return $this->belongsToMany(DiscountCode::class);
+    }
 }

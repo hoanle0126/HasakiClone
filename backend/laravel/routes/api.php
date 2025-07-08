@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\FlashDealController;
 use App\Http\Controllers\Api\HotDealController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Resources\BrandResource;
@@ -86,6 +87,7 @@ Route::post("/add-products2", function (Request $request) {
 Route::apiResource("/products", ProductController::class);
 Route::apiResource("/addresses", AddressController::class)->middleware('auth:sanctum');
 Route::apiResource("/carts", CartController::class)->middleware('auth:sanctum');
+Route::apiResource("/orders", OrderController::class)->middleware('auth:sanctum');
 Route::apiResource("/hot-deals", HotDealController::class);
 Route::apiResource("/flash-deals", FlashDealController::class);
 Route::get('/categories-children', function (Request $request) {
@@ -110,5 +112,5 @@ Route::get('/user', function () {
     ->name('login');
 
 Route::get("/list_cities", function () {
-    return City::all();
+    return CityResource::collection(City::all());
 });

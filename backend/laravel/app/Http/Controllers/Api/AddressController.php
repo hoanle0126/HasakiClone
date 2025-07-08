@@ -35,8 +35,16 @@ class AddressController extends Controller
     {
         $address = $request->validated();
         $address['user_id'] = Auth::id();
+        if ($address['default']) {
+            $all_addresses = request()->user()->Address();
+            foreach ($all_addresses as $item) {
+                $item->update([
+                    "default" => false
+                ]);
+            }
+        }
         Address::create($address);
-        return $address;
+        return new UserResource(request()->user());
     }
 
     /**
@@ -60,8 +68,17 @@ class AddressController extends Controller
      */
     public function update(AddressRequest $request, Address $address)
     {
+
         $addressValidate = $request->validated();
         $addressValidate['user_id'] = Auth::id();
+        if ($address['default']) {
+            $all_addresses = request()->user()->Address();
+            foreach ($all_addresses as $item) {
+                $item->update([
+                    "default" => false
+                ]);
+            }
+        }
         $address->update($addressValidate);
         return new UserResource(request()->user());
     }
@@ -71,6 +88,8 @@ class AddressController extends Controller
      */
     public function destroy(Address $address)
     {
-        //
+        $address->delete();
+
+        return new UserResource(request()->user());
     }
 }

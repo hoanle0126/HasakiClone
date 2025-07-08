@@ -65,4 +65,18 @@ class Product extends Model
     public function carts(){
         return $this->belongsToMany(Cart::class)->withPivot("quantity");
     }
+
+    public function DiscountCode()
+    {
+        return $this->belongsToMany(DiscountCode::class);
+    }
+
+    public function Voucher()
+    {
+        return $this->belongsToMany(DiscountCode::class);
+    }
+
+    public function Orders(){
+        return $this->belongsToMany(Order::class)->withPivot("quantity");
+    }
 }
