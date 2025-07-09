@@ -17,13 +17,15 @@ import { MuiTheme } from "@/Theme";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
 import { formatCurrency } from "@/Function/formatCurrency";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { sumPrice } from "../CartPage";
 import { useStateContext } from "@/Context";
 import SelectAddressModal from "../CartPage/components/SelectAddressModal";
 import PaymentTypeModal from "./PaymentTypeModal";
+import { addOrder } from "@/store/users/action";
 
 const CheckoutPage = () => {
+  const dispatch = useDispatch();
   const { user } = useSelector((store) => store.user);
   const { addressCheckout } = useStateContext();
   const [openAddressModal, setOpenAddressModal] = React.useState(false);
@@ -33,6 +35,7 @@ const CheckoutPage = () => {
     payment: { name: "Thanh toán khi nhận hàng", type: "offline" },
     note: "",
     products: [],
+    address_id: addressCheckout.id,
   });
 
   React.useEffect(() => {
@@ -348,6 +351,10 @@ const CheckoutPage = () => {
             variant="contained"
             sx={{
               borderRadius: "40px",
+            }}
+            onClick={async() => {
+              await dispatch(addOrder(checkoutForm));
+              alert("success")
             }}
           >
             Đặt hàng

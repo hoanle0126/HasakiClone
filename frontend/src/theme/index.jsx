@@ -11,7 +11,7 @@ export function MuiTheme() {
   return createTheme({
     palette: Palette(),
     typography: typography,
-    // shadows,
+    shadows,
     components: ComponentsCustom(shadows, palette, typography),
   });
 }

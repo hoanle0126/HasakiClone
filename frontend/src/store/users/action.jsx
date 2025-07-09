@@ -6,6 +6,9 @@ import {
   ADD_CART_FAILURE,
   ADD_CART_REQUEST,
   ADD_CART_SUCCESS,
+  ADD_ORDER_FAILURE,
+  ADD_ORDER_REQUEST,
+  ADD_ORDER_SUCCESS,
   DELETE_ADDRESS_FAILURE,
   DELETE_ADDRESS_REQUEST,
   DELETE_ADDRESS_SUCCESS,
@@ -149,4 +152,17 @@ export const deleteAddress = (id) => async (dispatch) => {
     });
 
   return {};
+};
+
+export const addOrder = (order) => async (dispatch) => {
+  dispatch({ type: ADD_ORDER_REQUEST });
+  await axiosClient
+    .post("/orders", order)
+    .then((data) => {
+      dispatch({ type: ADD_ORDER_SUCCESS, payload: data.data });
+    })
+    .catch((e) => {
+      console.log(e)
+      dispatch({ type: ADD_ORDER_FAILURE, error: e });
+    });
 };

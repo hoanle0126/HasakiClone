@@ -16,6 +16,7 @@ const initialState = {
   products: [],
   loading: false,
   error: null,
+  meta: {},
 };
 
 export const productReducer = (state = initialState, action) => {
@@ -30,7 +31,12 @@ export const productReducer = (state = initialState, action) => {
     case ADD_PRODUCT_SUCCESS:
     case UPDATE_PRODUCT_SUCCESS:
     case DELETE_PRODUCT_SUCCESS:
-      return { ...state, products: action.payload, loading: false };
+      return {
+        ...state,
+        products: action.payload.data,
+        meta: action.payload.meta,
+        loading: false,
+      };
     case GET_PRODUCT_BY_ID_SUCCESS:
       return { ...state, loading: false, product: action.payload };
     default:

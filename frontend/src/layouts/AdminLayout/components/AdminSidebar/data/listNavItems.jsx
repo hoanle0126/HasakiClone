@@ -5,6 +5,7 @@ const ListNavItems = () => {
   const { pathname } = useLocation();
   const [openCategories, setOpenCategories] = React.useState(false);
   const [openDeals, setOpenDeals] = React.useState(false);
+  const [openDiscount, setOpenDiscount] = React.useState(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -82,6 +83,25 @@ const ListNavItems = () => {
               name: "Flash Deals",
               active: pathname.includes("flash-deals"),
               action: () => navigate("admin/deals/flash-deals"),
+            },
+          ],
+        },
+        {
+          name: "Discount",
+          icon: "solar:ticket-sale-bold",
+          state: openDiscount,
+          action: () => setOpenDiscount(!openDiscount),
+          active: pathname.includes("/discounts"),
+          children: [
+            {
+              name: "Code",
+              active: pathname.includes("code"),
+              action: () => navigate("admin/discounts/code"),
+            },
+            {
+              name: "Vouchers",
+              active: pathname.includes("vouchers"),
+              action: () => navigate("admin/discounts/vouchers"),
             },
           ],
         },

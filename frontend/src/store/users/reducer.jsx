@@ -1,9 +1,10 @@
 import {
-  ADD_ADDRESS_FAILURE,
   ADD_ADDRESS_REQUEST,
   ADD_ADDRESS_SUCCESS,
   ADD_CART_REQUEST,
   ADD_CART_SUCCESS,
+  ADD_ORDER_FAILURE,
+  ADD_ORDER_REQUEST,
   DELETE_ADDRESS_REQUEST,
   DELETE_ADDRESS_SUCCESS,
   GET_USER_REQUEST,
@@ -41,6 +42,7 @@ export const userReducers = (state = initialState, action) => {
     case SHOW_ADDRESS_REQUEST:
     case UPDATE_ADDRESS_REQUEST:
     case DELETE_ADDRESS_REQUEST:
+    case ADD_ORDER_REQUEST:
       return {
         ...state,
         loading: true,
@@ -52,6 +54,7 @@ export const userReducers = (state = initialState, action) => {
     case ADD_ADDRESS_SUCCESS:
     case UPDATE_ADDRESS_SUCCESS:
     case DELETE_ADDRESS_SUCCESS:
+    case ADD_ORDER_FAILURE:
       return { ...state, user: action.payload, loading: false };
     case SHOW_ADDRESS_SUCCESS:
       return { ...state, addressValue: action.payload, loading: false };
