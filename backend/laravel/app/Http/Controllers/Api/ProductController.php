@@ -18,7 +18,11 @@ class ProductController extends Controller
     public function index()
     {
         $paginate = request()->query("paginate");
-        return ProductResource::collection(Product::paginate($paginate));
+        $search = request()->query("search");
+        $excluding = explode(",", request()->query("excluding"));
+        return ProductResource::collection(Product::where("name", "like", "%{$search}%")
+            ->whereNotIn("id", $excluding)
+            ->paginate($paginate));
     }
 
     /**

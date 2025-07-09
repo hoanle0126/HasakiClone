@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\OrderRequest;
+use App\Http\Resources\UserResource;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -43,10 +44,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return response()->json([
-            "order" => $order,
-            "request" => request()->products
-        ]);
+        return new UserResource(request()->user());
     }
 
     /**

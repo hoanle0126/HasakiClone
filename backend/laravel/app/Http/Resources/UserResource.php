@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             "birth" => $this->birth,
             "created_at" => $this->created_at,
             "address" => $this->address,
+            "orders" => OrderResource::collection($this->orders),
             "cart" => ProductResource::collection($this->cart->products)
         ];
     }
