@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "@/store/categories/action";
 import getCategoriesByType from "@/Function/getCategoriesByType";
 import CodeModal from "./CodeModal";
+import { addDiscountCode, getAllCodes } from "@/store/discountCodes/action";
 
 const hiddenFields = ["id", "__check__", "name", "action"];
 
@@ -31,14 +32,14 @@ const DiscountCodePage = () => {
     page: 0,
   });
   const dispatch = useDispatch();
-  const { categories, loading } = useSelector((store) => store.categories);
+  const { codes, loading } = useSelector((store) => store.codes);
 
   React.useEffect(() => {
-    dispatch(getAllCategories());
+    dispatch(getAllCodes());
   }, []);
 
   React.useEffect(() => {
-    console.log("Dispatch", categories);
+    console.log("Dispatch", codes);
   }, [loading]);
 
   return (
@@ -62,7 +63,7 @@ const DiscountCodePage = () => {
           setRowSelectionModel(it);
         }}
         // rowSelectionModel={rowSelectionModel}
-        rows={getCategoriesByType(categories, "DermaHair")}
+        rows={codes}
         initialState={{
           sorting: {
             sortModel: [{ field: "created_at", sort: "desc" }],
@@ -161,7 +162,19 @@ const DiscountCodePage = () => {
           },
         }}
       />
-      <CodeModal open={openModal} handleClose={() => setOpenModal(false)} />
+      <CodeModal
+        open={openModal}
+        handleClose={async () => setOpenModal(false)}
+        action={async (modalValue) => {
+          console.log("Form ", modalValue);
+          await dispatch(
+            addDiscountCode({
+              code: modalValue,
+            })
+          );
+          setOpenModal(false);
+        }}
+      />
     </AdminDefaultLayout>
   );
 };

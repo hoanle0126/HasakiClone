@@ -2,6 +2,7 @@ import { formatCurrency } from "@/Function/formatCurrency";
 import { getAllProducts } from "@/store/products/action";
 import { Icon } from "@iconify/react";
 import {
+  alpha,
   Button,
   ButtonBase,
   CircularProgress,
@@ -28,6 +29,7 @@ const SelectProductModal = ({ open, handleClose, action, excluding }) => {
   const [isTyping, setIsTyping] = React.useState(false);
   const [openSort, setOpenSort] = React.useState(null);
   const [openFilter, setOpenFilter] = React.useState(null);
+  const [selected, setSelected] = React.useState([]);
   const [filterForm, setFilterForm] = React.useState({
     asc: true,
     sort: {},
@@ -42,35 +44,35 @@ const SelectProductModal = ({ open, handleClose, action, excluding }) => {
         excluding: excluding,
       })
     );
-  }, [page, excluding]);
+  }, [page, open]);
 
-  React.useEffect(() => {
-    if (searchValue === "") {
-      setIsTyping(false);
-      dispatch(
-        getAllProducts({
-          paginate: 12,
-          page: page,
-          search: "",
-          excluding: excluding,
-        })
-      );
-      return;
-    }
-    setIsTyping(true);
-    const timeout = setTimeout(() => {
-      setIsTyping(false);
-      dispatch(
-        getAllProducts({
-          paginate: 12,
-          page: page,
-          search: searchValue,
-          excluding: excluding,
-        })
-      );
-    }, 500);
-    return () => clearTimeout(timeout);
-  }, [searchValue]);
+  // React.useEffect(() => {
+  //   if (searchValue === "") {
+  //     setIsTyping(false);
+  //     dispatch(
+  //       getAllProducts({
+  //         paginate: 12,
+  //         page: page,
+  //         search: "",
+  //         excluding: excluding,
+  //       })
+  //     );
+  //     return;
+  //   }
+  //   setIsTyping(true);
+  //   const timeout = setTimeout(() => {
+  //     setIsTyping(false);
+  //     dispatch(
+  //       getAllProducts({
+  //         paginate: 12,
+  //         page: page,
+  //         search: searchValue,
+  //         excluding: excluding,
+  //       })
+  //     );
+  //   }, 500);
+  //   return () => clearTimeout(timeout);
+  // }, [searchValue]);
 
   return (
     <Modal
@@ -194,10 +196,31 @@ const SelectProductModal = ({ open, handleClose, action, excluding }) => {
                       borderRadius: "12px",
                       flexDirection: "column",
                       alignItems: "start",
+                      position: "relative",
+                      "&::before": selected.includes(item)
+                        ? {
+                            content: "''",
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            backgroundColor: "primary.light",
+                            opacity: 0.3,
+                            backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            backgroundSize: "contain",
+                            backgroundImage:
+                              "url(https://png.pngtree.com/png-clipart/20230404/original/pngtree-tick-icon-vector-symbol-green-checkmark-isolated-transparent-background-png-image_9024769.png)",
+                          }
+                        : {},
                     }}
                     onClick={() => {
-                      action(item);
-                      handleClose();
+                      setSelected((prev) =>
+                        prev.includes(item)
+                          ? prev.filter((it) => it !== item)
+                          : [...selected, item]
+                      );
                     }}
                   >
                     <Stack
@@ -228,11 +251,24 @@ const SelectProductModal = ({ open, handleClose, action, excluding }) => {
                 </Grid>
               ))}
         </Grid>
-        <Pagination
-          count={meta.last_page || 5}
-          page={page}
-          onChange={(e, value) => setPage(value)}
-        />
+        <Stack direction="row" width="100%" gap="12px">
+          <Pagination
+            count={meta.last_page || 5}
+            page={page}
+            onChange={(e, value) => setPage(value)}
+          />
+          <div className="flex-1"></div>
+          <Button
+            variant="contained"
+            onClick={() => {
+              action(selected);
+              setSelected([]);
+              handleClose();
+            }}
+          >
+            Add products
+          </Button>
+        </Stack>
         <SortMenu
           open={Boolean(openSort)}
           anchorEl={openSort}

@@ -1,3 +1,4 @@
+import { formatCurrency } from "@/Function/formatCurrency";
 import { deleteCategory } from "@/store/categories/action";
 import { MuiTheme } from "@/theme";
 import { Icon } from "@iconify/react";
@@ -16,6 +17,11 @@ import {
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import CodeModal from "../CodeModal";
+import {
+  deleteDiscountCode,
+  updateDiscountCode,
+} from "@/store/discountCodes/action";
 
 function RenderProduct(props) {
   const { row } = props;
@@ -49,10 +55,11 @@ function RenderProduct(props) {
 }
 
 function RenderAction(props) {
-  const { row } = props;
+  const { row, rows } = props;
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = React.useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -95,13 +102,9 @@ function RenderAction(props) {
         }}
       >
         <MenuList>
-          <MenuItem
-            onClick={() =>
-              navigate("/admin/categories/heathy-&-beauty/" + row.id)
-            }
-          >
+          <MenuItem onClick={() => setOpenModal(row.id)}>
             <Icon icon="solar:eye-bold" />
-            View {row.id}
+            View {row.products.length}
           </MenuItem>
           <MenuItem>
             <Icon
@@ -112,7 +115,7 @@ function RenderAction(props) {
               variant="body2"
               color={"error"}
               onClick={() => {
-                dispatch(deleteCategory(row.id));
+                dispatch(deleteDiscountCode({id:row.id}));
               }}
             >
               Delete
@@ -120,6 +123,22 @@ function RenderAction(props) {
           </MenuItem>
         </MenuList>
       </Popover>
+
+      <CodeModal
+        open={openModal === row.id}
+        handleClose={async () => setOpenModal(-1)}
+        discountCodeValue={row}
+        action={async (modalValue) => {
+          console.log("Form ", modalValue);
+          await dispatch(
+            updateDiscountCode({
+              code: modalValue,
+              id: row.id,
+            })
+          );
+          setOpenModal(false);
+        }}
+      />
     </Box>
   );
 }
@@ -128,9 +147,19 @@ const DataGridHeader = () => {
   return [
     {
       field: "name",
-      headerName: "Categories",
+      headerName: "Name code",
       flex: 1,
-      renderCell: RenderProduct,
+    },
+    {
+      field: "code",
+      headerName: "Code",
+      width: 120,
+    },
+    {
+      field: "discount",
+      headerName: "Discount Value",
+      width: 120,
+      valueGetter: (row) => row + "%",
     },
     {
       field: "action",
