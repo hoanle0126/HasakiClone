@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string("name");
             $table->string("code");
             $table->float("discount");
+            $table->boolean("applyAll");
             $table->timestamps();
         });
 
@@ -28,7 +29,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('discount_code_brand', function (Blueprint $table) {
+        Schema::create('brand_discount_code', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(DiscountCode::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Brand::class)->constrained()->cascadeOnDelete();

@@ -9,6 +9,8 @@ class DiscountCode extends Model
     protected $fillable = [
         "name",
         "discount",
+        "code",
+        "applyAll"
     ];
 
     public function Products()
