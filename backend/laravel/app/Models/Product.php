@@ -62,7 +62,8 @@ class Product extends Model
         return $this->belongsToMany(FlashDeal::class);
     }
 
-    public function carts(){
+    public function carts()
+    {
         return $this->belongsToMany(Cart::class)->withPivot("quantity");
     }
 
@@ -71,12 +72,13 @@ class Product extends Model
         return $this->belongsToMany(DiscountCode::class);
     }
 
-    public function Voucher()
+    public function Orders()
     {
-        return $this->belongsToMany(DiscountCode::class);
+        return $this->belongsToMany(Order::class)->withPivot("quantity");
     }
 
-    public function Orders(){
-        return $this->belongsToMany(Order::class)->withPivot("quantity");
+    public function Reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }

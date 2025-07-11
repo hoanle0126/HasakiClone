@@ -24,11 +24,6 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function Voucher()
-    {
-        return $this->belongsTo(Voucher::class);
-    }
-
     public function DiscountCode()
     {
         return $this->belongsTo(DiscountCode::class);

@@ -82,6 +82,7 @@ class DiscountCodeController extends Controller
             $discountCode->Products()->attach($product['id']);
         }
 
+        $discountCode->Brands()->detach();
         foreach ($brands as $brand) {
             $discountCode->Brands()->attach($brand['id']);
         }

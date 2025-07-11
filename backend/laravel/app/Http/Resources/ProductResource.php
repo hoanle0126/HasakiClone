@@ -19,6 +19,7 @@ class ProductResource extends JsonResource
         $this->withoutWrapping();
         return [
             'id' => $this->id,
+            "reviews" => $this->reviews,
             'name' => $this->name,
             'url' => $this->url,
             'categories' => $this->categories['ancestors'],

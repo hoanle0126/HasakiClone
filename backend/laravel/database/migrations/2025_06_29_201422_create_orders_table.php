@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->json("payments")->nullable();
             $table->string("note")->nullable();
-            $table->foreignIdFor(Voucher::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(DiscountCode::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Address::class)->constrained()->cascadeOnDelete();
             $table->timestamps();

@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\FlashDealController;
 use App\Http\Controllers\Api\HotDealController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\VoucherController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\CategoriesResource;
@@ -92,6 +94,7 @@ Route::apiResource("/orders", OrderController::class)->middleware('auth:sanctum'
 Route::apiResource("/hot-deals", HotDealController::class);
 Route::apiResource("/flash-deals", FlashDealController::class);
 Route::apiResource("/discount-codes", DiscountCodeController::class);
+Route::apiResource("/reviews", ReviewController::class)->middleware('auth:sanctum');
 Route::get('/categories-children', function (Request $request) {
     $categories = Categories::where("type", "Heath & Beauty")
         ->get()
