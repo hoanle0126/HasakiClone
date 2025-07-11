@@ -13,6 +13,8 @@ const ListNavItems = () => {
       setOpenCategories(true);
     } else if (pathname.includes("/deals")) {
       setOpenDeals(true);
+    } else if (pathname.includes("/discounts")) {
+      setOpenDiscount(true);
     }
   }, []);
 
@@ -87,23 +89,11 @@ const ListNavItems = () => {
           ],
         },
         {
-          name: "Discount",
+          name: "Discount code",
           icon: "solar:ticket-sale-bold",
           state: openDiscount,
-          action: () => setOpenDiscount(!openDiscount),
+          action: () => navigate("/admin/discounts"),
           active: pathname.includes("/discounts"),
-          children: [
-            {
-              name: "Code",
-              active: pathname.includes("code"),
-              action: () => navigate("admin/discounts/code"),
-            },
-            {
-              name: "Vouchers",
-              active: pathname.includes("vouchers"),
-              action: () => navigate("admin/discounts/vouchers"),
-            },
-          ],
         },
         {
           name: "Orders",

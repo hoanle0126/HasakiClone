@@ -3,6 +3,8 @@ import {
   ADD_PRODUCT_FAILURE,
   ADD_PRODUCT_REQUEST,
   ADD_PRODUCT_SUCCESS,
+  ADD_REVIEW_REQUEST,
+  ADD_REVIEW_SUCCESS,
   DELETE_PRODUCT_FAILURE,
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
@@ -90,3 +92,12 @@ export const deleteProduct = (id) => async (dispatch) => {
       dispatch({ type: DELETE_PRODUCT_FAILURE, error: error });
     });
 };
+
+export const addReview =
+  ({ review }) =>
+  async (dispatch) => {
+    dispatch({ type: ADD_REVIEW_REQUEST });
+    await axiosClient.post("/reviews", review).then((data) => {
+      dispatch({ type: ADD_REVIEW_SUCCESS, payload: data.data });
+    });
+  };

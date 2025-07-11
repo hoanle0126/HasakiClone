@@ -4,7 +4,7 @@ export const secondaryFont = "Inter Var";
 export const typography = {
   fontFamily: primaryFont,
   h1: {
-    fontSize: "62px",
+    fontSize: "80px",
     lineHeight: "80px",
     fontWeight: "800",
     letterSpacing: 0,

@@ -36,6 +36,7 @@ import AddressViewPage from "@/pages/ClientPage/AddressPage/ViewPage";
 import CartPage from "@/pages/ClientPage/CartPage";
 import CheckoutLayout from "@/layouts/CheckoutLayout";
 import DiscountCodePage from "@/pages/AdminPage/DiscountCodePage";
+import VoucherPage from "@/pages/AdminPage/VoucherPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -146,9 +147,9 @@ export const MainRouter = createBrowserRouter([
         element: <OrderPage />,
       },
       {
-        path: "/admin/discounts/code",
+        path: "/admin/discounts",
         element: <DiscountCodePage />,
-      },
+      }
     ],
   },
   {
