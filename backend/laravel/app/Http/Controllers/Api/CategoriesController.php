@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\CategoryResource;
 use App\Models\Categories;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -14,9 +16,11 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return CategoriesResource::collection(Categories::whereNull("parent_id")
-            ->with("parent")
-            ->get());
+        $categories = Categories::where("name", "Sức Khỏe - Làm Đẹp")->first();
+        // return CategoriesResource::collection(Categories::whereNull("parent_id")
+        //     ->with("parent")
+        //     ->get());
+        return CategoriesResource::collection(Categories::where("parent_id",$categories->id)->get());
     }
 
     /**
@@ -50,7 +54,7 @@ class CategoriesController extends Controller
 
         // Chỉ trả về khi là cấp gốc
         if ($parentId === null) {
-            return CategoriesResource::collection(Categories::all());
+            return CategoryResource::collection(Categories::all());
         }
     }
 
@@ -59,8 +63,13 @@ class CategoriesController extends Controller
      */
     public function show($categories)
     {
-        $category = Categories::where("id", $categories)->first();
-        return new CategoriesResource($category);
+        $category = Categories::where("url", $categories)->first();
+        $productChildren = Product::whereIn("categories_id", $category->getAllChildIds())->paginate(40);
+
+        return response()->json([
+            "products" => $productChildren,
+            "category" => new CategoryResource($category)
+        ]);
     }
 
     /**

@@ -20,6 +20,26 @@ class ProductResource extends JsonResource
         return [
             'id' => $this->id,
             "reviews" => $this->reviews,
+            "rating" => [
+                "value" => collect($this->reviews)->average(function ($item) {
+                    return $item->rating;
+                }),
+                "star_5" => collect($this->reviews)->filter(function ($item) {
+                    return $item->rating === 5;
+                })->count(),
+                "star_4" => collect($this->reviews)->filter(function ($item) {
+                    return $item->rating === 4;
+                })->count(),
+                "star_3" => collect($this->reviews)->filter(function ($item) {
+                    return $item->rating === 3;
+                })->count(),
+                "star_2" => collect($this->reviews)->filter(function ($item) {
+                    return $item->rating === 2;
+                })->count(),
+                "star_1" => collect($this->reviews)->filter(function ($item) {
+                    return $item->rating === 1;
+                })->count()
+            ],
             'name' => $this->name,
             'url' => $this->url,
             'categories' => $this->categories['ancestors'],

@@ -20,7 +20,7 @@ class DiscountCodeResource extends JsonResource
             "name" => $this->name,
             "code" => $this->code,
             "discount" => $this->discount,
-            "products" => collect($this->products)->map(function($item){
+            "products" => collect($this->products)->map(function ($item) {
                 return [
                     "id" => $item->id,
                     "name" => $item->name,

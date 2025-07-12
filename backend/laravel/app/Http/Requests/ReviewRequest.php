@@ -11,11 +11,11 @@ class ReviewRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // $product_id = request()->product_id;
-        // $hasPurchased = request()->user()->Orders()->whereHas("products", function ($query) use ($product_id) {
-        //     $query->where('products.id', $product_id);
-        // })->exists();
-        return true;
+        $product_id = request()->product_id;
+        $hasPurchased = request()->user()->Orders()->whereHas("products", function ($query) use ($product_id) {
+            $query->where('products.id', $product_id);
+        })->exists();
+        return $hasPurchased;
     }
 
     /**

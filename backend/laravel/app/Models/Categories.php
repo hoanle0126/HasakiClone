@@ -15,6 +15,28 @@ class Categories extends Model
         "url"
     ];
 
+    public function getBrandsAttribute()
+    {
+        $ids = collect($this->products)->map(function ($item) {
+            return $item->brand;
+        });
+
+        foreach ($this->children as $child) {
+            $ids = $ids->merge($child->getBrandsAttribute());
+        }
+
+        return $ids
+            ->filter() // loại bỏ null
+            ->groupBy('id') // nhóm theo id brand
+            ->sortByDesc(function ($group) {
+                return $group->count();
+            })
+            ->map(function ($group) {
+                return $group->first(); // trả về đối tượng brand (không lặp)
+            })
+            ->values(); // reset lại key
+    }
+
     public function getAncestorsAttribute()
     {
         $ancestors = [];
@@ -36,14 +58,66 @@ class Categories extends Model
         return array_reverse($ancestors);
     }
 
-    public function getProductChildrenAttribute()
+    public function getFamiliesAttribute()
     {
-        $allChildren = collect();
+        return [
+            "children" => $this->children->map(function ($item) {
+                return [
+                    "id" => $item->id,
+                    "name" => $item->name,
+                    "product_count" => collect($item->getAllChildProducts())->count(),
+                    "url" => $item->url,
+                ];
+            }),
+            "brother" => $this->parent !== null ? collect(Categories::where("parent_id", $this->parent_id)->get())->map(function ($item) {
+                return [
+                    "id" => $item->id,
+                    "name" => $item->name,
+                    "product_count" => collect($item->getAllChildProducts())->count(),
+                    "url" => $item->url,
+                ];
+            }) : $this->children->map(function ($item) {
+                return [
+                    "id" => $item->id,
+                    "name" => $item->name,
+                    "product_count" => collect($item->getAllChildProducts())->count(),
+                    "url" => $item->url,
+                ];
+            }),
+            "parent" => $this->parent !== null ? [
+                "id" => $this->parent->id,
+                "name" => $this->parent->name,
+                "product_count" => collect($this->parent->getAllChildProducts())->count(),
+                "url" => $this->parent->url,
+            ] : [
+                "id" => $this->id,
+                "name" => $this->name,
+                "product_count" => collect($this->getAllChildProducts())->count(),
+                "url" => $this->url,
+            ]
+        ];
+    }
+
+    public function getAllChildIds()
+    {
+        $ids = collect([$this->id]);
+
         foreach ($this->children as $child) {
-            $allChildren = $allChildren->merge($child->products);
-            $allChildren->merge($child->product_children);
+            $ids = $ids->merge($child->getAllChildIds());
         }
-        return $allChildren;
+
+        return $ids;
+    }
+
+    public function getAllChildProducts()
+    {
+        $ids = $this->products;
+
+        foreach ($this->children as $child) {
+            $ids = $ids->merge($child->getAllChildProducts());
+        }
+
+        return $ids;
     }
 
     public function parent()

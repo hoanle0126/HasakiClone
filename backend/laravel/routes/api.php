@@ -33,15 +33,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::apiResource("/categories", CategoriesController::class);
 Route::apiResource("/brands", BrandController::class);
 Route::post("/add-brands", function (Request $request) {
-    foreach ($request->brands as $brand) {
-        Brand::create([
-            "name" => $brand['name'],
-            "thumbnail" => $brand['thumbnail'],
-            "logo" => $brand['logo']
-        ]);
+    $categories = Categories::all();
+    foreach ($categories as $category) {
+        $category->update(['url' => Str::slug($category->name)]);
 
     }
-    return BrandResource::collection(Brand::all());
+    return Categories::all();
 });
 Route::post("/add-products", function (Request $request) {
 
