@@ -37,6 +37,7 @@ import CartPage from "@/pages/ClientPage/CartPage";
 import CheckoutLayout from "@/layouts/CheckoutLayout";
 import DiscountCodePage from "@/pages/AdminPage/DiscountCodePage";
 import VoucherPage from "@/pages/AdminPage/VoucherPage";
+import CategoryProductsPage from "@/pages/ClientPage/CategoryProductsPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/checkout/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/danh-muc/:id",
+        element: <CategoryProductsPage />,
       },
       {
         path: "customer",
@@ -149,7 +154,7 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/admin/discounts",
         element: <DiscountCodePage />,
-      }
+      },
     ],
   },
   {

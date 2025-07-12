@@ -9,6 +9,7 @@ const ProductCard = ({ item }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector((store) => store.products);
+  const [hover, setHover] = React.useState(false);
 
   return (
     <ButtonBase
@@ -26,8 +27,14 @@ const ProductCard = ({ item }) => {
           getProductById(item.url, () => navigate("/san-pham/" + item.url))
         );
       }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
-      <img src={item?.images[0]} alt="" className="aspect-square w-full" />
+      <img
+        src={item?.images[!hover ? 0 : 1]}
+        alt=""
+        className="aspect-square w-full"
+      />
       <Stack
         sx={{
           padding: "8px",

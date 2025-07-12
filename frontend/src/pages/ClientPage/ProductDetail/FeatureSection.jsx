@@ -22,6 +22,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DetailHeader from "./DetailHeader";
 import { addReview } from "@/store/products/action";
+import { formatDate } from "@/Function/formatDate";
+import { formatTime } from "@/Function/formatTime";
 
 const FeatureSection = ({ action }) => {
   const dispatch = useDispatch();
@@ -306,10 +308,17 @@ const FeatureSection = ({ action }) => {
           <Grid size={4}>
             <Stack sx={{ alignItems: "center", gap: "4px" }}>
               <Typography variant="h1" color="secondary.main">
-                4.9
+                {product.rating?.value}
               </Typography>
-              <Rating value={4} size="small" />
-              <Typography variant="body2">105 nhận xét</Typography>
+              <Rating
+                value={product.rating?.value}
+                precision={0.1}
+                readOnly
+                size="small"
+              />
+              <Typography variant="body2">
+                {product.reviews?.length} nhận xét
+              </Typography>
             </Stack>
           </Grid>
           <Grid size={4}>
@@ -317,17 +326,29 @@ const FeatureSection = ({ action }) => {
               {[
                 {
                   name: "5 sao",
-                  value: 96,
+                  value: product.rating?.star_5,
                   description: "Rất hài lòng",
                 },
-                { name: "4 sao", value: 0, description: "Hài lòng" },
-                { name: "3 sao", value: 2, description: "Bình thường" },
+                {
+                  name: "4 sao",
+                  value: product.rating?.star_4,
+                  description: "Hài lòng",
+                },
+                {
+                  name: "3 sao",
+                  value: product.rating?.star_3,
+                  description: "Bình thường",
+                },
                 {
                   name: "2 sao",
-                  value: 0,
+                  value: product.rating?.star_2,
                   description: "Không hài lòng",
                 },
-                { name: "1 sao", value: 2, description: "Rất tệ" },
+                {
+                  name: "1 sao",
+                  value: product.rating?.star_1,
+                  description: "Rất tệ",
+                },
               ].map((item) => (
                 <Stack
                   direction="row"
@@ -338,7 +359,7 @@ const FeatureSection = ({ action }) => {
                 >
                   <Typography variant="body2">{item.name}</Typography>
                   <LinearProgress
-                    value={item.value}
+                    value={(item.value / product.reviews?.length) * 100}
                     color="secondary"
                     variant="determinate"
                     sx={{ width: 140, height: "12px" }}
@@ -447,7 +468,7 @@ const FeatureSection = ({ action }) => {
           }}
         >
           <Typography variant="body1">
-            105 bình luận cho sản phẩm này
+            {product.reviews?.length} bình luận cho sản phẩm này
           </Typography>
           <div className="flex-1"></div>
           <FormControl>
@@ -474,25 +495,21 @@ const FeatureSection = ({ action }) => {
                   Hoàn Lê
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Sữa Rửa Mặt CeraVe Sạch Sâu Cho Da Thường Đến Da Dầu 473ml
+                  {product.name}
                 </Typography>
                 <div className="flex-1"></div>
                 <Typography variant="body2" color="text.secondary">
-                  04:58 | 2025-07-11
+                  {formatTime(item.created_at)} | {formatDate(item.created_at)}
                 </Typography>
               </Stack>
-              <Typography variant="body2">
-                Mình có chai retinol Candid 0,5% mới dùng 2 lần. Bao check hàng
-                Hanna Olala. 600k pass do dùng mạnh với da quá Ai quan tâm liên
-                hệ zalo 0362587279
-              </Typography>
-              <Avatar
+              <Typography variant="body2">{item.description}</Typography>
+              {/* <Avatar
                 variant="square"
                 sx={{
                   width: 80,
                   height: 80,
                 }}
-              />
+              /> */}
               <Stack
                 paddingLeft="20px"
                 paddingTop="12px"

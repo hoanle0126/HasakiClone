@@ -244,7 +244,7 @@ const ClientHeader = () => {
             </Stack>
           </Grid>
         )}
-        {categoriesChildren.children.length > 0 && (
+        {categoriesChildren?.children?.length > 0 && (
           <Grid size={6}>
             <Grid
               container
@@ -275,7 +275,7 @@ const ClientHeader = () => {
                     },
                   }}
                 >
-                  {categoriesChildren.children.map((item, index) => (
+                  {categoriesChildren?.children?.map((item, index) => (
                     <Box
                       key={index}
                       sx={{
@@ -291,7 +291,7 @@ const ClientHeader = () => {
                         {item.name}
                       </Typography>
                       {item.children &&
-                        item.children.map((itemChild, indexChild) => (
+                        item?.children?.map((itemChild, indexChild) => (
                           <Typography
                             key={indexChild}
                             variant="captiontext"

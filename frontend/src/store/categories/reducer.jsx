@@ -42,7 +42,18 @@ export const categoryReducer = (state = initialState, action) => {
     case GET_CATEGORIES_CHILDREN_SUCCESS:
       return { ...state, loading: false, categoriesChildren: action.payload };
     case GET_CATEGORY_BY_ID_SUCCESS:
-      return { ...state, loading: false, category: action.payload };
+      return {
+        ...state,
+        loading: false,
+        category: {
+          ...action.payload.category,
+          products: action.payload.products.data,
+        },
+        meta: {
+          current_page: action.payload.products.current_page,
+          last_page: action.payload.products.last_page,
+        },
+      };
     default:
       return state;
   }
