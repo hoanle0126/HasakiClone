@@ -21,6 +21,7 @@ use App\Models\Brand;
 use App\Models\Categories;
 use App\Models\City;
 use App\Models\District;
+use App\Models\HotDeal;
 use App\Models\Product;
 use App\Models\Ward;
 use Illuminate\Http\Request;
@@ -33,12 +34,12 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::apiResource("/categories", CategoriesController::class);
 Route::apiResource("/brands", BrandController::class);
 Route::post("/add-brands", function (Request $request) {
-    $categories = Categories::all();
+    $categories = HotDeal::all();
     foreach ($categories as $category) {
         $category->update(['url' => Str::slug($category->name)]);
 
     }
-    return Categories::all();
+    return HotDeal::all();
 });
 Route::post("/add-products", function (Request $request) {
 

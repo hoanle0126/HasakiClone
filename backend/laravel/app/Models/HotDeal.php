@@ -8,7 +8,8 @@ class HotDeal extends Model
 {
     protected $fillable = [
         "name",
-        "banners"
+        "banners",
+        "url"
     ];
 
     protected $casts = [

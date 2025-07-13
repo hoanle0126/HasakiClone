@@ -19,6 +19,7 @@ class HotDealResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "banners" => $this->banners,
+            "url" => $this->url,
             "deal_times" => HotDealTimeResource::collection($this->dates)
         ];
     }
