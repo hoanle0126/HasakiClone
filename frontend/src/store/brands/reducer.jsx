@@ -35,7 +35,18 @@ export const brandReducer = (state = initialState, action) => {
       return { ...state, loading: false, brands: action.payload };
     case GET_BRAND_BY_ID_SUCCESS:
       console.log("test", action.payload);
-      return { ...state, loading: false, brand: action.payload };
+      return {
+        ...state,
+        loading: false,
+        brand: {
+          ...action.payload.brand,
+          products: action.payload.products.data,
+        },
+        meta: {
+          current_page:action.payload.products.current_page,
+          last_page:action.payload.products.last_page,
+        },
+      };
     default:
       return state;
   }

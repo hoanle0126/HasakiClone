@@ -13,37 +13,18 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCategories } from "@/store/categories/action";
+import { getAllCategories, getCategoryById } from "@/store/categories/action";
 import Banner from "./Banner";
 import MainSection from "./MainSection";
 import LoginPage from "@/pages/AuthPage/LoginPage";
 import RegisterPage from "@/pages/AuthPage/RegisterPage";
 import { getUser } from "@/store/users/action";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ClientHeader = () => {
   const containerRef = React.useRef(null);
-
-  React.useEffect(() => {
-    const container = containerRef.current;
-
-    const handleWheel = (e) => {
-      // Nếu lăn theo chiều dọc, chuyển thành cuộn ngang
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        container.scrollLeft += e.deltaY;
-      }
-    };
-
-    if (container) {
-      container.addEventListener("wheel", handleWheel, { passive: false });
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener("wheel", handleWheel);
-      }
-    };
-  }, []);
+  const location = useLocation();
+  const navigate = useNavigate();
   const [onDanhMuc, setOnDanhMuc] = React.useState(false);
   const dispatch = useDispatch();
   const categoriesReducer = useSelector((store) => store.categories);
@@ -59,6 +40,11 @@ const ClientHeader = () => {
   React.useEffect(() => {
     console.log(categoriesReducer.categories);
   }, [categoriesReducer.loading]);
+
+  React.useEffect(() => {
+    setOnDanhMuc(false);
+    setCategoriesChildren({ children: [] });
+  }, [location.pathname]);
 
   return (
     <>
@@ -102,22 +88,24 @@ const ClientHeader = () => {
           <Icon icon="fluent:divider-tall-20-regular" width="18" height="18" />
         </Stack>
         {[
-          { title: "Hasaki deals" },
-          { title: "hot deals" },
-          { title: "thương hiệu" },
+          { title: "Hasaki deals", to: "/deal-dang-dien-ra" },
+          { title: "hot deals", to: "/campaign/wow" },
+          { title: "thương hiệu", to: "/thuong-hieu" },
           { title: "hàng mới về" },
           { title: "bán chạy" },
           { title: "clinic & spa" },
           { title: "dermahair" },
         ].map((item, index) => (
-          <Typography
-            key={index}
-            textTransform="uppercase"
-            variant="captiontext"
-            fontWeight={600}
-          >
-            {item.title}
-          </Typography>
+          <Link to={item.to}>
+            <Typography
+              key={index}
+              textTransform="uppercase"
+              variant="captiontext"
+              fontWeight={600}
+            >
+              {item.title}
+            </Typography>
+          </Link>
         ))}
         <div className="flex-1"></div>
         {[{ title: "Tra cứu đơn hàng" }, { title: "Tải ứng dụng" }].map(
@@ -164,6 +152,16 @@ const ClientHeader = () => {
                     color: "grey.0",
                   },
                 }}
+                onClick={() => {
+                  dispatch(
+                    getCategoryById({
+                      id: "suc-khoe-lam-dep",
+                      onSuccess: () => {
+                        navigate("/danh-muc/suc-khoe-lam-dep");
+                      },
+                    })
+                  );
+                }}
               >
                 Sức Khỏe - Làm Đẹp
               </Typography>
@@ -184,6 +182,16 @@ const ClientHeader = () => {
                       backgroundColor: "secondary.main",
                       color: "grey.0",
                     },
+                  }}
+                  onClick={() => {
+                    dispatch(
+                      getCategoryById({
+                        id: item.url,
+                        onSuccess: () => {
+                          navigate("/danh-muc/" + item.url);
+                        },
+                      })
+                    );
                   }}
                 >
                   <Typography variant="captiontext" textTransform="capitalize">
@@ -287,6 +295,17 @@ const ClientHeader = () => {
                         padding="2px 12px"
                         display="block"
                         fontWeight={600}
+                        className="cursor-pointer"
+                        onClick={() => {
+                          dispatch(
+                            getCategoryById({
+                              id: item.url,
+                              onSuccess: () => {
+                                navigate("/danh-muc/" + item.url);
+                              },
+                            })
+                          );
+                        }}
                       >
                         {item.name}
                       </Typography>
@@ -298,6 +317,17 @@ const ClientHeader = () => {
                             padding="2px 12px"
                             textTransform="capitalize"
                             display="block"
+                            className="cursor-pointer"
+                            onClick={() => {
+                              dispatch(
+                                getCategoryById({
+                                  id: itemChild.url,
+                                  onSuccess: () => {
+                                    navigate("/danh-muc/" + itemChild.url);
+                                  },
+                                })
+                              );
+                            }}
                           >
                             {itemChild.name}
                           </Typography>

@@ -51,22 +51,24 @@ export const createCategory = (category) => async (dispatch) => {
   }
 };
 
-export const getCategoryById = (id) => async (dispatch) => {
-  dispatch({ type: GET_CATEGORY_BY_ID_REQUEST });
-  try {
-    axiosClient
-      .get("/categories/" + id)
-      .then((data) => {
-        dispatch({ type: GET_CATEGORY_BY_ID_SUCCESS, payload: data.data });
-        console.log(data.data);
-      })
-      .catch((e) => {
-        dispatch({ type: GET_CATEGORY_BY_ID_FAILURE, payload: e });
-      });
-  } catch (error) {
-    dispatch({ type: GET_CATEGORY_BY_ID_FAILURE, payload: error });
-  }
-};
+export const getCategoryById =
+  ({ id: id, onSuccess }) =>
+  async (dispatch) => {
+    dispatch({ type: GET_CATEGORY_BY_ID_REQUEST });
+    try {
+      await axiosClient
+        .get("/categories/" + id)
+        .then((data) => {
+          dispatch({ type: GET_CATEGORY_BY_ID_SUCCESS, payload: data.data });
+          onSuccess();
+        })
+        .catch((e) => {
+          dispatch({ type: GET_CATEGORY_BY_ID_FAILURE, payload: e });
+        });
+    } catch (error) {
+      dispatch({ type: GET_CATEGORY_BY_ID_FAILURE, payload: error });
+    }
+  };
 
 export const updateCategory = (id, category) => async (dispatch) => {
   dispatch({ type: UPDATE_CATEGORY_REQUEST });

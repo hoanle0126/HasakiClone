@@ -83,7 +83,6 @@ export const addCart = (cart) => async (dispatch) => {
   await axiosClient
     .post("/carts", cart)
     .then((data) => {
-      console.log(data.data);
       dispatch({ type: ADD_CART_SUCCESS, payload: data.data });
     })
     .catch((e) => {
@@ -108,7 +107,6 @@ export const showAddress = (id) => async (dispatch) => {
   await axiosClient
     .get("/addresses/" + id)
     .then((data) => {
-      console.log(data.data);
       dispatch({ type: SHOW_ADDRESS_SUCCESS, payload: data.data });
 
       return data.data;
@@ -125,7 +123,6 @@ export const updateAddress = (address, id) => async (dispatch) => {
   await axiosClient
     .put("/addresses/" + id, address)
     .then((data) => {
-      console.log(data.data);
       dispatch({ type: UPDATE_ADDRESS_SUCCESS, payload: data.data });
 
       return data.data;
@@ -142,7 +139,6 @@ export const deleteAddress = (id) => async (dispatch) => {
   await axiosClient
     .delete("/addresses/" + id)
     .then((data) => {
-      console.log(data.data);
       dispatch({ type: DELETE_ADDRESS_SUCCESS, payload: data.data });
 
       return data.data;

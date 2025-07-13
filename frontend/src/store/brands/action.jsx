@@ -12,16 +12,19 @@ import {
   UPDATE_BRAND_SUCCESS,
 } from "./actionType";
 
-export const getAllBrands = () => async (dispatch) => {
-  dispatch({ type: GET_ALL_BRANDS_REQUEST });
-  try {
-    axiosClient.get("/brands").then((data) => {
-      dispatch({ type: GET_ALL_BRANDS_SUCCESS, payload: data.data });
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const getAllBrands =
+  ({ onSuccess = () => {} }) =>
+  async (dispatch) => {
+    dispatch({ type: GET_ALL_BRANDS_REQUEST });
+    try {
+      axiosClient.get("/brands").then((data) => {
+        dispatch({ type: GET_ALL_BRANDS_SUCCESS, payload: data.data });
+        onSuccess(data.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const addNewBrand = (brand) => async (dispatch) => {
   dispatch({ type: ADD_BRAND_REQUEST });
@@ -34,17 +37,20 @@ export const addNewBrand = (brand) => async (dispatch) => {
   }
 };
 
-export const getBrandById = (id) => async (dispatch) => {
-  dispatch({ type: GET_BRAND_BY_ID_REQUEST });
-  try {
-    axiosClient.get("/brands/" + id).then((data) => {
-      dispatch({ type: GET_BRAND_BY_ID_SUCCESS, payload: data.data });
-      console.log("brands", data.data);
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const getBrandById =
+  ({ id, onSuccess = () => {}, search = "" }) =>
+  async (dispatch) => {
+    dispatch({ type: GET_BRAND_BY_ID_REQUEST });
+    try {
+      axiosClient.get("/brands/" + id + search).then((data) => {
+        console.log("url", "/brands/" + id + search);
+        dispatch({ type: GET_BRAND_BY_ID_SUCCESS, payload: data.data });
+        onSuccess();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 export const updateBrand = (brand, id) => async (dispatch) => {
   dispatch({ type: UPDATE_BRAND_REQUEST });

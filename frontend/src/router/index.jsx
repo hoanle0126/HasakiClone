@@ -38,6 +38,9 @@ import CheckoutLayout from "@/layouts/CheckoutLayout";
 import DiscountCodePage from "@/pages/AdminPage/DiscountCodePage";
 import VoucherPage from "@/pages/AdminPage/VoucherPage";
 import CategoryProductsPage from "@/pages/ClientPage/CategoryProductsPage";
+import BrandProductPage from "@/pages/ClientPage/BrandProductPage";
+import BrandClientPage from "@/pages/ClientPage/BrandsPage";
+import HotDealClientPage from "@/pages/ClientPage/HotDealPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -59,6 +62,18 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/danh-muc/:id",
         element: <CategoryProductsPage />,
+      },
+      {
+        path: "/thuong-hieu",
+        element: <BrandClientPage />,
+      },
+      {
+        path: "/thuong-hieu/:id",
+        element: <BrandProductPage />,
+      },
+      {
+        path: "/campaign/wow",
+        element: <HotDealClientPage />,
       },
       {
         path: "customer",
