@@ -1,0 +1,827 @@
+{
+    "status": {
+        "error_code": 0,
+        "error_message": "success",
+        "alert_message": "Thành công"
+    },
+    "data": {
+        "blocks": [
+            {
+                "type": "CommonInfo",
+                "tab_title": "Tổng quan",
+                "common_data": {
+                    "UUID": "e31202a5-7bec-42b1-a4b8-10c93c851005",
+                    "prodDetId": "77f25456-0e90-56f7-94f0-3217e60cc158",
+                    "title": "<h3><span style=\"color: #ff6600;\"><strong>NowFree 2H</strong></span>Giao Nhanh Miễn Phí 2H</h3>",
+                    "gallery": [
+                        {
+                            "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530.jpg",
+                            "image_80": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_80x80_d200c5_fit_center.jpg"
+                        },
+                        {
+                            "image": "https://media.hcdn.vn/catalog/product/t/e/tem-phu-combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-1712039144.jpg",
+                            "image_80": "https://media.hcdn.vn/catalog/product/t/e/tem-phu-combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-1712039144_img_80x80_d200c5_fit_center.jpg"
+                        },
+                        {
+                            "image": "https://media.hcdn.vn/catalog/product/certificate/TDIC-giay-chung-nhan-dai-ly-chinh-hang-20251736844951.jpg",
+                            "image_80": "https://media.hcdn.vn/catalog/product/certificate/TDIC-giay-chung-nhan-dai-ly-chinh-hang-20251736844951_img_80x80_d200c5_fit_center.jpg"
+                        },
+                        {
+                            "image": "https://media.hcdn.vn/catalog/product/c/o/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-1-1712039136.jpg",
+                            "image_80": "https://media.hcdn.vn/catalog/product/c/o/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-1-1712039136_img_80x80_d200c5_fit_center.jpg"
+                        },
+                        {
+                            "image": "https://media.hcdn.vn/catalog/product/c/o/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-2-1712039136.jpg",
+                            "image_80": "https://media.hcdn.vn/catalog/product/c/o/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-2-1712039136_img_80x80_d200c5_fit_center.jpg"
+                        },
+                        {
+                            "image": "https://media.hcdn.vn/catalog/product/g/o/google-shopping-combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-1712039175.jpg",
+                            "image_80": "https://media.hcdn.vn/catalog/product/g/o/google-shopping-combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-1712039175_img_80x80_d200c5_fit_center.jpg"
+                        }
+                    ],
+                    "id": 120044,
+                    "sku": "422219221",
+                    "name": "Combo 2 Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                    "english_name": "Supple Preparation Unscented Toner",
+                    "category_name": "Toner / Nước Cân Bằng Da",
+                    "url": "https://hasaki.vn/san-pham/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-120044.html",
+                    "redirect_link": "",
+                    "brand": {
+                        "name": "Klairs",
+                        "off_online": false,
+                        "off_online_url": null,
+                        "url": "https://hasaki.vn/thuong-hieu/klairs.html",
+                        "image": "https://media.hcdn.vn/brand/1534909918klairs.jpg",
+                        "id": 2182,
+                        "followed": false,
+                        "following": 7613
+                    },
+                    "market_price": 818000,
+                    "price": 557000,
+                    "discount_percent": 32,
+                    "promotion_text": null,
+                    "promotion_badge": null,
+                    "quantity": 50,
+                    "is_show_button": 1,
+                    "spa": null,
+                    "bought_count": 0,
+                    "deal": {
+                        "deal_id": 9214,
+                        "quantity": 23,
+                        "bought_percent": 23,
+                        "start": 1744909200,
+                        "expired": 1752490799,
+                        "time_remain": 10483
+                    },
+                    "icon_delivery": null,
+                    "icon_out_stock": "https://hasaki.vn/icon/icon-out-stock.png",
+                    "rating": {
+                        "total": 137,
+                        "average": 4.8
+                    },
+                    "comment": {
+                        "total": 566
+                    },
+                    "favorite": {
+                        "is_liked": false
+                    },
+                    "now_free": true,
+                    "optional_text": null,
+                    "multi_optional_text": [],
+                    "genuine_url": "https://hotro.hasaki.vn/kiem-chung-hang-chinh-hang.html",
+                    "announce": null,
+                    "price_detail": null,
+                    "category_list": [
+                        {
+                            "id": 3,
+                            "name": "Sức Khỏe - Làm Đẹp",
+                            "level": 2,
+                            "is_active": 1,
+                            "url": "https://hasaki.vn/danh-muc/suc-khoe-lam-dep-c3.html"
+                        },
+                        {
+                            "id": 4,
+                            "name": "Chăm Sóc Da Mặt",
+                            "level": 3,
+                            "is_active": 1,
+                            "url": "https://hasaki.vn/danh-muc/cham-soc-da-mat-c4.html"
+                        },
+                        {
+                            "id": 1855,
+                            "name": "Làm Sạch Da",
+                            "level": 4,
+                            "is_active": 1,
+                            "url": "https://hasaki.vn/danh-muc/lam-sach-da-c1855.html"
+                        },
+                        {
+                            "id": 1857,
+                            "name": "Toner / Nước Cân Bằng Da",
+                            "level": 5,
+                            "is_active": 1,
+                            "url": "https://hasaki.vn/danh-muc/toner-c1857.html"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "UserVouchersInfo"
+            },
+            {
+                "type": "PromotionInfo",
+                "title": "Ưu đãi khác",
+                "promotions_data": {
+                    "promotion_list": [
+                        {
+                            "title": "",
+                            "image": "https://media.hasaki.vn/catalog/product/b/o/bo-qua-tang-hasaki-ngau-nhien_img_220x220_0dff4c_fit_center.jpg",
+                            "content": "Nhập HASAKIAPP giảm 10% đơn hàng đầu tiên trên app"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "SplitComboInfo",
+                "title": "Bạn có thể mua sản phẩm tách combo",
+                "split_combo_list_data": {
+                    "products": [
+                        {
+                            "id": 65994,
+                            "name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "url": "https://hasaki.vn/san-pham/nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml-65994.html",
+                            "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja_img_220x220_0dff4c_fit_center.png",
+                            "price": 226000
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ShippingInfo",
+                "title": "Giao nhanh miễn phí 2H",
+                "shipping_info_data": {
+                    "delivery": {
+                        "title": "Giao Nhanh Miễn Phí 2H",
+                        "icon": "https://hasaki.vn/icon/icon_nowfree.png",
+                        "text": "Bạn muốn nhận hàng trước <span style='color: #ff6600;'>18h</span> hôm nay (<span style='color: #ff6600;'><strong>Miễn phí</strong></span>). Đặt hàng trong <span style='color: #ff6600;'>55 phút</span> tới và chọn giao hàng <span style='color: #ff6600;'>2H</span> ở bước thanh toán.",
+                        "url": "https://hotro.hasaki.vn/van-chuyen-2h.html"
+                    }
+                }
+            },
+            {
+                "type": "BoxShippingRight",
+                "title": "Miễn phí vận chuyển",
+                "url": "https://hotro.hasaki.vn/",
+                "content_box_shipping_right": {
+                    "delivery": {
+                        "title": ""
+                    },
+                    "shipping": {
+                        "title": "tại 60 Tỉnh Thành"
+                    },
+                    "policy": {
+                        "title": 30
+                    }
+                }
+            },
+            {
+                "type": "PickingInfo",
+                "picking_info_data": {
+                    "quantity": 50,
+                    "branch": {
+                        "total": 267,
+                        "stock_available": 267,
+                        "in_stock": 50
+                    },
+                    "attribute": {
+                        "isCombo": false,
+                        "items": [
+                            {
+                                "id": 143,
+                                "code": "capacity",
+                                "display_type": "text",
+                                "label": "Dung Tích",
+                                "options": [
+                                    {
+                                        "id": 222798,
+                                        "short_label": "2x180ml",
+                                        "long_label": "2x180ml",
+                                        "is_default": true,
+                                        "option_color": null,
+                                        "products": [
+                                            {
+                                                "id": 120044,
+                                                "sku": "422219221",
+                                                "price": 557000,
+                                                "quantity": 32954,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 267,
+                                                    "in_stock": 17581
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530.jpg",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_38x38_2b8932_fit_center.jpg",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_358x358_843626_fit_center.jpg",
+                                                "option_id": 222798,
+                                                "product_url": "https://hasaki.vn/san-pham/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-120044.html",
+                                                "combo": null
+                                            }
+                                        ],
+                                        "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530.jpg",
+                                        "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_38x38_2b8932_fit_center.jpg"
+                                    },
+                                    {
+                                        "id": 40,
+                                        "short_label": "10ml",
+                                        "long_label": "10ml",
+                                        "is_default": false,
+                                        "option_color": null,
+                                        "products": [
+                                            {
+                                                "id": 186332,
+                                                "sku": "422228886",
+                                                "price": 49000,
+                                                "quantity": 3438,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 266,
+                                                    "in_stock": 2568
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927.jpg",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927_img_38x38_2b8932_fit_center.jpg",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927_img_358x358_843626_fit_center.jpg",
+                                                "option_id": 40,
+                                                "product_url": "https://hasaki.vn/san-pham/mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-186332.html",
+                                                "combo": null
+                                            }
+                                        ],
+                                        "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927.jpg",
+                                        "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927_img_38x38_2b8932_fit_center.jpg"
+                                    },
+                                    {
+                                        "id": 87,
+                                        "short_label": "20ml",
+                                        "long_label": "20ml",
+                                        "is_default": false,
+                                        "option_color": null,
+                                        "products": [
+                                            {
+                                                "id": 198055,
+                                                "sku": "422229180",
+                                                "price": 69000,
+                                                "quantity": 1693,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 240,
+                                                    "in_stock": 1440
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245.jpg",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245_img_38x38_2b8932_fit_center.jpg",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245_img_358x358_843626_fit_center.jpg",
+                                                "option_id": 87,
+                                                "product_url": "https://hasaki.vn/san-pham/mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-198055.html",
+                                                "combo": null
+                                            }
+                                        ],
+                                        "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245.jpg",
+                                        "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245_img_38x38_2b8932_fit_center.jpg"
+                                    },
+                                    {
+                                        "id": 82,
+                                        "short_label": "180ml",
+                                        "long_label": "180ml",
+                                        "is_default": false,
+                                        "option_color": null,
+                                        "products": [
+                                            {
+                                                "id": 65994,
+                                                "sku": "318900012",
+                                                "price": 226000,
+                                                "quantity": 65995,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 267,
+                                                    "in_stock": 35247
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja.png",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja_img_38x38_2b8932_fit_center.png",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja_img_358x358_843626_fit_center.png",
+                                                "option_id": 82,
+                                                "product_url": "https://hasaki.vn/san-pham/nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml-65994.html",
+                                                "combo": null
+                                            },
+                                            {
+                                                "id": 65998,
+                                                "sku": "318900011",
+                                                "price": 220000,
+                                                "quantity": 3918,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 267,
+                                                    "in_stock": 2594
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw.png",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw_img_38x38_2b8932_fit_center.png",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw_img_358x358_843626_fit_center.png",
+                                                "option_id": 82,
+                                                "product_url": "https://hasaki.vn/san-pham/nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml-65998.html",
+                                                "combo": null
+                                            }
+                                        ],
+                                        "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja.png",
+                                        "image_38": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja_img_38x38_2b8932_fit_center.png"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 153,
+                                "code": "flavor",
+                                "display_type": "image",
+                                "label": "Mùi hương",
+                                "options": [
+                                    {
+                                        "id": 4408,
+                                        "short_label": "Không Mùi",
+                                        "long_label": "Không Mùi",
+                                        "is_default": true,
+                                        "option_color": null,
+                                        "products": [
+                                            {
+                                                "id": 198055,
+                                                "sku": "422229180",
+                                                "price": 69000,
+                                                "quantity": 1693,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 240,
+                                                    "in_stock": 1440
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245.jpg",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245_img_38x38_2b8932_fit_center.jpg",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-1750992245_img_358x358_843626_fit_center.jpg",
+                                                "option_id": 4408,
+                                                "product_url": "https://hasaki.vn/san-pham/mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-20ml-198055.html",
+                                                "combo": null
+                                            },
+                                            {
+                                                "id": 65994,
+                                                "sku": "318900012",
+                                                "price": 226000,
+                                                "quantity": 65995,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 267,
+                                                    "in_stock": 35247
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja.png",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja_img_38x38_2b8932_fit_center.png",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml_oUaZPtw17162iLja_img_358x358_843626_fit_center.png",
+                                                "option_id": 4408,
+                                                "product_url": "https://hasaki.vn/san-pham/nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml-65994.html",
+                                                "combo": null
+                                            },
+                                            {
+                                                "id": 120044,
+                                                "sku": "422219221",
+                                                "price": 557000,
+                                                "quantity": 32954,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 267,
+                                                    "in_stock": 17581
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530.jpg",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_38x38_2b8932_fit_center.jpg",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_358x358_843626_fit_center.jpg",
+                                                "option_id": 4408,
+                                                "product_url": "https://hasaki.vn/san-pham/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-120044.html",
+                                                "combo": null
+                                            },
+                                            {
+                                                "id": 186332,
+                                                "sku": "422228886",
+                                                "price": 49000,
+                                                "quantity": 3438,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 266,
+                                                    "in_stock": 2568
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927.jpg",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927_img_38x38_2b8932_fit_center.jpg",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-1742608927_img_358x358_843626_fit_center.jpg",
+                                                "option_id": 4408,
+                                                "product_url": "https://hasaki.vn/san-pham/mini-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-10ml-186332.html",
+                                                "combo": null
+                                            }
+                                        ],
+                                        "image": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530.jpg",
+                                        "image_38": "https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530_img_38x38_2b8932_fit_center.jpg"
+                                    },
+                                    {
+                                        "id": 218965,
+                                        "short_label": "Có Mùi Hương",
+                                        "long_label": "Có Mùi Hương",
+                                        "is_default": false,
+                                        "option_color": null,
+                                        "products": [
+                                            {
+                                                "id": 65998,
+                                                "sku": "318900011",
+                                                "price": 220000,
+                                                "quantity": 3918,
+                                                "branch": {
+                                                    "total": 267,
+                                                    "stock_available": 267,
+                                                    "in_stock": 2594
+                                                },
+                                                "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw.png",
+                                                "image_38": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw_img_38x38_2b8932_fit_center.png",
+                                                "image_358": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw_img_358x358_843626_fit_center.png",
+                                                "option_id": 218965,
+                                                "product_url": "https://hasaki.vn/san-pham/nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml-65998.html",
+                                                "combo": null
+                                            }
+                                        ],
+                                        "image": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw.png",
+                                        "image_38": "https://media.hcdn.vn/catalog/product/p/r/special-deal-nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml_14UTZwbXC6aNxkYw_img_38x38_2b8932_fit_center.png"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "type": "DescriptionInfo",
+                "title": "Mô tả sản phẩm",
+                "tab_title": "Mô tả",
+                "description_data": {
+                    "info": {
+                        "short": "Nước Hoa Hồng Klairs Supple Preparation là dòng sản phẩm toner được thương hiệu Dear, Klairs thiết kế chuyên biệt dành cho làn da nhạy cảm. Với bảng thành phần chiết xuất từ thực vật và kết cấu lỏng nhẹ, thấm nhanh trên da, nước h",
+                        "full": "<div style=\"font-size: 13px!important; font-family: arial, helvetica, sans-serif;color: black!important;\"><p><strong>Nước Hoa Hồng Klairs&nbsp;Supple Preparation&nbsp;</strong>l&agrave; d&ograve;ng sản phẩm&nbsp;<a href=\"https://hasaki.vn/danh-muc/toner-c1857.html\" target=\"_blank\">toner</a>&nbsp;được&nbsp;<a href=\"https://hasaki.vn/thuong-hieu/klairs.html\" target=\"_blank\">thương hiệu Dear, Klairs</a>&nbsp;thiết kế chuy&ecirc;n biệt d&agrave;nh cho l&agrave;n da nhạy cảm. Với bảng th&agrave;nh phần chiết xuất từ thực vật v&agrave; kết cấu lỏng nhẹ, thấm nhanh tr&ecirc;n da, nước hoa hồng Klairs sẽ gi&uacute;p c&acirc;n bằng độ pH v&agrave; cấp ẩm cho l&agrave;n da hiệu quả, hỗ trợ cho c&aacute;c&nbsp;<span>bước skincare tiếp theo đạt hiệu quả tối ưu.</span></p>\r\n<p>Hiện sản phẩm&nbsp;<strong>Nước Hoa Hồng Klairs Cho Da Nhạy Cảm </strong>đ&atilde; c&oacute; mặt tại <a href=\"https://hasaki.vn/\" target=\"_blank\">Hasaki</a> với 2 loại:</p>\r\n<ul>\r\n<li>\r\n<p><strong>Nước Hoa Hồng Klairs&nbsp;Supple Preparation Facial Toner:&nbsp;</strong>d&agrave;nh cho da nhạy cảm (hương thảo mộc).</p>\r\n</li>\r\n<li>\r\n<p><strong>Nước Hoa Hồng Klairs&nbsp;Supple Preparation Unscented Toner:&nbsp;</strong>d&agrave;nh cho da si&ecirc;u nhạy cảm (kh&ocirc;ng m&ugrave;i).</p>\r\n</li>\r\n</ul>\r\n<h2 style=\"font-size: 17px!important;font-weight: bolder;\">1.&nbsp;Nước hoa hồng Klairs Supple Preparation Facial Toner 180ml</h2>\r\n<p><span><strong>Nước hoa hồng Klairs Supple Preparation Facial Toner</strong>&nbsp;sản phẩm tối ưu trong việc l&agrave;m sạch, c&acirc;n bằng độ PH v&agrave; dưỡng ẩm, c&oacute; kết cấu dạng lỏng nhẹ, trong suốt v&agrave; kh&ocirc;ng m&agrave;u, thẩm thấu nhanh ch&oacute;ng v&agrave;o da. Kết hợp c&ugrave;ng m&ugrave;i hương thảo mộc v&ocirc; c&ugrave;ng dễ chịu, ho&agrave;n to&agrave;n kh&ocirc;ng g&acirc;y k&iacute;ch ứng hay cảm gi&aacute;c nhờn d&iacute;nh.&nbsp;</span></p>\r\n<p>&nbsp;</p>\r\n<p style=\"text-align: center;\"><img title=\"Mua Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm\" src=\"https://media.hcdn.vn/wysiwyg/kimhuy/nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml-3.gif\" alt=\"Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm\" width=\"800\" height=\"1200\" /></p>\r\n<p>&nbsp;</p>\r\n<p><strong>* Update:&nbsp;</strong>Với triết l&yacute; mong muốn mang tới những điều tốt đẹp nhất cho l&agrave;n da, thương hiệu dear,Klairs lu&ocirc;n thay đổi v&agrave; chuyển m&igrave;nh mỗi ng&agrave;y theo hướng t&iacute;ch cực hơn để đ&aacute;p ứng niềm tin của người d&ugrave;ng. Ch&iacute;nh v&igrave; thế,<strong> Nước Hoa Hồng Klairs&nbsp;Supple Preparation Facial Toner</strong>&nbsp;<span>lại được cẩn trọng hơn hết khi thay đổi từ bao b&igrave; b&ecirc;n ngo&agrave;i </span>cho đến th&agrave;nh phần b&ecirc;n trong, cụ thể như sau:</p>\r\n<div dir=\"auto\">\r\n<ul>\r\n<li>\r\n<p>Tối giản phần \"Triết l&yacute; thương hiệu\" ở mặt b&ecirc;n hộp.</p>\r\n</li>\r\n<li>\r\n<p>Thay đổi vị tr&iacute; th&agrave;nh phần ch&iacute;nh v&agrave; c&aacute;c logo chứng nhận.</p>\r\n</li>\r\n<li>\r\n<p>Thay đổi nhỏ trong văn bản.</p>\r\n</li>\r\n<li>\r\n<p>Đặc biệt, lượng tinh dầu tự nhi&ecirc;n (essential oils) trong sản phẩm đ&atilde; được giảm thiểu tối đa để l&agrave;nh t&iacute;nh hơn nữa với những l&agrave;n da nhạy cảm.</p>\r\n</li>\r\n</ul>\r\n</div>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Nước hoa hồng Klairs Supple Preparation Facial Toner ph&ugrave; hợp với loại da n&agrave;o?</h3>\r\n<ul>\r\n<li>\r\n<p>Sản phẩm th&iacute;ch hợp với mọi loại da, đặc biệt l&agrave; da nhạy cảm.</p>\r\n</li>\r\n</ul>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Đối tượng sử dụng Nước hoa hồng Klairs Supple Preparation Facial Toner:</h3>\r\n<ul>\r\n<li>\r\n<p>Da <a href=\"https://hasaki.vn/danh-muc/nhay-cam-kich-ung-c1885.html\" target=\"_blank\">nhạy cảm</a>, dễ bị mẩn đỏ.</p>\r\n</li>\r\n<li>\r\n<p>Da tổn thương do mụn.</p>\r\n</li>\r\n<li>\r\n<p>Da <a href=\"https://hasaki.vn/danh-muc/thieu-am-thieu-nuoc-c1883.html\" target=\"_blank\">thiếu ẩm - thiếu nước</a>.</p>\r\n</li>\r\n</ul>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Ưu thế nổi bật của&nbsp;Nước hoa hồng Klairs Supple Preparation Facial Toner:</h3>\r\n<ul>\r\n<li>\r\n<p><strong>Phyto-Oligo (tế b&agrave;o gốc thực vật)&nbsp;</strong>dưỡng ẩm to&agrave;n diện v&agrave; giải quyết t&igrave;nh trạng kh&ocirc; da.</p>\r\n</li>\r\n<li>\r\n<p><strong>Axit Amin từ L&uacute;a M&igrave;&nbsp;</strong>giảm vi&ecirc;m nhiễm tr&ecirc;n da.</p>\r\n</li>\r\n<li>\r\n<p><strong>Klairs Supple Preparation Facial Toner </strong>gi&uacute;p<strong>&nbsp;</strong>k&eacute;o d&agrave;i độ ẩm hơn 20% so với c&aacute;c loại Toner th&ocirc;ng thường&nbsp;với Sodium Hyaluronate v&agrave; Beta-glucan.</p>\r\n</li>\r\n<li>\r\n<p>Chống vi&ecirc;m&nbsp;v&agrave;&nbsp;cải thiện t&igrave;nh trạng mụn đầu trắng.</p>\r\n</li>\r\n<li>\r\n<p><span>Với c&aacute;c chiết xuất từ thực vật v&agrave; c&aacute;c th&agrave;nh phần l&agrave;m dịu:&nbsp;toner dưỡng ẩm dịu nhẹ, kh&ocirc;ng g&acirc;y k&iacute;ch ứng cho mọi loại da, ngay cả đối với những l&agrave;n da nhạy cảm nhất.</span></p>\r\n</li>\r\n</ul>\r\n<ul>\r\n<li>\r\n<p>C&oacute; m&ugrave;i hương thảo dược, cam thảo nhẹ nh&agrave;ng từ tinh dầu c&aacute;c loại hoa, n&oacute;i kh&ocirc;ng với chất tạo m&ugrave;i nh&acirc;n tạo.</p>\r\n</li>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<p style=\"text-align: center;\"><img title=\"Mua Ngay Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm\" src=\"https://media.hcdn.vn/wysiwyg/kimhuy/nuoc-hoa-hong-klairs-danh-cho-da-nhay-cam-180ml4.gif\" alt=\"Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm Hasaki\" width=\"800\" height=\"533\" /></p>\r\n<p style=\"text-align: center;\"><span ><br /></span></p>\r\n<h2 style=\"font-size: 17px!important;font-weight: bolder;\">2.&nbsp;Nước hoa hồng Klairs Supple Preparation Unscented Toner 180ml</h2>\r\n<p><strong>Nước hoa hồng kh&ocirc;ng m&ugrave;i&nbsp; Klairs Supple Preparation Unscented Toner&nbsp;</strong>dưỡng ẩm v&agrave; mềm da&nbsp;chiết xuất từ thực vật, gi&uacute;p c&acirc;n bằng độ pH, tăng cường hiệu quả chăm s&oacute;c da. Toner c&oacute; dạng trong suốt, kh&ocirc;ng m&agrave;u, lỏng, nhẹ, hơi nhớt, thấm rất nhanh tr&ecirc;n da. Gi&uacute;p loại bỏ bụi bẩn v&agrave; b&atilde; nhờn dư thừa tr&ecirc;n da sau khi rửa mặt đồng thời c&acirc;n bằng độ pH để c&aacute;c bước skincare tiếp theo đạt hiệu quả hơn.</p>\r\n<p>&nbsp;</p>\r\n<p style=\"text-align: center;\"><span style=\"color: #000000; font-family: arial,helvetica,sans-serif; \"><span class=\"base\" data-ui-id=\"page-title-wrapper\"><img title=\"Mua Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm Ngay\" src=\"https://media.hcdn.vn/wysiwyg/kimhuy/nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml-6.gif\" alt=\"Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm Tại Haskai\" width=\"800\" height=\"1200\" /></span></span></p>\r\n<p style=\"text-align: center;\">&nbsp;</p>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Nước hoa hồng Klairs Supple Preparation Unscented Toner ph&ugrave; hợp với loại da n&agrave;o?</h3>\r\n<ul>\r\n<li>\r\n<p>Sản phẩm th&iacute;ch hợp sử dụng cho mọi loại da, đặc biệt l&agrave; da si&ecirc;u nhạy cảm.</p>\r\n</li>\r\n</ul>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Đối tượng sử dụng&nbsp;Nước hoa hồng Klairs Supple Preparation Unscented Toner:</h3>\r\n<div>\r\n<ul>\r\n<li>\r\n<p>Da nhạy cảm, dễ bị k&iacute;ch ứng, mẩn đỏ.</p>\r\n</li>\r\n<li>\r\n<p>Da kh&ocirc;, thiếu nước.</p>\r\n</li>\r\n</ul>\r\n</div>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Ưu thế nổi bật của Nước hoa hồng Klairs Supple Preparation Unscented Toner:</h3>\r\n<ul>\r\n<li>\r\n<p>Cấp ẩm&nbsp;tức th&igrave; cho da, l&agrave;m dịu l&agrave;n da kh&ocirc; căng, k&iacute;ch ứng&nbsp;</p>\r\n</li>\r\n<li>\r\n<p>C&acirc;n bằng độ pH tr&ecirc;n da, tăng hiệu quả của qu&aacute; tr&igrave;nh chăm s&oacute;c da h&agrave;ng ng&agrave;y.</p>\r\n</li>\r\n<li>\r\n<p><strong>Sodium Hyaluronate:&nbsp;</strong>Cấp nước vượt trội, gi&uacute;p da được ẩm mượt v&agrave; mềm mại.</p>\r\n</li>\r\n<li>\r\n<p><strong>Phyto-Oligo:</strong>&nbsp;dưỡng ẩm, gi&uacute;p da kh&ocirc;ng bị kh&ocirc;.</p>\r\n</li>\r\n<li>\r\n<p><strong>Axit Amin l&uacute;a m&igrave;:&nbsp;</strong>c&oacute; c&ocirc;ng dụng chống vi&ecirc;m, gi&uacute;p giảm vi&ecirc;m v&agrave; cung cấp độ ẩm s&acirc;u.</p>\r\n</li>\r\n<li>\r\n<p>Kết cấu sản phẩm l&agrave; dạng lỏng&nbsp;khi thoa l&ecirc;n da bạn sẽ cảm thấy da được cung cấp một lượng nước v&agrave; độ ẩm rất lớn.</p>\r\n</li>\r\n</ul>\r\n<ul>\r\n<li>\r\n<p>Sản phẩm kh&ocirc;ng m&ugrave;i, kh&ocirc;ng hương hiệu, ph&ugrave; hợp cho những l&agrave;n da nhạy cảm.</p>\r\n</li>\r\n</ul>\r\n<p>&nbsp;</p>\r\n<p style=\"text-align: center;\"><img title=\"Mua Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm Ngay Tại Hasaki\" src=\"https://media.hcdn.vn/wysiwyg/kimhuy/nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml-5.gif\" alt=\"Mua Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm - 1\" width=\"800\" height=\"533\" /></p>\r\n<p style=\"text-align: center;\">&nbsp;</p>\r\n<p style=\"text-align: center;\"><span style=\"color: #000000; font-family: arial,helvetica,sans-serif; \"><img src=\"https://media.hasaki.vn/wysiwyg/HaNguyen/nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-7.gif\" alt=\"\" width=\"800\" /></span></p>\r\n<p style=\"text-align: center;\">&nbsp;&nbsp;</p>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Hướng dẫn bảo quản:</h3>\r\n<ul>\r\n<li>\r\n<p>Tr&aacute;nh &aacute;nh nắng trực tiếp.</p>\r\n</li>\r\n<li>\r\n<p>Để nơi kh&ocirc; r&aacute;o, tho&aacute;ng m&aacute;t.</p>\r\n</li>\r\n<li>\r\n<p>Đậy nắp k&iacute;n sau khi sử dụng.</p>\r\n</li>\r\n</ul>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">Lưu &yacute;:</h3>\r\n<ul>\r\n<li>\r\n<p><strong>Hạn sử dụng:&nbsp;</strong>3 năm kể từ ng&agrave;y sản xuất.</p>\r\n</li>\r\n</ul></div>",
+                        "description_warning": "<div class=\"box-warning width_common\" style=\"border: thin solid #b1ead0;background-color: #e5fbf1;padding: 10px; margin: 15px 0;\">\n            <p style=\"font-weight: bold;\">Làm sao để phân biệt hàng có trộn hay không ?</p>\n            <ul>\n                <li>Hàng trộn sẽ không thể <strong>xuất hoá đơn GTGT (VAT) 100%</strong> được do có hàng không nguồn gốc trong đó.</li>\n                <li>Tại Hasaki, 100% hàng bán ra sẽ được <strong>xuất hoá đơn GTGT</strong> cho dù khách hàng có lấy hay không. Nếu có nhu cầu lấy hoá đơn GTGT, quý khách vui lòng cung cấp thông tin xuất hóa đơn trong vòng 2 giờ sau khi nhận hàng và trước 22h30 cùng ngày. 2 giờ sau khi giao hàng thành công, hệ thống Hasaki sẽ tự động xuất hết hoá đơn cho những hàng hoá mà khách hàng không đăng kí lấy hoá đơn.</li>\n                <li>Do <strong>100%</strong> hàng hóa bán ra đều được xuất hết hóa đơn GTGT trong ngày nên đảm bảo 100% hàng tại Hasaki là hàng chính hãng có nguồn gốc rõ ràng.</li>\n            </ul>\n        </div>"
+                    }
+                }
+            },
+            {
+                "type": "SpecificationInfo",
+                "title": "Thông số sản phẩm",
+                "tab_title": "Thông số",
+                "specification_data": {
+                    "infos": [
+                        {
+                            "label": "Thương Hiệu",
+                            "value": "Klairs"
+                        },
+                        {
+                            "label": "Xuất xứ thương hiệu",
+                            "value": "Hàn Quốc"
+                        },
+                        {
+                            "label": "Nơi sản xuất",
+                            "value": "Korea"
+                        },
+                        {
+                            "label": "Loại da",
+                            "value": "Da nhạy cảm"
+                        },
+                        {
+                            "label": "Dung Tích",
+                            "value": "2x180ml"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "GuideInfo",
+                "title": "Hướng dẫn sử dụng",
+                "tab_title": "HDSD",
+                "guide_data": {
+                    "info": {
+                        "full": "<div style=\"font-size: 13px!important; font-family: arial, helvetica, sans-serif;color: black!important;\"><ul>\r\n<li>\r\n<p>Sau bước l&agrave;m sạch da, cho một lượng toner vừa đủ ra tay hoặc b&ocirc;ng tẩy trang v&agrave; thoa đều l&ecirc;n da mặt theo chiều v&ograve;ng tr&ograve;n.</p>\r\n</li>\r\n<li>\r\n<p>Vỗ hoặc m&aacute;t-xa nhẹ nh&agrave;ng để toner thẩm thấu hết v&agrave;o da.</p>\r\n</li>\r\n<li>\r\n<p>Tiếp tục với c&aacute;c bước chăm s&oacute;c tiếp theo như serum, kem dưỡng.</p>\r\n</li>\r\n<li>\r\n<p>Sử dụng mỗi ng&agrave;y 2 lần v&agrave;o buổi s&aacute;ng v&agrave; tối.</p>\r\n</li>\r\n</ul></div>"
+                    }
+                }
+            },
+            {
+                "type": "IngredientInfo",
+                "title": "Thành phần sản phẩm",
+                "tab_title": "Thành phần",
+                "ingredient_data": {
+                    "info": {
+                        "full": "<div style=\"font-size: 13px!important; font-family: arial, helvetica, sans-serif;color: black!important;\"><p><h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\">1. Nước Hoa Hồng Klairs D&agrave;nh Cho Da Nhạy Cảm 180ml</h3>\r\n<p><strong>Th&agrave;nh phần ch&iacute;nh:&nbsp;</strong></p>\r\n<ul>\r\n<li dir=\"ltr\">\r\n<p dir=\"ltr\"><strong>Sodium Hyaluronate, &beta;-glucan: </strong>Gi&uacute;p da được cấp ẩm tức th&igrave; v&agrave; giữ ẩm cho da.</p>\r\n</li>\r\n<li dir=\"ltr\">\r\n<p dir=\"ltr\"><strong>Chiết xuất rau m&aacute;</strong><span>: Gi&uacute;p l&agrave;m dịu da, giảm mẫn đỏ, sưng vi&ecirc;m v&agrave; hồi phục da.</span></p>\r\n</li>\r\n<li dir=\"ltr\">\r\n<p dir=\"ltr\"><strong>Lipidure</strong><span><strong>:</strong> Dưỡng ẩm s&acirc;u v&agrave; h&igrave;nh th&agrave;nh h&agrave;ng r&agrave;o bảo vệ da.</span></p>\r\n</li>\r\n</ul>\r\n<p><strong><span>Th&agrave;nh phần đầy đủ:&nbsp;</span></strong></p>\r\n<p><span>Water, Butylene Glycol, Dimethyl Sulfone, Betaine, Caprylic/Capric Triglyceride, Natto Gum, Sodium Hyaluronate, Disodium EDTA, Centella Asiatica Extract, Glycyrrhiza Glabra (Licorice) Root Extract, Polyquaternium-51, Chlorphenesin, Tocopheryl Acetate, Carbomer, Panthenol, Arginine, Luffa Cylindrica Fruit/Leaf/Stem Extract, Beta-Glucan, Althaea Rosea Flower Extract, Aloe Barbadensis Leaf Extract, Hydroxyethylcellulose, Portulaca Oleracea Extract, Lysine HCL, Proline, Sodium Ascorbyl Phosphate, Acetyl Methionine, Theanine, Lavandula Angustifolia (Lavender) Oil,&nbsp;</span>Eucalyptus<span>&nbsp;Globulus Leaf Oil, Pelargonium Graveolens Flower Oil, Citrus Limon (Lemon) Peel Oil, Citrus Aurantium Dulcis (Orange) Peel Oil, Cananga Odorata Flower Oil, Copper Tripeptide-1</span></p>\r\n<h3 style=\"font-size: 15px!important;font-weight: bolder;line-height: 1.8;\"><span>2.&nbsp;Nước Hoa Hồng Klairs Kh&ocirc;ng M&ugrave;i Cho Da Nhạy Cảm 180ml</span></h3>\r\n<p><strong>Th&agrave;nh phần ch&iacute;nh:</strong></p>\r\n<div>\r\n<div dir=\"auto\">\r\n<ul>\r\n<li>\r\n<p><strong>Sodium Hyaluronate, &beta;-glucan:</strong> Gi&uacute;p da được cấp ẩm tức th&igrave; v&agrave; giữ ẩm cho da.</p>\r\n</li>\r\n<li>\r\n<p><strong>Chiết xuất rau m&aacute;:</strong> Gi&uacute;p l&agrave;m dịu da, giảm mẩn đỏ, sưng vi&ecirc;m v&agrave; hồi phục da.</p>\r\n</li>\r\n<li>\r\n<p><strong>Lipidure:</strong> Dưỡng ẩm s&acirc;u v&agrave; h&igrave;nh th&agrave;nh h&agrave;ng r&agrave;o bảo vệ da.</p>\r\n</li>\r\n<li>\r\n<p><span>Đặc biệt sản phẩm ho&agrave;n to&agrave;n kh&ocirc;ng m&ugrave;i, kh&ocirc;ng chứa hương liệu, ph&ugrave; hợp với những l&agrave;n da nhạy cảm về hương liệu.</span></p>\r\n</li>\r\n</ul>\r\n</div>\r\n</div>\r\n<p><strong>Th&agrave;nh phần chi tiết:</strong></p>\r\n<p>Water, Butylene Glycol, Dimethyl Sulfone, Betaine, Caprylic/Capric Triglyceride, Natto Gum, Sodium Hyaluronate, Disodium EDTA, Centella Asiatica Extract, Glycyrrhiza Glabra (Licorice) Root Extract, Polyquaternium-51, Chlorphenesin, Tocopheryl Acetate, Carbomer, Panthenol, Arginine, Luffa Cylindrica Fruit/Leaf/Stem Extract, Beta-Glucan, Althaea Rosea Flower Extract, Aloe Barbadensis Leaf Extract, Hydroxyethylcellulose, Portulaca, Oleracea Extract, Lysine HCL, Proline, Sodium Ascorbyl Phosphate, Acetyl Methionine, Theanine, Copper Tripeptide-1.</p></p></div>"
+                    }
+                }
+            },
+            {
+                "type": "ShortRatingInfo",
+                "title": "Đánh giá",
+                "tab_title": "Đánh giá",
+                "short_rating_data": {
+                    "info": {
+                        "total": 137,
+                        "average": 4.8
+                    },
+                    "image_reviews": [
+                        {
+                            "id": 131677,
+                            "product_id": 65994,
+                            "product_name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "content": "dùng em này dịu da ẩm mịn dễ thẩm thấu mình hay chiết ra chai nhỏ để dùng làm dịu da á, nói chung là cũng ổn và thấy nó cũng vô thưởng vô phạt lắm nha.",
+                            "user_id": 18740155,
+                            "user_fullname": "Huệ Ngọc",
+                            "rating": {
+                                "star": 4,
+                                "description": "Hài lòng"
+                            },
+                            "created_at": 1751557327,
+                            "answer_rating": "Hasaki xin chào! Hasaki cảm ơn Huệ Ngọc đã dành thời gian đánh giá. Sự hài lòng của khách hàng là động lực to lớn để Hasaki ngày càng phát triển hơn nữa về chất lượng dịch vụ. Cảm ơn bạn đã tin tưởng và mua sắm tại Hasaki!",
+                            "answer_created_at": 1751557327,
+                            "is_bought": false,
+                            "images": [
+                                "https://media.hcdn.vn/rating/175155732734920.jpg"
+                            ],
+                            "data_images": [
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/175155732734920_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/175155732734920.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 130390,
+                            "product_id": 65994,
+                            "product_name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "content": "cho hỏi nít này  của hàng phải ko ak.",
+                            "user_id": 19236525,
+                            "user_fullname": "Thúy An",
+                            "rating": {
+                                "star": 5,
+                                "description": "Rất hài lòng"
+                            },
+                            "created_at": 1750056210,
+                            "answer_rating": "Hasaki xin chào! Hasaki cảm ơn Thúy An đã dành thời gian đánh giá. Sự hài lòng của khách hàng là động lực to lớn để Hasaki ngày càng phát triển hơn nữa về chất lượng dịch vụ. Cảm ơn bạn đã tin tưởng và mua sắm tại Hasaki!",
+                            "answer_created_at": 1750056210,
+                            "is_bought": false,
+                            "images": [
+                                "https://media.hcdn.vn/rating/175005621020870.jpg"
+                            ],
+                            "data_images": [
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/175005621020870_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/175005621020870.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 126697,
+                            "product_id": 65998,
+                            "product_name": "Nước Hoa Hồng Klairs Dành Cho Da Nhạy Cảm 180ml",
+                            "content": "tui sài này r , dùng rất oki cũng giảm mụn tí",
+                            "user_id": 18790058,
+                            "user_fullname": "Trương Bảo Mẫn",
+                            "rating": {
+                                "star": 5,
+                                "description": "Rất hài lòng"
+                            },
+                            "created_at": 1743826585,
+                            "answer_rating": "Hasaki xin chào! Hasaki cảm ơn Trương Bảo Mẫn đã dành thời gian đánh giá. Sự hài lòng của khách hàng là động lực to lớn để Hasaki ngày càng phát triển hơn nữa về chất lượng dịch vụ. Cảm ơn bạn đã tin tưởng và mua sắm tại Hasaki!",
+                            "answer_created_at": 1743826585,
+                            "is_bought": false,
+                            "images": [
+                                "https://media.hcdn.vn/rating/174382658516190.jpg"
+                            ],
+                            "data_images": [
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/174382658516190_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/174382658516190.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 124636,
+                            "product_id": 65994,
+                            "product_name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "content": "đóng gói cẩn thận mik chưa dùng nên ko bt giao hàng cũng rất nhanh ship thân thiện",
+                            "user_id": 18396268,
+                            "user_fullname": "Bùi ngọc hà",
+                            "rating": {
+                                "star": 5,
+                                "description": "Rất hài lòng"
+                            },
+                            "created_at": 1739698919,
+                            "answer_rating": "",
+                            "answer_created_at": 0,
+                            "is_bought": true,
+                            "images": [
+                                "https://media.hcdn.vn/rating/173969891945510.jpg",
+                                "https://media.hcdn.vn/rating/173969891945511.jpg",
+                                "https://media.hcdn.vn/rating/173969891945512.jpg"
+                            ],
+                            "data_images": [
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/173969891945510_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/173969891945510.jpg"
+                                },
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/173969891945511_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/173969891945511.jpg"
+                                },
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/173969891945512_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/173969891945512.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 120785,
+                            "product_id": 65994,
+                            "product_name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "content": "10 đỉm 9 hãng<br/>Săn giá hời <br/>Mn yên tâm mua ở hasaki nha",
+                            "user_id": 17929494,
+                            "user_fullname": "Nguyễn Thị Trúc Đào",
+                            "rating": {
+                                "star": 5,
+                                "description": "Rất hài lòng"
+                            },
+                            "created_at": 1732677934,
+                            "answer_rating": "",
+                            "answer_created_at": 0,
+                            "is_bought": true,
+                            "images": [
+                                "https://media.hcdn.vn/rating/173267793422580.jpg"
+                            ],
+                            "data_images": [
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/173267793422580_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/173267793422580.jpg"
+                                }
+                            ]
+                        }
+                    ],
+                    "reviews": [
+                        {
+                            "id": 131677,
+                            "product_id": 65994,
+                            "product_name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "content": "dùng em này dịu da ẩm mịn dễ thẩm thấu mình hay chiết ra chai nhỏ để dùng làm dịu da á, nói chung là cũng ổn và thấy nó cũng vô thưởng vô phạt lắm nha.",
+                            "user_id": 18740155,
+                            "user_fullname": "Huệ Ngọc",
+                            "rating": {
+                                "star": 4,
+                                "description": "Hài lòng"
+                            },
+                            "created_at": 1751557327,
+                            "answer_rating": "Hasaki xin chào! Hasaki cảm ơn Huệ Ngọc đã dành thời gian đánh giá. Sự hài lòng của khách hàng là động lực to lớn để Hasaki ngày càng phát triển hơn nữa về chất lượng dịch vụ. Cảm ơn bạn đã tin tưởng và mua sắm tại Hasaki!",
+                            "answer_created_at": 1751557327,
+                            "is_bought": false,
+                            "images": [
+                                "https://media.hcdn.vn/rating/175155732734920.jpg"
+                            ],
+                            "data_images": [
+                                {
+                                    "thumb": "https://media.hcdn.vn/rating/175155732734920_img_60x60_91f8f8_fit_center.jpg",
+                                    "image": "https://media.hcdn.vn/rating/175155732734920.jpg"
+                                }
+                            ]
+                        },
+                        {
+                            "id": 130721,
+                            "product_id": 65994,
+                            "product_name": "Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml",
+                            "content": "mình k có nhu cầu dùng nữa nên pass 120 . ib zl 0983779206",
+                            "user_id": 17671428,
+                            "user_fullname": "6. Ly Băng",
+                            "rating": {
+                                "star": 5,
+                                "description": "Rất hài lòng"
+                            },
+                            "created_at": 1750578577,
+                            "answer_rating": "Hasaki xin chào! Hasaki cảm ơn 6. Ly Băng đã dành thời gian đánh giá. Sự hài lòng của khách hàng là động lực to lớn để Hasaki ngày càng phát triển hơn nữa về chất lượng dịch vụ. Cảm ơn bạn đã tin tưởng và mua sắm tại Hasaki!",
+                            "answer_created_at": 1750578578,
+                            "is_bought": false,
+                            "images": null
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ShortCommentInfo",
+                "title": "Hỏi đáp",
+                "tab_title": "Hỏi đáp",
+                "short_comment_data": {
+                    "info": {
+                        "total": 566
+                    },
+                    "comments": [
+                        {
+                            "id": 344301,
+                            "content": "250709505993   (1 sản phẩm / 1 kiện) Ngày đặt: 09/07/2025, 17:09 Nhà riêng Hang không dung tha kathyrency nguyên phương - 0586519702 1506/12/4 Huỳnh tấn phát,Q7,ho chi minh, Phường Phú Mỹ, Quận 7, Hồ Chí Minh Hình thức thanh toán Thanh toán khi nhận hàng Kiện 1/1 - Đang xử lý Giao 11/07/2025 (48h) Giảm giá 0 ₫ Phí vận chuyển 10.000 ₫ Tổng tiền (1 sản phẩm): 33.000 ₫ Xem thông tin vận chuyển Mặt Nạ Wonjin Cung Cấp Năng Lượng, Phục Hồi Chuyên Sâu 30g-42% WonJin Mặt Nạ Wonjin Cung Cấp Năng Lượng, Phục Hồi Chuyên Sâu 30g 1 miếng Số lượng 1 23.000 ₫  Mua lại Ghi chú 1san~ phẩm ngày thứ 6 hôm nay đã là thứ tư rồi?! Sữa tắm thứ 6 của tháng 7 thì ra hôm nay là thứ tư tôi lại đảng chí đi rồi đúng là trong đó thật là hấp dẫn giá cũng ok đó 800g 800 ml ờ mờ lờ mờ lờ Tạm tính (1) 23.000 ₫ Giảm giá -0 ₫ Phí vận chuyển 10.000 ₫ Thành tiền (Đã VAT) 33.000 ₫  Vào 09-07-2568 BE, lúc 07:40, Rency Kathy  đã viết:  ﻿Có tiền mới làm phiền được nhau  Vào 20-06-2568 BE, lúc 17:43, SHEIN  đã viết:  ﻿  It&#39;s time to treat yourself!  SHEIN Unsubscribe | View in Browser WOMEN\tPLUS\tMEN\tKIDS  Shop Now  Recently Added to Wishlist   Stock: 4 1pc Solid Color Vine Foil Lace Print Tassel Triangle Scarf Classic Hollow-Out Breathable Thin Shawl 46000₫ Fits your needs   Stock: 8 1pc Acrylic DIY Trapezoid Display And Storage Rack For Holiday Beach Bathroom Collection Bedroom C 131000₫ Fits your needs   Stock: 10 Plush Blue Small Elephant Ear Case For AirPods1/2 For AirPods Pro For AirPods 3 For AirPods Pro (2nd 76000₫     Minimalist High-End Leather Design Phone Case Suitable For IPhone 16 Pro Max/16 Pro/16/16 Plus/16e/1 26000₫   1pc/3-4pcs Women Casual Style Fashion Cat Eye Clear Glasses For Daily Life Reading Office Hiking Par 37000₫   1pc New Printed Scarf Women Dual-Use Fashionable Neck Scarf Shawl Bandana Bandana Hair Band Head Ban 43000₫    Shop Now\t Shop Now\t Shop Now\t Shop Now  SHOP NOW\t\t SHOP NOW\t\t SHOP NOW\t\t SHOP NOW SHEIN VIP CONTACT PREFERENCES APP EXCLUSIVE FIND US ON  facebook\t instagram\t twitter\t youtube\t pinterest APP  Apple\t Android You received this message because you&#39;ve registered or accepted our invitation to receive emails from SHEIN, or you&#39;ve made a purchase from S﻿H﻿E﻿I﻿N﻿.﻿c﻿o﻿m. Please note: to stop receiving emails, click on the UNSUBSCRIBE button, and do not directly reply to this email, as this email was generated automatically and thus your unsubscription request will not be processed. Please contact our customer service if you have any questions. 1﻿1﻿2﻿ R﻿o﻿b﻿i﻿n﻿s﻿o﻿n﻿ R﻿o﻿a﻿d﻿ ﻿#0﻿3﻿-﻿0﻿1﻿ R﻿o﻿b﻿i﻿n﻿s﻿o﻿n﻿ 1﻿1﻿2﻿ S﻿i﻿n﻿g﻿a﻿p﻿o﻿r﻿e﻿ PRIVACY POLICY | CONDITIONS & TERMS",
+                            "like_count": 0,
+                            "created_at": 1752056105,
+                            "is_liked": false,
+                            "product_id": 65994,
+                            "status": 1,
+                            "user": {
+                                "id": 19383058,
+                                "fullname": "Bên kia sông Bông bân",
+                                "is_root": false
+                            },
+                            "sub_comments": [
+                                {
+                                    "id": 276669,
+                                    "content": "Dạ chào bạn, Hasaki có thể hỗ trợ gì cho bạn ạ? Bạn nhấn nút phần \"chat với chúng tôi\" hoặc liên hệ hotline 18006324 (phím 1) và cung cấp thông tin chi tiết về vấn đề bạn gặp phải để được hỗ trợ nhé. Cảm ơn bạn đã tin tưởng và mua sắm tại Hasaki!\n",
+                                    "like_count": 1,
+                                    "created_at": 1752064460,
+                                    "is_liked": false,
+                                    "user": {
+                                        "id": -69,
+                                        "fullname": "Hasaki",
+                                        "is_root": true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": 343893,
+                            "content": "thấy trong giỏ hàng có tặng nước cân bằng. nhưng khi thanh toán thì không thấy tặng. mong shop hồi đáp",
+                            "like_count": 2,
+                            "created_at": 1751894216,
+                            "is_liked": false,
+                            "product_id": 65994,
+                            "status": 1,
+                            "user": {
+                                "id": 16565395,
+                                "fullname": "Kiều Oanh",
+                                "is_root": false
+                            },
+                            "sub_comments": [
+                                {
+                                    "id": 276201,
+                                    "content": "Hasaki chào bạn, quà tặng áp dụng cho đơn hàng online và offline có số lượng giới hạn ạ, đơn online nếu còn quà tặng sẽ tự thêm 1 sản phẩm 0d vào đơn hàng, đối với đơn hàng offline mua tại cửa hàng quà tặng sẽ tùy thuộc vào lượng khách thực tế tại cửa hàng, bạn có thể nhờ nhân viên kiểm tra trực tiếp tại cửa hàng cho mình ạ. Bạn vui lòng kiểm tra kỹ các sản phẩm trên đơn hàng trước khi thanh toán giúp mình nhé.\n",
+                                    "like_count": 1,
+                                    "created_at": 1751965166,
+                                    "is_liked": false,
+                                    "user": {
+                                        "id": -69,
+                                        "fullname": "Hasaki",
+                                        "is_root": true
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "UserBenefit",
+                "user_benefit_data": {
+                    "images": [
+                        "https://media.hcdn.vn/hsk/icon/img_quality_3.png",
+                        "https://media.hcdn.vn/hsk/icon/img_quality_2.png",
+                        "https://media.hcdn.vn/hsk/icon/img_quality_44.png"
+                    ]
+                }
+            },
+            {
+                "type": "CheckoutBar",
+                "title": "Thêm vào giỏ hàng"
+            },
+            {
+                "type": "ProductHorizontalListScroll",
+                "title": "Sản phẩm được xem cùng",
+                "url": "https://hasaki.vn/hard/related-products",
+                "tab_title": "Đề xuất"
+            },
+            {
+                "type": "ProductHorizontalListScroll",
+                "title": "Sản phẩm cùng thương hiệu",
+                "url": "https://hasaki.vn/thuong-hieu/klairs.html"
+            },
+            {
+                "type": "ProductVerticalListScroll",
+                "title": "GỢI Ý DÀNH RIÊNG CHO BẠN"
+            },
+            {
+                "type": "ProductSeo",
+                "meta_description": null,
+                "meta_title": "Combo 2 Chai Klairs Supple Preparation Unscented Toner 180ml",
+                "meta_keyword": null,
+                "ratingJson": "{\n    \"@context\": \"https://schema.org/\",\n    \"@type\": \"Product\",\n    \"name\": \"Combo 2 Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml\",\n    \"image\": [\n        \"https://media.hcdn.vn/catalog/product/f/a/facebook-dynamic-422219221-1730367530.jpg\"\n    ],\n    \"description\": \"\",\n    \"sku\": \"422219221\",\n    \"mpn\": null,\n    \"brand\": {\n        \"@type\": \"Brand\",\n        \"name\": \"Klairs\"\n    },\n    \"review\": {\n        \"@type\": \"Review\",\n        \"reviewRating\": {\n            \"@type\": \"Rating\",\n            \"ratingValue\": 4,\n            \"bestRating\": 5\n        },\n        \"author\": {\n            \"@type\": \"Person\",\n            \"name\": \"Huệ Ngọc\"\n        }\n    },\n    \"aggregateRating\": {\n        \"@type\": \"AggregateRating\",\n        \"ratingValue\": 4.8,\n        \"reviewCount\": 137\n    },\n    \"offers\": {\n        \"@type\": \"Offer\",\n        \"url\": \"https://hasaki.vn/san-pham/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-120044.html\",\n        \"priceCurrency\": \"VND\",\n        \"price\": 557000,\n        \"priceValidUntil\": \"2019-06-30\",\n        \"itemCondition\": \"https://schema.org/UsedCondition\",\n        \"availability\": \"https://schema.org/InStock\",\n        \"seller\": {\n            \"@type\": \"Organization\",\n            \"name\": \"Hasaki.vn\"\n        }\n    }\n}",
+                "seo": {
+                    "og:title": "Combo 2 Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml | Hasaki.vn",
+                    "og:description": "Mua Combo 2 Nước Hoa Hồng Klairs Không Mùi Cho Da Nhạy Cảm 180ml, thương hiệu Klairs, thuộc dòng sản phẩm Toner / Nước Cân Bằng Da✓ Hàng Chính Hãng ✓ Giá Ưu Đãi ✓ Giao Nhanh Miễn Phí 2H Từ 90k (Trễ Tặng 100k)",
+                    "og:url": "https://hasaki.vn/san-pham/combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml-120044.html",
+                    "og:image": "https://media.hcdn.vn/catalog/product/o/g/og-image-auto-combo-2-nuoc-hoa-hong-klairs-khong-mui-cho-da-nhay-cam-180ml_5LYV1vbiUiG9UTgw.png",
+                    "price:amount": 557000,
+                    "price:currency": "VND",
+                    "product:band": "Klairs",
+                    "product:availability": "in stock",
+                    "product:category": "Toner / Nước Cân Bằng Da",
+                    "product:condition": "new",
+                    "product:retailer_item_id": 120044,
+                    "product:robots": "index, follow",
+                    "product:canonical": "https://hasaki.vn/san-pham/nuoc-hoa-hong-khong-mui-klairs-danh-cho-da-nhay-cam-180ml-65994.html"
+                }
+            }
+        ]
+    }
+}

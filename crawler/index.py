@@ -1,33 +1,41 @@
 from playwright.sync_api import sync_playwright
-from bs4 import BeautifulSoup
 import json
+import time
 
-list_brands = []
+with open("list_url.json", 'r', encoding="utf-8") as file:
+    urls = json.load(file)
 
-with open("new_brands.json", 'r', encoding="utf-8") as f:
-    brands = json.load(f)
+list_products = []
 
 
-def getElements(playwright, url):
-    browser = playwright.chromium.launch()
-    page = browser.new_page()
-    page.goto(url)
+def addProduct(url):
     
-    html = page.content()
-    soup = BeautifulSoup(html, "html.parser")
-    elements = {
-        "name": soup.select_one(".bg-white .m-auto.container .flex.gap-4.p-5.pb-0.bg-white .w-full.text-sm h1").text.strip() if soup.select_one(".bg-white .m-auto.container .flex.gap-4.p-5.pb-0.bg-white .w-full.text-sm h1") else "",
-        "description": soup.select_one(".bg-white .m-auto.container .flex.gap-4.p-5.pb-0.bg-white .w-full.text-sm div").text.strip() if soup.select_one(".bg-white .m-auto.container .flex.gap-4.p-5.pb-0.bg-white .w-full.text-sm div") else ""
-    }
-    browser.close()
-    return elements
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False, slow_mo=300)
+        context = browser.new_context(user_agent=(
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        ))
+        page = context.new_page()
+        
+        def handle_response(response):
+            if "product?" in response.url:
+                try:
+                    json_data = response.json()
+                    list_products.append(json_data)
+                    with open("products.json", 'w', encoding="utf-8") as file:
+                        json.dump(list_products, file, ensure_ascii=False, indent=4)
+                except:
+                    pass
+        
+        page.on("response", handle_response)
+        
+        page.goto(url, timeout=60000)
+        time.sleep(5)
+        browser.close()
 
 
-with sync_playwright() as playwright:
-    for brand in brands:
-        elements = getElements(playwright, brand)
-        list_brands.append(elements)
-        print(f"Đã thêm: {elements['name']}")
+for index, url in enumerate(urls):
+    addProduct(url)
+    print(f" {index}, Thêm sản phẩm: {url}")
 
-with open("list_brands.json", 'w', encoding="utf-8") as file:
-    json.dump(list_brands, file, ensure_ascii=False, indent=4)
