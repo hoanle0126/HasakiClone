@@ -15,6 +15,8 @@ class Product extends Model
         "ingredients",
         "parameters",
         "quantity",
+        "sku",
+        "announce_number",
         "remain",
         "categories_id",
         "brand_id",
@@ -80,5 +82,15 @@ class Product extends Model
     public function Reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function Options()
+    {
+        return $this->belongsToMany(AttributeOption::class);
+    }
+
+    public function Attributes()
+    {
+        return $this->hasMany(Attribute::class)->with("options");
     }
 }

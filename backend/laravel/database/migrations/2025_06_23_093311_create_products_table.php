@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->string("name")->unique();
             $table->string("english_name");
             $table->string("url");
+            $table->string("sku");
+            $table->string("announce_number");
+            $table->longText("thumbnail");
             $table->longText("description")->nullable();
             $table->integer("quantity")->default(0);
             $table->integer("remain")->default(0);
@@ -24,6 +27,7 @@ return new class extends Migration {
             $table->float("price")->default(0);
             $table->float("sales")->default(0);
             $table->json("images")->nullable();
+            $table->json("attributes")->nullable();
             $table->json("parameters")->nullable();
             $table->longText("ingredients")->nullable();
             $table->longText("guide")->nullable();

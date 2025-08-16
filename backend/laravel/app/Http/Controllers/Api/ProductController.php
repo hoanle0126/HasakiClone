@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductDetailResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Brand;
 use App\Models\Categories;
@@ -60,7 +61,7 @@ class ProductController extends Controller
      */
     public function show($product_url)
     {
-        return new ProductResource(Product::where("url", $product_url)->first());
+        return new ProductDetailResource(Product::where("url", $product_url)->first());
         // return Product::where("url", $product_url)->first();
     }
 

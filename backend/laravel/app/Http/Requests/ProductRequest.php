@@ -33,8 +33,8 @@ class ProductRequest extends FormRequest
             'images' => 'nullable|array',
             'images.*' => 'nullable|url',
             'quantity' => 'nullable|numeric',
-            'categories_id' => 'required|exists:categories,id',
-            'brand_id' => 'required|exists:brands,id',
+            // 'categories_id' => 'required|exists:categories,name',
+            // 'brand_id' => 'required|exists:brands,id',
         ];
     }
 }

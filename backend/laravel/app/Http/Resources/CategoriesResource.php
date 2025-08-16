@@ -22,6 +22,7 @@ class CategoriesResource extends JsonResource
             "name" => $this->name,
             "url" => $this->url,
             "id" => $this->id,
+            "type" => $this->type,
             "thumbnail" => $this->thumbnail,
             "search_count" => $this->products->sum("search_count"),
             "products" => $this->products->take(2),
