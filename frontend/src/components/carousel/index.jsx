@@ -40,7 +40,7 @@ const EmblaCarousel = ({ lists, options, children, size, spacing }) => {
                 flex: `0 0 calc(100%/${size || 1})`,
                 paddingLeft: spacing || "0px",
               }}
-              className="embla__slide  "
+              className="embla__slide"
               key={index}
             >
               {children(item)}

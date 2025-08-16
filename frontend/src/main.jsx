@@ -10,6 +10,7 @@ import { store } from "./store";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import ThemeContext from "./Context";
+import "./bootstrap";
 
 createRoot(document.getElementById("root")).render(
   <LocalizationProvider dateAdapter={AdapterDayjs}>

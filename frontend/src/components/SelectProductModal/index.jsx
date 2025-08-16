@@ -46,34 +46,6 @@ const SelectProductModal = ({ open, handleClose, action, excluding }) => {
     );
   }, [page, open]);
 
-  // React.useEffect(() => {
-  //   if (searchValue === "") {
-  //     setIsTyping(false);
-  //     dispatch(
-  //       getAllProducts({
-  //         paginate: 12,
-  //         page: page,
-  //         search: "",
-  //         excluding: excluding,
-  //       })
-  //     );
-  //     return;
-  //   }
-  //   setIsTyping(true);
-  //   const timeout = setTimeout(() => {
-  //     setIsTyping(false);
-  //     dispatch(
-  //       getAllProducts({
-  //         paginate: 12,
-  //         page: page,
-  //         search: searchValue,
-  //         excluding: excluding,
-  //       })
-  //     );
-  //   }, 500);
-  //   return () => clearTimeout(timeout);
-  // }, [searchValue]);
-
   return (
     <Modal
       open={open}

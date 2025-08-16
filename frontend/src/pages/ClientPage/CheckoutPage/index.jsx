@@ -16,9 +16,7 @@ import React from "react";
 import { MuiTheme } from "@/Theme";
 import { Icon } from "@iconify/react";
 import { Link } from "react-router-dom";
-import { formatCurrency } from "@/Function/formatCurrency";
 import { useDispatch, useSelector } from "react-redux";
-import { sumPrice } from "../CartPage";
 import { useStateContext } from "@/Context";
 import SelectAddressModal from "../CartPage/components/SelectAddressModal";
 import PaymentTypeModal from "./PaymentTypeModal";
@@ -268,7 +266,7 @@ const CheckoutPage = () => {
                   <Typography variant="body2">{item.quantity_cart}</Typography>
                   <Typography>x</Typography>
                   <Typography variant="subtitle2">
-                    {formatCurrency(item.price)}
+                    {item.price.formatCurrency()}
                   </Typography>
                 </Stack>
               ))}
@@ -307,7 +305,7 @@ const CheckoutPage = () => {
                     <Typography>Tổng tiền</Typography>
                     <div className="flex-1"></div>
                     <Typography>
-                      {formatCurrency(sumPrice(user.cart))}
+                      {/* {formatCurrency(sumPrice(user.cart))} */}
                     </Typography>
                   </Stack>
                   <div className="flex-1"></div>
@@ -393,17 +391,17 @@ const CheckoutPage = () => {
             <Stack direction="row" width="100%" alignItems="center">
               <Typography color="text.secondary">Tạm tính</Typography>
               <div className="flex-1"></div>
-              <Typography>{formatCurrency(sumPrice(user.cart))}</Typography>
+              <Typography>{user.cart.sumPrice.formatCurrency}</Typography>
             </Stack>
             <Stack direction="row" width="100%" alignItems="center">
               <Typography color="text.secondary">Giảm giá</Typography>
               <div className="flex-1"></div>
-              <Typography>{formatCurrency(0)}</Typography>
+              <Typography>{1}</Typography>
             </Stack>
             <Stack direction="row" width="100%" alignItems="center">
               <Typography color="text.secondary">Phí vận chuyển</Typography>
               <div className="flex-1"></div>
-              <Typography>{formatCurrency(0)}</Typography>
+              <Typography>{Number(0).formatCurrency()}</Typography>
             </Stack>
             <Stack
               direction="row"
@@ -416,7 +414,7 @@ const CheckoutPage = () => {
               </Typography>
               <div className="flex-1"></div>
               <Typography variant="h6" color="error.main">
-                {formatCurrency(sumPrice(user.cart))}
+                {user.cart.sumPrice().formatCurrency()}
               </Typography>
             </Stack>
           </Stack>

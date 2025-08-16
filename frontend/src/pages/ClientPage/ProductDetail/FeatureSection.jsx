@@ -232,8 +232,8 @@ const FeatureSection = ({ action }) => {
         <TableContainer>
           <Table aria-label="simple table">
             <TableBody>
-              {product.parameters?.map((item, index) => (
-                <TableRow key={index}>
+              {/* {Object.entries(product?.parameters)?.map(([key, value]) => (
+                <TableRow key={key}>
                   <TableCell
                     sx={{
                       border: "1px solid black",
@@ -241,7 +241,7 @@ const FeatureSection = ({ action }) => {
                       backgroundColor: "background.neutral",
                     }}
                   >
-                    {item.label}
+                    {key}
                   </TableCell>
                   <TableCell
                     sx={{
@@ -249,10 +249,10 @@ const FeatureSection = ({ action }) => {
                       borderColor: "divider",
                     }}
                   >
-                    {item.value}
+                    {value}
                   </TableCell>
                 </TableRow>
-              ))}
+              ))} */}
             </TableBody>
           </Table>
         </TableContainer>

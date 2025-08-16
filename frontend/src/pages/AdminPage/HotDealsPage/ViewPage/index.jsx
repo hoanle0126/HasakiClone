@@ -329,7 +329,7 @@ const HotDealsViewPage = () => {
           setDeals({ ...deals, deal_times: [...deals?.deal_times, modalValue] })
         }
       />
-      <ProductModal
+      {/* <ProductModal
         open={openProductModal}
         handleClose={() => setOpenProductModal(false)}
         deal={deals?.deal_times.at(selectIndex)?.products}
@@ -351,7 +351,7 @@ const HotDealsViewPage = () => {
               .concat(endDeal),
           });
         }}
-      />
+      /> */}
       <Button
         variant="contained"
         sx={{

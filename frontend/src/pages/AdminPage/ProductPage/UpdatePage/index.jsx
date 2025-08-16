@@ -31,6 +31,7 @@ import AdminDefaultLayout from "@/layouts/AdminLayout/DefaultLayout";
 import CustomTabPanel from "@/components/tabPanel";
 import { getAllBrands } from "@/store/brands/action";
 import { getProductById, updateProduct } from "@/store/products/action";
+import AttributesTab from "./components/AttributesTab";
 
 const ViewProductPage = () => {
   const navigate = useNavigate();
@@ -40,18 +41,7 @@ const ViewProductPage = () => {
     images: [],
     ingredient: {},
     sales: null,
-    parameters: {
-      "Cấu hình và bộ nhớ": {
-        "Hệ điều hành:": ["Android 14"],
-        "Chip xử lí(CPU):": [
-          "MediaTek Dimensity 8200 5G 8 nhân",
-          "MediaTek Dimensity 8200 5G 8 nhân 2",
-        ],
-      },
-      "Camera & Màn hình": {
-        "Độ phân giải camera sau:": ["Chính 50 MP & Phụ 32 MP, 8 MP"],
-      },
-    },
+    parameters: {},
   });
   const productReducer = useSelector((store) => store.products);
   const categoriesReducer = useSelector((store) => store.categories);
@@ -226,6 +216,57 @@ const ViewProductPage = () => {
                 Create new brand
               </Button>
             </Box>
+            <Box
+              sx={{
+                boxShadow: "custom.card",
+                borderRadius: "12px",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "24px",
+                paddingBottom: "40px",
+              }}
+            >
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label" color="custom">
+                  Brands
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={Number(product?.brand_id)}
+                  label="Categories"
+                  color="custom"
+                  onChange={(e) =>
+                    setProduct({ ...product, brand_id: e.target.value })
+                  }
+                >
+                  {brands?.map((brand, index) => (
+                    <MenuItem value={brand.id} key={index}>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        gap={"8px"}
+                      >
+                        <img
+                          src={brand.thumbnail}
+                          alt=""
+                          className="w-[16px] h-[16px]"
+                        />
+                        {brand.name}
+                      </Stack>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button
+                variant="outlined"
+                color="inherit"
+                // onClick={() => router.get(route("categories.create"))}
+              >
+                Create new brand
+              </Button>
+            </Box>
           </Stack>
         </Grid>
         <Grid size={9}>
@@ -247,6 +288,7 @@ const ViewProductPage = () => {
             >
               <Tab label="General" value="1" />
               <Tab label="Advanced" value="2" />
+              <Tab label="Attributes" value="3" />
             </Tabs>
           </Box>
           <CustomTabPanel tab={tab} index={1}>
@@ -254,6 +296,9 @@ const ViewProductPage = () => {
           </CustomTabPanel>
           <CustomTabPanel tab={tab} index={2}>
             <AdvancedTab product={product} setProduct={setProduct} />
+          </CustomTabPanel>
+          <CustomTabPanel tab={tab} index={3}>
+            <AttributesTab />
           </CustomTabPanel>
           <Stack
             sx={{

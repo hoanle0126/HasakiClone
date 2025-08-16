@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlashDeals, updateFlashDeals } from "@/store/flashDeals/action";
 import { formatCurrency } from "@/Function/formatCurrency";
+import SelectProductModal from "@/components/SelectProductModal";
 
 const FlashDealsPage = () => {
   const [deal, setDeal] = React.useState({
@@ -204,13 +205,21 @@ const FlashDealsPage = () => {
           </Stack>
         </Grid>
       </Grid>
-      <ProductModal
+      {/* <ProductModal
         deal={deal?.products}
         open={openProductModal}
         handleClose={() => setOpenProductModal(false)}
         action={(modalValue) =>
           setDeal({ ...deal, products: deal?.products.concat(modalValue) })
         }
+      /> */}
+      <SelectProductModal
+        open={openProductModal}
+        handleClose={() => setOpenProductModal(false)}
+        action={(products) => {
+          console.log("Products: ", products);
+          setDeal({ ...deal, products: deal?.products.concat(products) });
+        }}
       />
       <Button
         variant="contained"

@@ -5,7 +5,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ item }) => {
+const ProductCard = ({ item, size }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading } = useSelector((store) => store.products);
@@ -49,7 +49,7 @@ const ProductCard = ({ item }) => {
           width="100%"
         >
           <Typography
-            variant="subtitle1"
+            variant={size === "small" ? "subtitle2" : "subtitle1"}
             className="break-all"
             color="secondary.main"
           >
@@ -62,7 +62,7 @@ const ProductCard = ({ item }) => {
           )}
         </Stack>
         <Typography
-          variant="body2"
+          variant={size === "small" ? "captiontext" : "body2"}
           textTransform="capitalize"
           sx={{
             display: "-webkit-box",

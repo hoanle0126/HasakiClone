@@ -44,7 +44,7 @@ const AdvancedTab = ({ product, setProduct }) => {
         <Stack gap={"20px"}>
           <Typography variant="h6">Parameters</Typography>
           <ShowParam
-            parameter={product.parameters}
+            parameter={product?.parameters || {}}
             setParameter={(parameterValue) => {
               setProduct({
                 ...product,

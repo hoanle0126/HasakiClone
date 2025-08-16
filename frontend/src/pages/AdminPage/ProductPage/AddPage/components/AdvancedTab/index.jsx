@@ -40,7 +40,7 @@ const AdvancedTab = ({ product, setProduct }) => {
           </Stack>
         </Stack>
       </Card>
-      <Card>
+      {/* <Card>
         <Stack gap={"20px"}>
           <Typography variant="h6">Parameters</Typography>
           <ShowParam
@@ -53,7 +53,7 @@ const AdvancedTab = ({ product, setProduct }) => {
             }}
           />
         </Stack>
-      </Card>
+      </Card> */}
       <Card>
         <Stack gap={"8px"}>
           <Typography variant="h6">Ingredients</Typography>

@@ -15,13 +15,6 @@ import { formatCurrency } from "@/Function/formatCurrency";
 import { useSelector } from "react-redux";
 import SelectAddressModal from "./components/SelectAddressModal";
 
-export const sumPrice = (products) => {
-  return products?.reduce(
-    (total, item) => total + item.total_price * item.quantity_cart,
-    0
-  );
-};
-
 const CartPage = () => {
   const { user } = useSelector((store) => store.user);
   const [openAddressModal, setOpenAddressModal] = React.useState(false);
@@ -100,7 +93,7 @@ const CartPage = () => {
               >
                 <Typography variant="body2">Tạm tính:</Typography>
                 <Typography variant="body2">
-                  {formatCurrency(sumPrice(user.cart))}
+                  {Number(user.cart?.sumPrice()).formatCurrency()}
                 </Typography>
               </Stack>
               <Stack
@@ -125,7 +118,7 @@ const CartPage = () => {
               >
                 <Typography variant="body2">Tạm tính:</Typography>
                 <Typography variant="body2">
-                  {formatCurrency(sumPrice(user.cart))}
+                  {Number(user.cart?.sumPrice()).formatCurrency()}
                 </Typography>
               </Stack>
               <Typography variant="body2" color="text.secondary">

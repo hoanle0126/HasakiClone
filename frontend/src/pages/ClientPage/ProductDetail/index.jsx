@@ -40,6 +40,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useParams } from "react-router-dom";
 import DetailHeader from "./DetailHeader";
 import FeatureSection from "./FeatureSection";
+import ProductData from "./AttributeData";
+import CounterNumber from "@/components/Counter";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -47,14 +49,16 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
   const { product, loading } = useSelector((store) => store.products);
   const [quantity, setQuantity] = React.useState(1);
   const [openDialog, setOpenDialog] = React.useState(false);
+  // const product = ProductData();
 
   React.useEffect(() => {
     dispatch(getProductById(id));
-  }, []);
+  }, [location.pathname]);
 
   React.useEffect(() => {
     if (openDialog) {
@@ -76,6 +80,7 @@ const ProductDetail = () => {
           position: "relative",
         }}
       >
+        {/* Title */}
         <Breadcrumbs
           separator={
             <Icon icon="solar:alt-arrow-right-linear" width="14" height="14" />
@@ -93,7 +98,7 @@ const ProductDetail = () => {
             <Link
               underline="hover"
               color="inherit"
-              to={"/danh-muc/" + item.url}
+              to={"/danh-muc/" + item?.url}
               key={index}
             >
               {item.name}
@@ -103,6 +108,7 @@ const ProductDetail = () => {
             {product.name}
           </Typography>
         </Breadcrumbs>
+        {/*  */}
         <Grid container spacing="12px" height="100%">
           <Grid size={9.5}>
             <Stack
@@ -129,6 +135,7 @@ const ProductDetail = () => {
                     alignItems: "start",
                   }}
                 >
+                  {/* Thumbnail */}
                   <Stack direction="row" gap="8px">
                     <Stack
                       sx={{
@@ -161,6 +168,8 @@ const ProductDetail = () => {
                       }}
                     />
                   </Stack>
+                  {/*  */}
+                  {/* Main Detail */}
                   <Stack>
                     <Stack
                       direction="row"
@@ -181,9 +190,23 @@ const ProductDetail = () => {
                     <Typography variant="h6" color="text.primary">
                       {product?.name}
                     </Typography>
-                    <Typography variant="h6" color="text.primary">
-                      {product.brand?.name}
+                    <Typography variant="subtitle1" color="text.primary">
+                      {product?.english_name}
                     </Typography>
+                    <Stack
+                      sx={{
+                        typography: "captiontext",
+                        borderWidth: 1,
+                        padding: "0px 8px",
+                        borderColor: "primary.main",
+                        color: "primary.main",
+                        backgroundColor: "primary.lighter",
+                        borderRadius: "4px",
+                        marginY: "8px",
+                      }}
+                    >
+                      {product?.announce_number}
+                    </Stack>
                     <Stack direction="row" alignItems="center" gap="8px">
                       <Rating size="small" />
                       <Breadcrumbs
@@ -202,14 +225,212 @@ const ProductDetail = () => {
                         </Typography>
                       </Breadcrumbs>
                     </Stack>
-                    <Typography variant="h6" color="secondary.main">
-                      {formatCurrency(product.price)}
+                    <Stack
+                      sx={{
+                        width: "100%",
+                        backgroundColor: "secondary.main",
+                        padding: "6px 12px",
+                        marginBottom: "8px",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: "4px",
+                        typography: "body2",
+                        textTransform: "uppercase",
+                        color: "white",
+                      }}
+                    >
+                      <Icon icon="solar:bolt-bold" />
+                      <strong>flash deal</strong>
+                      <div className="flex-1"></div>
+                      <span>Kết thúc trong</span>
+                      <Stack
+                        component="span"
+                        sx={{
+                          bgcolor: "text.primary",
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "4px",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CounterNumber
+                          value={0}
+                          places={[10, 1]}
+                          fontSize={12}
+                          gap={0}
+                          textColor="white"
+                          fontWeight={600}
+                        />
+                      </Stack>
+                      :
+                      <Stack
+                        component="span"
+                        sx={{
+                          bgcolor: "text.primary",
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "4px",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CounterNumber
+                          value={0}
+                          places={[10, 1]}
+                          fontSize={12}
+                          gap={0}
+                          textColor="white"
+                          fontWeight={600}
+                        />
+                      </Stack>
+                      :
+                      <Stack
+                        component="span"
+                        sx={{
+                          bgcolor: "text.primary",
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "4px",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CounterNumber
+                          value={0}
+                          places={[10, 1]}
+                          fontSize={12}
+                          gap={0}
+                          textColor="white"
+                          fontWeight={600}
+                        />
+                      </Stack>
+                      :
+                      <Stack
+                        component="span"
+                        sx={{
+                          bgcolor: "text.primary",
+                          width: "24px",
+                          height: "24px",
+                          borderRadius: "4px",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CounterNumber
+                          value={0}
+                          places={[10, 1]}
+                          fontSize={12}
+                          gap={0}
+                          textColor="white"
+                          fontWeight={600}
+                        />
+                      </Stack>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      gap="4px"
+                      sx={{
+                        svg: {
+                          color: "secondary.main",
+                        },
+                      }}
+                    >
+                      <Icon icon="solar:ticket-bold" width="24" height="24" />
+                      <Typography variant="h6" color="secondary.main">
+                        {formatCurrency(product.price)}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        (Đã bao gồm VAT)
+                      </Typography>
+                    </Stack>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        span: {
+                          color: "secondary.main",
+                        },
+                      }}
+                    >
+                      Giá thị trường: 350.000 ₫ - Tiết kiệm: 83.000 ₫(
+                      <span>24%</span>)
                     </Typography>
+                    <Stack
+                      sx={{
+                        marginTop: "8px",
+                        marginBottom: "4px",
+                        gap: "12px",
+                      }}
+                    >
+                      {product?.attributes?.map((attribute) => (
+                        <Stack gap="8px">
+                          <Typography variant="body2">
+                            {attribute.label}
+                          </Typography>
+                          {attribute.display_type === "text" && (
+                            <Stack direction="row" gap="12px">
+                              {attribute.options.map((option) => (
+                                <Typography
+                                  component={Link}
+                                  to={"/san-pham/" + option.products?.url}
+                                  sx={{
+                                    backgroundColor: "background.neutral",
+                                    padding: "4px 20px",
+                                    borderRadius: "50px",
+                                    borderWidth: 1,
+                                    borderColor:
+                                      option.products.parameters[
+                                        attribute.label
+                                      ] == product.parameters[attribute.label]
+                                        ? "secondary.main"
+                                        : "divider",
+                                  }}
+                                  variant="body2"
+                                >
+                                  {option.value}
+                                </Typography>
+                              ))}
+                            </Stack>
+                          )}
+                          {attribute.display_type === "image" && (
+                            <Stack direction="row" gap="12px">
+                              {attribute.options.map(
+                                (item, index) =>
+                                  item.products !== null && (
+                                    <Avatar
+                                      component={Link}
+                                      to={"/san-pham/" + item.products?.url}
+                                      src={item.products?.thumbnail}
+                                      key={index}
+                                      variant="rounded"
+                                      sx={{
+                                        width: 48,
+                                        height: 48,
+                                        borderRadius: "8px",
+                                        borderWidth: 1,
+                                        borderColor:
+                                          item.products.parameters[
+                                            attribute.label
+                                          ] ==
+                                          product.parameters[attribute.label]
+                                            ? "secondary.main"
+                                            : "divider",
+                                      }}
+                                    />
+                                  )
+                              )}
+                            </Stack>
+                          )}
+                        </Stack>
+                      ))}
+                    </Stack>
                     <Stack
                       direction="row"
                       alignItems="center"
                       gap="8px"
                       paddingY="12px"
+                      color="primary.main"
                     >
                       <Typography variant="captiontext">Số lượng</Typography>
                       <Stack
@@ -288,6 +509,7 @@ const ProductDetail = () => {
                       </Button>
                     </Stack>
                   </Stack>
+                  {/*  */}
                 </Stack>
                 <Stack direction="row" gap="12px">
                   <Button

@@ -20,7 +20,7 @@ import {
 } from "./actionType";
 
 export const getAllProducts =
-  ({ paginate = 18, page = 1, search = "", excluding = [] }) =>
+  ({ paginate, page = 1, search = "", excluding = [] }) =>
   async (dispatch) => {
     dispatch({ type: GET_ALL_PRODUCTS_REQUEST });
     await axiosClient

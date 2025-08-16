@@ -168,7 +168,7 @@ function RenderAction(props) {
         }}
       >
         <MenuList>
-          <MenuItem onClick={() => navigate("" + row.id)}>
+          <MenuItem onClick={() => navigate("" + row.url)}>
             <Icon icon="solar:eye-bold" />
             View
           </MenuItem>

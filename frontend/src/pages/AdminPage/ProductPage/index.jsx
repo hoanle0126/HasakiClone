@@ -27,15 +27,16 @@ const ProductPage = () => {
     page: 0,
   });
   const dispatch = useDispatch();
-  const { products, loading } = useSelector((store) => store.products);
+  const { products, loading, meta } = useSelector((store) => store.products);
 
   React.useEffect(() => {
-    dispatch(getAllProducts());
-  }, []);
-
-  React.useEffect(() => {
-    console.log("products", products);
-  }, [loading]);
+    dispatch(
+      getAllProducts({
+        paginate: paginationModel.pageSize,
+        page: paginationModel.page + 1,
+      })
+    );
+  }, [paginationModel.page, paginationModel.pageSize]);
 
   return (
     <AdminDefaultLayout
@@ -78,7 +79,9 @@ const ProductPage = () => {
             },
           },
         }}
+        rowCount={meta.total}
         paginationModel={paginationModel}
+        paginationMode="server"
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[5, 10, 15]}
         slots={{
@@ -90,6 +93,7 @@ const ProductPage = () => {
             <Icon icon="solar:alt-arrow-down-bold-duotone" />
           ),
         }}
+        loading={loading}
         slotProps={{
           panel: {
             anchorEl: filterButtonEl,

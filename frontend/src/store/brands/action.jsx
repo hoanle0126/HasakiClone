@@ -12,19 +12,16 @@ import {
   UPDATE_BRAND_SUCCESS,
 } from "./actionType";
 
-export const getAllBrands =
-  ({ onSuccess = () => {} }) =>
-  async (dispatch) => {
-    dispatch({ type: GET_ALL_BRANDS_REQUEST });
-    try {
-      axiosClient.get("/brands").then((data) => {
-        dispatch({ type: GET_ALL_BRANDS_SUCCESS, payload: data.data });
-        onSuccess(data.data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const getAllBrands = () => async (dispatch) => {
+  dispatch({ type: GET_ALL_BRANDS_REQUEST });
+  try {
+    axiosClient.get("/brands").then((data) => {
+      dispatch({ type: GET_ALL_BRANDS_SUCCESS, payload: data.data });
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const addNewBrand = (brand) => async (dispatch) => {
   dispatch({ type: ADD_BRAND_REQUEST });
@@ -45,7 +42,7 @@ export const getBrandById =
       axiosClient.get("/brands/" + id + search).then((data) => {
         console.log("url", "/brands/" + id + search);
         dispatch({ type: GET_BRAND_BY_ID_SUCCESS, payload: data.data });
-        onSuccess();
+        // onSuccess();
       });
     } catch (error) {
       console.log(error);

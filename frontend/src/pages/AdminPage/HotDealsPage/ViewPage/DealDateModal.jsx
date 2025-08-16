@@ -23,19 +23,17 @@ import ProductModal from "./ProductModal";
 import { Icon } from "@iconify/react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "@/store/products/action";
+import SelectProductModal from "@/components/SelectProductModal";
 
 const DealDateModal = ({ open, handleClose, action, deal }) => {
-  const [openProductModal, setOpenProductModal] = React.useState(true);
-  const dispatch = useDispatch();
-  const { products } = useSelector((store) => store.products);
-  const [searchField, setSearchField] = React.useState("");
+  const [openProductModal, setOpenProductModal] = React.useState(false);
   const [dealModel, setDealModel] = React.useState({
     products: [],
   });
 
   React.useEffect(() => {
-    dispatch(getAllProducts());
-  }, []);
+    console.log("Deal ", dealModel);
+  }, [dealModel]);
 
   return (
     <Modal
@@ -84,7 +82,7 @@ const DealDateModal = ({ open, handleClose, action, deal }) => {
               <Stack key={index}>
                 <Stack direction="row" gap="20px" alignItems="center">
                   <img
-                    src={item.product?.thumbnail}
+                    src={item.thumbnail}
                     className="size-[80px] outline"
                   />
                   <Stack
@@ -93,10 +91,10 @@ const DealDateModal = ({ open, handleClose, action, deal }) => {
                     alignItems="start"
                     width="100%"
                   >
-                    <Typography variant="h6">{item.product?.name}</Typography>
+                    <Typography variant="subtitle1">{item.name}</Typography>
                     <div className="flex-1"></div>
                     <Typography variant="body1">
-                      {item.product?.price}
+                      {item.price.formatCurrency()}
                     </Typography>
                   </Stack>
                   <IconButton
@@ -118,71 +116,19 @@ const DealDateModal = ({ open, handleClose, action, deal }) => {
                 </Stack>
               </Stack>
             ))}
-            {openProductModal === true ? (
-              <Button onClick={() => setOpenProductModal(!openProductModal)}>
-                Add Product
-              </Button>
-            ) : (
-              <Stack>
-                <Stack
-                  direction="row"
-                  sx={{
-                    borderTop: "1px solid black",
-                    borderLeft: "1px solid black",
-                    borderRight: "1px solid black",
-                    borderColor: "divider",
-                    padding: "8px 8px",
-                    color: "text.primary",
-                    gap: "8px",
-                    alignItems: "center",
-                  }}
-                >
-                  <Icon icon="eva:search-fill" width="24" height="24" />
-                  <input
-                    type="text"
-                    className="w-full focus:outline-none"
-                    value={searchField}
-                    placeholder="Search by name"
-                    onChange={(e) => setSearchField(e.target.value)}
-                  />
-                </Stack>
-                <List
-                  sx={{
-                    maxHeight: 200,
-                    overflowY: "scroll",
-                    border: "1px solid black",
-                    borderColor: "divider",
-                    padding: 0,
-                  }}
-                >
-                  {products
-                    ?.filter(
-                      (it) =>
-                        it.name.includes(searchField) &&
-                        !dealModel?.products?.some(
-                          (itDeals) => itDeals.product.id === it.id
-                        )
-                    )
-                    .map((item, index) => (
-                      <ListItemButton
-                        key={index}
-                        onClick={() => {
-                          setDealModel({
-                            ...dealModel,
-                            products: [
-                              ...dealModel.products,
-                              { product: item, sales: 0 },
-                            ],
-                          });
-                          setOpenProductModal(!openProductModal);
-                        }}
-                      >
-                        {item.name}
-                      </ListItemButton>
-                    ))}
-                </List>
-              </Stack>
-            )}
+            <Button onClick={() => setOpenProductModal(!openProductModal)}>
+              Add Product
+            </Button>
+            <SelectProductModal
+              open={openProductModal}
+              handleClose={() => setOpenProductModal(false)}
+              action={(modalValue) => {
+                setDealModel({
+                  ...dealModel,
+                  products: modalValue,
+                });
+              }}
+            />
           </Stack>
         </Stack>
         <Button

@@ -13,7 +13,7 @@ import ProductSection from "./ProductSection";
 const LandingPage = () => {
   return (
     <div>
-      <BannerSection />
+      {/* <BannerSection /> */}
       <Stack
         sx={{
           paddingX: "120px",
@@ -22,13 +22,13 @@ const LandingPage = () => {
           backgroundColor: "background.neutral",
         }}
       >
-        <SalesSection />
+        {/* <SalesSection />
         <SubBannerSection />
         <CategoriesSection />
         <BrandSection />
         <TopSellSection />
         <TopSearchSection />
-        <ServiceSection />
+        <ServiceSection /> */}
       </Stack>
         <ProductSection />
     </div>

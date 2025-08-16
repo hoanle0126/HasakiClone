@@ -61,6 +61,44 @@ const GeneralTab = ({ product, setProduct }) => {
             </Typography>
           </Stack>
           <Stack gap={"8px"}>
+            <Typography variant="subtitle2">English Name</Typography>
+            <OutlinedInput
+              size="small"
+              color="custom"
+              fullWidth
+              placeholder="Enter product name..."
+              value={product?.english_name}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  english_name: e.target.value,
+                })
+              }
+            />
+            <Typography variant="captiontext" color={"text.disabled"}>
+              A product name is required and recommended to be unique.
+            </Typography>
+          </Stack>
+          <Stack gap={"8px"}>
+            <Typography variant="subtitle2">Announcer Number</Typography>
+            <OutlinedInput
+              size="small"
+              color="custom"
+              fullWidth
+              placeholder="Enter product name..."
+              value={product?.announce_number}
+              onChange={(e) =>
+                setProduct({
+                  ...product,
+                  announce_number: e.target.value,
+                })
+              }
+            />
+            <Typography variant="captiontext" color={"text.disabled"}>
+              A product name is required and recommended to be unique.
+            </Typography>
+          </Stack>
+          <Stack gap={"8px"}>
             <Typography variant="subtitle2">Quantity</Typography>
             <OutlinedInput
               size="small"
@@ -94,29 +132,29 @@ const GeneralTab = ({ product, setProduct }) => {
               A product name is required and recommended to be unique.
             </Typography>
           </Stack>
-        <Stack gap={"20px"}>
-          <Typography variant="h6">Sales</Typography>
-          <Stack gap={"8px"}>
-            <Typography variant="subtitle2">Giá ban đầu</Typography>
-            <OutlinedInput
-              size="small"
-              color="custom"
-              fullWidth
-              type="number"
-              placeholder="Enter base price..."
-              value={product?.price}
-              onChange={(e) =>
-                setProduct({
-                  ...product,
-                  price: e.target.value,
-                })
-              }
-            />
-            <Typography variant="captiontext" color={"text.disabled"}>
-              A product name is required and recommended to be unique.
-            </Typography>
+          <Stack gap={"20px"}>
+            <Typography variant="h6">Sales</Typography>
+            <Stack gap={"8px"}>
+              <Typography variant="subtitle2">Giá ban đầu</Typography>
+              <OutlinedInput
+                size="small"
+                color="custom"
+                fullWidth
+                type="number"
+                placeholder="Enter base price..."
+                value={product?.price}
+                onChange={(e) =>
+                  setProduct({
+                    ...product,
+                    price: e.target.value,
+                  })
+                }
+              />
+              <Typography variant="captiontext" color={"text.disabled"}>
+                A product name is required and recommended to be unique.
+              </Typography>
+            </Stack>
           </Stack>
-        </Stack>
         </Stack>
       </Card>
     </Stack>
