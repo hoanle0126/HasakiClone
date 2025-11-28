@@ -1,4 +1,4 @@
-name: Monorepo Deploy (Fixed Git Permission)
+name: Monorepo Deploy (Fixed RAM & Git)
 
 on:
   push:
@@ -17,19 +17,19 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          # Dừng ngay nếu có lỗi (Quan trọng)
           set -e
-          
-          echo "---- FIX GIT PERMISSION ----"
+          echo "---- FIX GIT ERROR ----"
           git config --global --add safe.directory /var/www/hasaki
-          
-          echo "---- PULL CODE ----"
           cd /var/www/hasaki
-          # Reset nhẹ để tránh conflict
-          git reset --hard origin/main
-          git pull origin main
           
-          echo "---- DEPLOY LARAVEL ----"
+          # Lệnh này sửa lỗi 'cannot lock ref'
+          git remote prune origin
+          
+          # Reset cứng code về giống hệt GitHub
+          git fetch --all
+          git reset --hard origin/main
+          
+          echo "---- DEPLOY BACKEND ----"
           cd backend
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
@@ -38,9 +38,8 @@ jobs:
           php artisan route:cache
           php artisan view:cache
           
-          # Cấp quyền lại cho chắc
-          sudo chown -R www-data:www-data /var/www/hasaki/backend
-          sudo chmod -R 775 /var/www/hasaki/backend/storage
+          # Cấp quyền lại
+          sudo chown -R www-data:www-data /var/www/hasaki/backend/storage
           
           echo "✅ Backend deployed successfully!"
 
@@ -57,18 +56,21 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           set -e
-          
-          # Fix git permission
+          echo "---- FIX GIT ERROR (FRONTEND) ----"
           git config --global --add safe.directory /var/www/hasaki
-          
-          echo "---- PULL CODE FRONTEND ----"
           cd /var/www/hasaki
-          git pull origin main
+          git remote prune origin
+          git fetch --all
+          git reset --hard origin/main
           
-          echo "---- BUILD FRONTEND ----"
+          echo "---- BUILD FRONTEND (WITH SWAP) ----"
           cd frontend
           npm install
-          # Build trên VPS (Đảm bảo bạn đã có Swap RAM)
+          
+          # --- DÒNG QUAN TRỌNG NHẤT ĐỂ SỬA LỖI RAM ---
+          # Ép Node dùng tối đa 4GB RAM (Nó sẽ ăn vào Swap file)
+          export NODE_OPTIONS="--max-old-space-size=4096"
+          
           npm run build
           
           # Cấp quyền lại
@@ -76,23 +78,23 @@ jobs:
           
           echo "✅ Frontend deployed successfully!"
 
-  # --- JOB 3: NOTIFY (Sửa lại chuẩn cURL) ---
+  # --- JOB 3: NOTIFY ---
   notify:
     name: 🔔 Notify n8n
     runs-on: ubuntu-latest
-    if: always() # Luôn chạy để báo cáo kể cả khi lỗi
     needs: [deploy-backend, deploy-frontend]
+    if: always()
     steps:
       - name: Send Notification Success
         if: needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success'
         run: |
            curl -X POST ${{ secrets.N8N_WEBHOOK }} \
            -H "Content-Type: application/json" \
-           -d '{"message": "✅ Hasaki Update: Deploy THÀNH CÔNG cả Frontend & Backend!", "author": "${{ github.actor }}"}'
+           -d '{"message": "✅ Hasaki Update: Deploy THÀNH CÔNG (Đã fix lỗi RAM & Git)!", "author": "${{ github.actor }}"}'
 
       - name: Send Notification Failure
         if: needs.deploy-backend.result == 'failure' || needs.deploy-frontend.result == 'failure'
         run: |
            curl -X POST ${{ secrets.N8N_WEBHOOK }} \
            -H "Content-Type: application/json" \
-           -d '{"message": "❌ Hasaki Update: Deploy THẤT BẠI! Hãy kiểm tra log ngay.", "author": "${{ github.actor }}"}'
+           -d '{"message": "❌ Hasaki Update: Vẫn lỗi! Kiểm tra log GitHub.", "author": "${{ github.actor }}"}'
