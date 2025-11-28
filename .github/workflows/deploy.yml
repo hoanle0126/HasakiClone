@@ -97,13 +97,13 @@ jobs:
       - name: Send Notification Success
         if: needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success'
         run: |
-           curl -X POST https://n8n.tuantran.io.vn/webhook-test/deploy-success \
+           curl -X POST "https://n8n.tuantran.io.vn/webhook-test/deploy-success" \
            -H "Content-Type: application/json" \
            -d '{"message": "✅ Hasaki Update: Đã fix xong lỗi Ref Lock và Deploy thành công!", "author": "${{ github.actor }}"}'
 
       - name: Send Notification Failure
         if: needs.deploy-backend.result == 'failure' || needs.deploy-frontend.result == 'failure'
         run: |
-           curl -X POST https://n8n.tuantran.io.vn/webhook-test/deploy-success \
+           curl -X POST "https://n8n.tuantran.io.vn/webhook-test/deploy-success" \
            -H "Content-Type: application/json" \
            -d '{"message": "❌ Hasaki Update: Vẫn lỗi! Kiểm tra log.", "author": "${{ github.actor }}"}'
