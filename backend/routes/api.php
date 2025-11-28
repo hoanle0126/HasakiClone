@@ -72,7 +72,7 @@ Route::get('/debug-config', function () {
 
 
 
-Route::get('/test-cicd', function () {
+Route::get('/test-ci-cd', function () {
     return [
         'message' => 'Kiểm tra cấu hình Database thực tế',
         'db_host_from_config' => config('database.connections.mysql.host'),
