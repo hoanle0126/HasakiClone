@@ -1,0 +1,16 @@
+# Bỏ qua các thư mục dependencies
+/vendor
+/node_modules
+
+# Bỏ qua file môi trường, không bao giờ đưa vào image
+.env
+
+# Bỏ qua các file log
+/storage/*.log
+/public/storage
+
+# Bỏ qua các file của Git và các IDE
+.git
+.gitignore
+.idea
+.vscode
