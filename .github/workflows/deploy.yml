@@ -1,11 +1,11 @@
-name: Monorepo Deploy (Hybrid - Best Performance)
+name: Monorepo Deploy (Fixed Git Permission)
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # --- JOB 1: DEPLOY BACKEND (Giữ nguyên của bạn - Đã chuẩn) ---
+  # --- JOB 1: BACKEND ---
   deploy-backend:
     name: 🚀 Deploy Backend
     runs-on: ubuntu-latest
@@ -17,9 +17,19 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          echo "---- BẮT ĐẦU DEPLOY BACKEND ----"
+          # Dừng ngay nếu có lỗi (Quan trọng)
+          set -e
+          
+          echo "---- FIX GIT PERMISSION ----"
+          git config --global --add safe.directory /var/www/hasaki
+          
+          echo "---- PULL CODE ----"
           cd /var/www/hasaki
+          # Reset nhẹ để tránh conflict
+          git reset --hard origin/main
           git pull origin main
+          
+          echo "---- DEPLOY LARAVEL ----"
           cd backend
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
@@ -27,67 +37,62 @@ jobs:
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-          php artisan queue:restart
+          
+          # Cấp quyền lại cho chắc
+          sudo chown -R www-data:www-data /var/www/hasaki/backend
+          sudo chmod -R 775 /var/www/hasaki/backend/storage
+          
           echo "✅ Backend deployed successfully!"
 
-  # --- JOB 2: DEPLOY FRONTEND (SỬA LẠI CHO ĐÚNG) ---
+  # --- JOB 2: FRONTEND ---
   deploy-frontend:
-    name: 🎨 Build & Deploy Frontend
+    name: 🎨 Deploy Frontend
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-
-    # --- SỬA 1: Thêm biến môi trường API vào lúc Build ---
-    - name: Install & Build
-      env: 
-        # Thay đúng đường dẫn API của bạn vào đây
-        VITE_API_URL: "https://api.hasaki-clone.io.vn" 
-      run: |
-        cd frontend
-        npm install
-        npm run build
-    
-    # --- SỬA 2: Copy chính xác thư mục dist ---
-    - name: Copy build to VPS
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        # Copy thư mục dist ở GitHub
-        source: "frontend/dist"
-        # Paste vào thư mục frontend trên VPS
-        target: "/var/www/hasaki/frontend"
-        # Ghi đè file cũ
-        overwrite: true
-
-    - name: Fix Permissions
+    - name: SSH & Deploy ReactJS
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          # Cấp quyền lại cho Nginx đọc được file mới
+          set -e
+          
+          # Fix git permission
+          git config --global --add safe.directory /var/www/hasaki
+          
+          echo "---- PULL CODE FRONTEND ----"
+          cd /var/www/hasaki
+          git pull origin main
+          
+          echo "---- BUILD FRONTEND ----"
+          cd frontend
+          npm install
+          # Build trên VPS (Đảm bảo bạn đã có Swap RAM)
+          npm run build
+          
+          # Cấp quyền lại
           sudo chown -R www-data:www-data /var/www/hasaki/frontend/dist
-          sudo chmod -R 755 /var/www/hasaki/frontend/dist
-          echo "✅ Frontend Updated!"
+          
+          echo "✅ Frontend deployed successfully!"
 
-  # --- JOB 3: THÔNG BÁO ---
+  # --- JOB 3: NOTIFY (Sửa lại chuẩn cURL) ---
   notify:
     name: 🔔 Notify n8n
     runs-on: ubuntu-latest
+    if: always() # Luôn chạy để báo cáo kể cả khi lỗi
     needs: [deploy-backend, deploy-frontend]
-    if: always()
     steps:
-      - name: Send Notification
+      - name: Send Notification Success
+        if: needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success'
         run: |
            curl -X POST ${{ secrets.N8N_WEBHOOK }} \
            -H "Content-Type: application/json" \
-           -d '{"message": "🚀 Hasaki Update: Đã deploy thành công (Hybrid Mode)!", "author": "${{ github.actor }}"}'
+           -d '{"message": "✅ Hasaki Update: Deploy THÀNH CÔNG cả Frontend & Backend!", "author": "${{ github.actor }}"}'
+
+      - name: Send Notification Failure
+        if: needs.deploy-backend.result == 'failure' || needs.deploy-frontend.result == 'failure'
+        run: |
+           curl -X POST ${{ secrets.N8N_WEBHOOK }} \
+           -H "Content-Type: application/json" \
+           -d '{"message": "❌ Hasaki Update: Deploy THẤT BẠI! Hãy kiểm tra log ngay.", "author": "${{ github.actor }}"}'
