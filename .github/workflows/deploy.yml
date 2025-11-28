@@ -38,31 +38,49 @@ jobs:
           echo "✅ Backend deployed successfully!"
 
   # --- JOB 2: DEPLOY FRONTEND ---
+  # --- JOB DEPLOY FRONTEND (SỬA LẠI) ---
   deploy-frontend:
-    name: 🎨 Deploy Frontend
+    name: 🎨 Build & Deploy Frontend
     runs-on: ubuntu-latest
-    # Đã xóa dòng 'if'
     
     steps:
-    - name: SSH & Deploy ReactJS
+    # 1. Lấy code về máy GitHub
+    - uses: actions/checkout@v4
+
+    # 2. Cài Node trên máy GitHub
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    # 3. Build trên máy GitHub (Nhanh và không tốn RAM VPS)
+    - name: Install & Build
+      run: |
+        cd frontend
+        npm install
+        npm run build
+    
+    # 4. Copy thư mục DIST từ GitHub sang VPS (Dùng SCP)
+    - name: Copy build to VPS
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "frontend/dist/*"
+        target: "/var/www/hasaki" # Copy đè vào đây
+        strip_components: 1 # Để nó không tạo thêm folder frontend thừa
+
+    # 5. Fix quyền trên VPS (Vì copy sang thì quyền lại bị sai)
+    - name: Fix Permissions
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          echo "---- BẮT ĐẦU DEPLOY FRONTEND ----"
-          
-          # 1. RA THƯ MỤC GỐC ĐỂ PULL CODE
-          cd /var/www/hasaki
-          git pull origin main
-          
-          # 2. VÀO FRONTEND ĐỂ BUILD
-          cd frontend
-          npm install
-          npm run build
-          
-          echo "✅ Frontend deployed successfully!"
+          sudo chown -R www-data:www-data /var/www/hasaki/frontend/dist
+          echo "✅ Đã copy file build mới sang VPS thành công!"
 
   # --- JOB 3: THÔNG BÁO ---
   notify:
