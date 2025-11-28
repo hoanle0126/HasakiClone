@@ -1,4 +1,4 @@
-name: Monorepo Deploy (Auto Unlock & Deploy)
+name: Monorepo Deploy (Auto Fix Ref Lock)
 
 on:
   push:
@@ -18,20 +18,23 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           set -e
-          echo "---- TỰ ĐỘNG PHÁ KHÓA GIT ----"
+          echo "---- FIX GIT REF ERROR (BACKEND) ----"
           cd /var/www/hasaki
           
-          # ĐÂY LÀ DÒNG LỆNH CỨU TINH
+          # 1. Xóa file khóa tiến trình (Lỗi cũ)
           rm -f .git/index.lock
           
-          # Fix lỗi quyền hạn luôn cho chắc
+          # 2. XÓA FILE THAM CHIẾU BỊ HỎNG (Lỗi hiện tại) - QUAN TRỌNG
+          rm -rf .git/refs/remotes/origin/main
+          
+          # 3. Config lại quyền
           git config --global --add safe.directory /var/www/hasaki
           
           echo "---- PULL CODE ----"
           git fetch --all
           git reset --hard origin/main
           
-          echo "---- DEPLOY BACKEND ----"
+          echo "---- DEPLOY LARAVEL ----"
           cd backend
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
@@ -58,11 +61,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           set -e
-          echo "---- TỰ ĐỘNG PHÁ KHÓA GIT (FRONTEND) ----"
+          echo "---- FIX GIT REF ERROR (FRONTEND) ----"
           cd /var/www/hasaki
           
-          # ĐÂY LÀ DÒNG LỆNH CỨU TINH
+          # 1. Xóa file khóa tiến trình
           rm -f .git/index.lock
+          
+          # 2. XÓA FILE THAM CHIẾU BỊ HỎNG - QUAN TRỌNG
+          rm -rf .git/refs/remotes/origin/main
           
           git config --global --add safe.directory /var/www/hasaki
           git fetch --all
@@ -76,7 +82,7 @@ jobs:
           export NODE_OPTIONS="--max-old-space-size=4096"
           npm run build
           
-          # Cấp quyền
+          # Cấp quyền lại
           sudo chown -R www-data:www-data /var/www/hasaki/frontend/dist
           
           echo "✅ Frontend deployed successfully!"
@@ -88,8 +94,16 @@ jobs:
     needs: [deploy-backend, deploy-frontend]
     if: always()
     steps:
-      - name: Send Notification
+      - name: Send Notification Success
+        if: needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success'
         run: |
            curl -X POST ${{ secrets.N8N_WEBHOOK }} \
            -H "Content-Type: application/json" \
-           -d '{"message": "🚀 Hasaki Update: Đã tự động Fix lỗi và Deploy thành công!", "author": "${{ github.actor }}"}'
+           -d '{"message": "✅ Hasaki Update: Đã fix xong lỗi Ref Lock và Deploy thành công!", "author": "${{ github.actor }}"}'
+
+      - name: Send Notification Failure
+        if: needs.deploy-backend.result == 'failure' || needs.deploy-frontend.result == 'failure'
+        run: |
+           curl -X POST ${{ secrets.N8N_WEBHOOK }} \
+           -H "Content-Type: application/json" \
+           -d '{"message": "❌ Hasaki Update: Vẫn lỗi! Kiểm tra log.", "author": "${{ github.actor }}"}'
