@@ -85,6 +85,6 @@ jobs:
       - name: Send Notification
         run: |
            # Tôi giữ nguyên phần gán cứng URL của bạn để đảm bảo chạy được
-           curl -X POST "https://n8n.tuantran.io.vn/webhook-test/deploy-success" \
+           curl -X POST "https://n8n.tuantran.io.vn/webhook/deploy-success" \
            -H "Content-Type: application/json" \
            -d '{"message": "🚀 Hasaki Update: Full Flow hoàn tất (Backend -> Frontend)!", "author": "${{ github.actor }}"}'
