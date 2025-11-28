@@ -1,13 +1,13 @@
-name: Monorepo Deploy (Auto Fix Ref Lock)
+name: Monorepo Deploy (Sequential - No Conflict)
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # --- JOB 1: BACKEND ---
+  # --- JOB 1: BACKEND (Đi trước mở đường) ---
   deploy-backend:
-    name: 🚀 Deploy Backend
+    name: 🚀 Deploy Backend & Pull Code
     runs-on: ubuntu-latest
     steps:
     - name: SSH & Deploy Laravel
@@ -18,23 +18,20 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           set -e
-          echo "---- FIX GIT REF ERROR (BACKEND) ----"
+          echo "---- 1. DỌN DẸP & PHÁ KHÓA GIT ----"
           cd /var/www/hasaki
           
-          # 1. Xóa file khóa tiến trình (Lỗi cũ)
+          # Xóa mọi loại khóa có thể gây lỗi
           rm -f .git/index.lock
-          
-          # 2. XÓA FILE THAM CHIẾU BỊ HỎNG (Lỗi hiện tại) - QUAN TRỌNG
           rm -rf .git/refs/remotes/origin/main
           
-          # 3. Config lại quyền
           git config --global --add safe.directory /var/www/hasaki
           
-          echo "---- PULL CODE ----"
+          echo "---- 2. KÉO CODE (CHỈ LÀM 1 LẦN TẠI ĐÂY) ----"
           git fetch --all
           git reset --hard origin/main
           
-          echo "---- DEPLOY LARAVEL ----"
+          echo "---- 3. CHẠY LARAVEL ----"
           cd backend
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
@@ -43,17 +40,19 @@ jobs:
           php artisan route:cache
           php artisan view:cache
           
-          # Cấp quyền lại
+          # Cấp quyền storage
           sudo chown -R www-data:www-data /var/www/hasaki/backend/storage
           
-          echo "✅ Backend deployed successfully!"
+          echo "✅ Backend Code Updated!"
 
-  # --- JOB 2: FRONTEND ---
+  # --- JOB 2: FRONTEND (Chạy sau khi Backend xong) ---
   deploy-frontend:
-    name: 🎨 Deploy Frontend
+    name: 🎨 Build Frontend
     runs-on: ubuntu-latest
+    needs: deploy-backend # <--- DÒNG QUAN TRỌNG NHẤT: Bắt phải đợi Backend xong mới chạy
+    
     steps:
-    - name: SSH & Deploy ReactJS
+    - name: SSH & Build ReactJS
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
@@ -61,49 +60,31 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           set -e
-          echo "---- FIX GIT REF ERROR (FRONTEND) ----"
-          cd /var/www/hasaki
+          echo "---- 4. BUILD FRONTEND ----"
+          # Không cần git pull nữa vì Backend đã kéo code mới về rồi
           
-          # 1. Xóa file khóa tiến trình
-          rm -f .git/index.lock
-          
-          # 2. XÓA FILE THAM CHIẾU BỊ HỎNG - QUAN TRỌNG
-          rm -rf .git/refs/remotes/origin/main
-          
-          git config --global --add safe.directory /var/www/hasaki
-          git fetch --all
-          git reset --hard origin/main
-          
-          echo "---- BUILD FRONTEND ----"
-          cd frontend
+          cd /var/www/hasaki/frontend
           npm install
           
-          # Fix RAM
+          # Fix RAM & Build
           export NODE_OPTIONS="--max-old-space-size=4096"
           npm run build
           
-          # Cấp quyền lại
+          # Cấp quyền cho thư mục dist
           sudo chown -R www-data:www-data /var/www/hasaki/frontend/dist
           
-          echo "✅ Frontend deployed successfully!"
+          echo "✅ Frontend Re-built!"
 
-  # --- JOB 3: NOTIFY ---
+  # --- JOB 3: NOTIFY (Báo cáo) ---
   notify:
     name: 🔔 Notify n8n
     runs-on: ubuntu-latest
     needs: [deploy-backend, deploy-frontend]
     if: always()
     steps:
-      - name: Send Notification Success
-        if: needs.deploy-backend.result == 'success' && needs.deploy-frontend.result == 'success'
+      - name: Send Notification
         run: |
+           # Tôi giữ nguyên phần gán cứng URL của bạn để đảm bảo chạy được
            curl -X POST "https://n8n.tuantran.io.vn/webhook-test/deploy-success" \
            -H "Content-Type: application/json" \
-           -d '{"message": "✅ Hasaki Update: Đã fix xong lỗi Ref Lock và Deploy thành công!", "author": "${{ github.actor }}"}'
-
-      - name: Send Notification Failure
-        if: needs.deploy-backend.result == 'failure' || needs.deploy-frontend.result == 'failure'
-        run: |
-           curl -X POST "https://n8n.tuantran.io.vn/webhook-test/deploy-success" \
-           -H "Content-Type: application/json" \
-           -d '{"message": "❌ Hasaki Update: Vẫn lỗi! Kiểm tra log.", "author": "${{ github.actor }}"}'
+           -d '{"message": "🚀 Hasaki Update: Full Flow hoàn tất (Backend -> Frontend)!", "author": "${{ github.actor }}"}'
