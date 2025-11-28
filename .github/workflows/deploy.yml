@@ -1,16 +1,15 @@
-name: Monorepo Deploy (Smart)
+name: Monorepo Deploy (Always Run)
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # --- JOB 1: DEPLOY BACKEND (Laravel) ---
+  # --- JOB 1: DEPLOY BACKEND ---
   deploy-backend:
     name: 🚀 Deploy Backend
     runs-on: ubuntu-latest
-    # Chỉ chạy khi có file trong thư mục backend thay đổi
-    if:  ${{ contains(github.event.head_commit.modified, 'backend/') || contains(github.event.head_commit.added, 'backend/') }}
+    # Đã xóa dòng 'if' để lúc nào cũng chạy cho bạn dễ test
     
     steps:
     - name: SSH & Deploy Laravel
@@ -21,13 +20,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           echo "---- BẮT ĐẦU DEPLOY BACKEND ----"
-          # 1. Đi vào thư mục backend
-          cd /var/www/hasaki/backend
           
-          # 2. Update code (Lưu ý: git pull ở root hay subfolder đều kéo cả cục về)
+          # 1. RA THƯ MỤC GỐC ĐỂ PULL CODE (Quan trọng)
+          cd /var/www/hasaki
           git pull origin main
           
-          # 3. Cài đặt & Tối ưu
+          # 2. VÀO BACKEND ĐỂ CHẠY LỆNH
+          cd backend
+          
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
           php artisan optimize:clear
@@ -35,17 +35,13 @@ jobs:
           php artisan route:cache
           php artisan view:cache
           
-          # 4. Restart Queue (Nếu có dùng Queue Worker gửi mail)
-          php artisan queue:restart
-          
           echo "✅ Backend deployed successfully!"
 
-  # --- JOB 2: DEPLOY FRONTEND (React Vite) ---
+  # --- JOB 2: DEPLOY FRONTEND ---
   deploy-frontend:
     name: 🎨 Deploy Frontend
     runs-on: ubuntu-latest
-    # Chỉ chạy khi có file trong thư mục frontend thay đổi
-    if: ${{ contains(github.event.head_commit.modified, 'frontend/') || contains(github.event.head_commit.added, 'frontend/') }}
+    # Đã xóa dòng 'if'
     
     steps:
     - name: SSH & Deploy ReactJS
@@ -56,30 +52,28 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           echo "---- BẮT ĐẦU DEPLOY FRONTEND ----"
-          # 1. Đi vào thư mục frontend
-          cd /var/www/hasaki/frontend
           
-          # 2. Update code
+          # 1. RA THƯ MỤC GỐC ĐỂ PULL CODE
+          cd /var/www/hasaki
           git pull origin main
           
-          # 3. Cài đặt thư viện mới (nếu có)
+          # 2. VÀO FRONTEND ĐỂ BUILD
+          cd frontend
           npm install
-          
-          # 4. Build ra file tĩnh (Folder dist)
           npm run build
           
           echo "✅ Frontend deployed successfully!"
 
-  # --- JOB 3: THÔNG BÁO n8n (Chạy khi 1 trong 2 thành công) ---
+  # --- JOB 3: THÔNG BÁO ---
   notify:
     name: 🔔 Notify n8n
     runs-on: ubuntu-latest
-    needs: [deploy-backend, deploy-frontend] # Chờ 2 thằng trên
-    if: always() # Luôn chạy để báo cáo kết quả
+    needs: [deploy-backend, deploy-frontend]
+    if: always()
     
     steps:
       - name: Send Notification
         run: |
            curl -X POST ${{ secrets.N8N_WEBHOOK }} \
            -H "Content-Type: application/json" \
-           -d '{"message": "🚀 Hasaki Monorepo Update: Quá trình Deploy đã hoàn tất.", "author": "${{ github.actor }}"}'
+           -d '{"message": "🚀 Hasaki Update: Đã deploy code mới nhất lên VPS!", "author": "${{ github.actor }}"}'
