@@ -140,7 +140,7 @@ const ProductDetail = () => {
           }}
         >
           <Link underline="hover" color="inherit" to="/">
-            Trang chủ
+            Trang chủ {Test CI CD}
           </Link>
           {product?.categories?.map((item, index) => (
             <Link
