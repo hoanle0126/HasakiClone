@@ -89,6 +89,8 @@ Route::get('/categories-children', function (Request $request) {
     return CategoriesResource::collection($categories);
 });
 
+Route::post('/reviews/ai-reply', [ReviewController::class, 'saveAiReply']);
+
 
 Route::get("/list_cities", function () {
     return CityResource::collection(City::all());

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đừng bỏ lỡ sản phẩm trong giỏ hàng</title>
+    <style>
+        /* Reset CSS cơ bản cho Email */
+        body { margin: 0; padding: 0; background-color: #f3f4f6; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        table { border-collapse: collapse; width: 100%; }
+        img { display: block; border: 0; outline: none; text-decoration: none; }
+        
+        /* Mobile Responsive */
+        @media only screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .product-img { width: 80px !important; height: 80px !important; }
+            .content-padding { padding: 20px !important; }
+        }
+    </style>
+</head>
+<body style="background-color: #f3f4f6; padding: 40px 0;">
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center">
+                <table class="container" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    
+                    <tr>
+                        <td bgcolor="#32b768" align="center" style="padding: 20px;">
+                            <h1 style="color: #ffffff; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px;">
+                                HASAKI CLONE
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="content-padding" style="padding: 40px 30px;">
+                            <h2 style="color: #333333; margin-top: 0; text-align: center;">Bạn để quên đồ nè! 👀</h2>
+                            <p style="color: #666666; font-size: 16px; line-height: 24px; text-align: center; margin-bottom: 30px;">
+                                Chào <strong>{{ $json.first_name }}</strong>,<br>
+                                Chúng tôi nhận thấy bạn chưa hoàn tất đơn hàng. Các sản phẩm yêu thích vẫn đang nằm trong giỏ và chờ bạn rước về đấy!
+                            </p>
+
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #eeeeee; border-radius: 8px; overflow: hidden;">
+                                
+                                <tr bgcolor="#f9fafb">
+                                    <th align="left" style="padding: 10px 15px; color: #666666; font-size: 12px; text-transform: uppercase;">Sản phẩm</th>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding: 15px; border-bottom: 1px solid #eeeeee;">
+                                        <p style="color: #333333; font-size: 15px; font-weight: bold; margin: 0 0 5px;">
+                                            {{ $json.product_list }} 
+                                            </p>
+                                        <p style="color: #999999; font-size: 13px; margin: 0;">
+                                            Các sản phẩm tuyệt vời đang chờ bạn!
+                                        </p>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <div style="text-align: center; margin-top: 35px;">
+                                <a href="https://hasaki-clone.io.vn/cart" style="background-color: #32b768; color: #ffffff; text-decoration: none; padding: 14px 30px; border-radius: 50px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px rgba(50, 183, 104, 0.3);">
+                                    Hoàn tất đơn hàng ngay
+                                </a>
+                            </div>
+
+                            <p style="text-align: center; color: #999999; font-size: 13px; margin-top: 25px;">
+                                *Giá và tình trạng còn hàng có thể thay đổi.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td bgcolor="#f9fafb" style="padding: 20px; text-align: center; border-top: 1px solid #eeeeee;">
+                            <p style="color: #999999; font-size: 12px; margin: 0;">
+                                &copy; 2025 Hasaki Clone. All rights reserved.
+                            </p>
+                            <p style="color: #999999; font-size: 12px; margin: 5px 0 0;">
+                                <a href="#" style="color: #32b768; text-decoration: none;">Hủy đăng ký</a> | 
+                                <a href="#" style="color: #32b768; text-decoration: none;">Liên hệ hỗ trợ</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                </td>
+        </tr>
+    </table>
+
+</body>
+</html>

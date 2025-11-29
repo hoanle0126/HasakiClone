@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ReviewReplied;
 use App\Http\Requests\ReviewRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Review;
 use App\Http\Controllers\Controller;
 use Auth;
+use Http;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -37,13 +40,55 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ReviewRequest $request)
+    public function store(Request $request)
     {
-        $reviewRequest = $request->validated();
-        $reviewRequest['user_id'] = Auth::id();
-        Review::create($reviewRequest);
+        $review = Review::create([
+            'user_id' => Auth::id(),
+            'product_id' => $request['product_id'],
+            'rating' => $request['rating'],
+            'description' => $request['description'] ?? '',
+            'images' => $request['images'] ?? [],
+        ]);
 
-        return new ProductResource(Product::find($reviewRequest['product_id']));
+        try {
+            Http::timeout(2)->post('https://n8n.tuantran.io.vn/webhook-test/ai-review-reply', [
+                'description' => $request->description,
+                'product_id' => $request->product_id,
+                "review_id" => $review->id
+            ]);
+        } catch (\Exception $e) {
+            // Ghi log nếu lỗi, nhưng không chặn người  
+            \Log::error("Lỗi gửi Webhook n8n: " . $e->getMessage());
+        }
+
+        return new ProductResource(Product::find($request['product_id']));
+    }
+
+    public function saveAiReply(Request $request)
+    {
+        // 1. Lưu vào DB (Giữ nguyên code cũ)
+        $review = Review::find($request->review_id);
+        $review->reply = $request->reply_content;
+        $review->updated_at = now(); // Cập nhật thời gian
+        $review->save();
+
+        // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
+        // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
+        try {
+            Http::post('http://localhost:6001/broadcast', [
+                'channel' => 'product.' . $review->product_id, // Tên kênh
+                'event' => 'ReviewReplied',                  // Tên sự kiện
+                'data' => [
+                    'review_id' => $review->id,
+                    'reply' => $request->reply_content,
+                    'updated_at' => $review->updated_at->toISOString()
+                ]
+            ]);
+        } catch (\Exception $e) {
+            \Log::error("Lỗi gọi Socket: " . $e->getMessage());
+        }
+
+        return response()->json(['status' => 'OK']);
     }
 
     /**

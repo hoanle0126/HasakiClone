@@ -103,7 +103,11 @@ export const addReview =
   ({ review }) =>
   async (dispatch) => {
     dispatch({ type: ADD_REVIEW_REQUEST });
-    await axiosClient.post("/reviews", review).then((data) => {
+    try {
+      await axiosClient.post("/reviews", review).then((data) => {
       dispatch({ type: ADD_REVIEW_SUCCESS, payload: data.data });
     });
+    } catch (error) {
+      console.error("Failed to add review:", error);
+    }
   };

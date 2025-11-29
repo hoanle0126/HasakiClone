@@ -369,7 +369,7 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
               size="large"
               variant="contained"
               sx={{ borderRadius: "99px" }}
-              loading={loading}
+              // loading={loading}
             >
               Đăng ký
             </Button>

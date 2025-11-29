@@ -41,6 +41,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useParams } from "react-router-dom";
 import DetailHeader from "./DetailHeader";
 import FeatureSection from "./FeatureSection";
+import { io } from "socket.io-client";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -53,6 +54,51 @@ const ProductDetail = () => {
   const { product, loading } = useSelector((store) => store.products);
   const [quantity, setQuantity] = React.useState(1);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [reviews, setReviews] = React.useState([]);
+  const productId = product?.id;
+
+  React.useEffect(() => {
+    // 1. Kết nối tới Socket Server (Qua đường dẫn Nginx đã cấu hình)
+    // Không cần port 6001 vì đã proxy qua Nginx port 443 rồi
+    const socket = io("https://hasaki-clone.io.vn", {
+      transports: ["websocket", "polling"],
+      path: "/socket.io/", // Mặc định thư viện nó cũng tự thêm cái này, nhưng khai báo cho chắc
+    });
+
+    socket.on("connect", () => {
+      console.log("🟢 Đã kết nối Socket.io:", socket.id);
+    });
+
+    // 2. Lắng nghe kênh sản phẩm này
+    // Lưu ý: Logic lắng nghe của code tay hơi khác Pusher chút
+    socket.on(`product.${productId}`, (payload) => {
+      console.log("📩 Nhận tin nhắn:", payload);
+
+      // Chỉ xử lý nếu đúng sự kiện
+      if (payload.event === "ReviewReplied") {
+        const data = payload.data;
+
+        // Cập nhật State
+        setReviews((prev) =>
+          prev.map((r) => {
+            if (r.id === data.review_id) {
+              return {
+                ...r,
+                reply: data.reply,
+                updated_at: data.updated_at,
+              };
+            }
+            return r;
+          })
+        );
+      }
+    });
+
+    // Cleanup
+    return () => {
+      socket.disconnect();
+    };
+  }, [productId]);
 
   React.useEffect(() => {
     dispatch(
