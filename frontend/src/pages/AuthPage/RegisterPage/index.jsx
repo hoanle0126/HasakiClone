@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
@@ -22,13 +23,14 @@ const YEARS = Array.from({ length: 100 }, (_, i) => CURRENT_YEAR - i);
 
 const RegisterPage = ({ open, handleClose, navigate }) => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
+  const { authLoading, authError } = useSelector((state) => state.user);
+  const [getVerificationCode, setGetVerificationCode] = React.useState(false);
 
   const [registerForm, setRegisterForm] = React.useState({
     email: "",
     password: "",
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     gender: "male",
     verificationCode: "",
     birth: {
@@ -36,6 +38,7 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
       month: "",
       year: "",
     },
+    acceptTerms: false,
   });
 
   // 1. Tính toán số ngày dựa trên Tháng và Năm đã chọn
@@ -75,16 +78,6 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    // Validate cơ bản
-    if (
-      !registerForm.birth.day ||
-      !registerForm.birth.month ||
-      !registerForm.birth.year
-    ) {
-      alert("Vui lòng chọn đầy đủ ngày tháng năm sinh");
-      return;
-    }
 
     // Format lại thành YYYY-MM-DD để gửi lên server (MySQL chuẩn DATE)
     // Hoặc DD-MM-YYYY tùy theo backend bạn đã sửa
@@ -187,10 +180,17 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
                 variant="contained"
                 onClick={() => {
                   dispatch(verifyEmail(registerForm));
+                  setGetVerificationCode(true);
                 }}
               >
                 Lấy mã
               </Button>
+              <Snackbar
+                message="Mã xác nhận đã được gửi đến email của bạn"
+                open={getVerificationCode}
+                onClose={() => setGetVerificationCode(false)}
+                autoHideDuration={3000}
+              />
             </Stack>
             {/* Mã xác nhận */}
             {/* Input Password */}
@@ -228,11 +228,11 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
               }}
             >
               <input
-                value={registerForm.lastName}
+                value={registerForm.last_name}
                 onChange={(e) =>
                   setRegisterForm({
                     ...registerForm,
-                    lastName: e.target.value,
+                    last_name: e.target.value,
                   })
                 }
                 className="focus:outline-none text-[13px] placeholder:text-[13px] flex-1"
@@ -253,11 +253,11 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
               }}
             >
               <input
-                value={registerForm.firstName}
+                value={registerForm.first_name}
                 onChange={(e) =>
                   setRegisterForm({
                     ...registerForm,
-                    firstName: e.target.value,
+                    first_name: e.target.value,
                   })
                 }
                 className="focus:outline-none text-[13px] placeholder:text-[13px] flex-1"
@@ -356,23 +356,40 @@ const RegisterPage = ({ open, handleClose, navigate }) => {
                 gap: "4px",
               }}
             >
-              <Checkbox size="small" sx={{ padding: 0 }} defaultChecked />
+              <Checkbox
+                checked={registerForm.acceptTerms}
+                onChange={(e) => {
+                  setRegisterForm({
+                    ...registerForm,
+                    acceptTerms: e.target.checked,
+                  });
+                }}
+                size="small"
+                sx={{ padding: 0 }}
+              />
               <Typography variant="caption" sx={{ fontSize: "12px" }}>
                 Tôi đã đọc và đồng ý với{" "}
                 <a href="#">Điều kiện giao dịch chung</a> và{" "}
                 <a href="#">Chính sách bảo mật thông tin</a> của Hasaki
               </Typography>
             </Stack>
-
             <Button
               type="submit"
               size="large"
               variant="contained"
               sx={{ borderRadius: "99px" }}
-              // loading={loading}
+              loading={authLoading}
+              onClick={() => {
+                console.log("Error", authError);
+              }}
             >
               Đăng ký
             </Button>
+            {authError && (
+              <Typography variant="body2" color="error">
+                {authError}
+              </Typography>
+            )}
           </Stack>
         </Stack>
 

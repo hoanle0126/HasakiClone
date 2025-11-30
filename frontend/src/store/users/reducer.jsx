@@ -10,10 +10,13 @@ import {
   DELETE_ADDRESS_SUCCESS,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
+  LOGIN_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
+  LOGOUT_FAILURE,
   LOGOUT_REQUEST,
   LOGOUT_SUCCESS,
+  REGISTER_FAILURE,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   SHOW_ADDRESS_REQUEST,
@@ -32,14 +35,20 @@ const initialState = {
     wards: [],
   },
   loading: false,
+  authLoading: false,
+  authError: null,
 };
 
 export const userReducers = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
-    case GET_USER_REQUEST:
     case LOGOUT_REQUEST:
+      return {
+        ...state,
+        authLoading: true,
+      };
+    case GET_USER_REQUEST:
     case ADD_CART_REQUEST:
     case ADD_ADDRESS_REQUEST:
     case SHOW_ADDRESS_REQUEST:
@@ -50,8 +59,6 @@ export const userReducers = (state = initialState, action) => {
         ...state,
         loading: true,
       };
-    case LOGIN_SUCCESS:
-    case REGISTER_SUCCESS:
     case GET_USER_SUCCESS:
     case ADD_CART_SUCCESS:
     case ADD_ADDRESS_SUCCESS:
@@ -61,9 +68,16 @@ export const userReducers = (state = initialState, action) => {
       return { ...state, user: action.payload, loading: false };
     case SHOW_ADDRESS_SUCCESS:
       return { ...state, addressValue: action.payload, loading: false };
+    case LOGIN_SUCCESS:
+    case REGISTER_SUCCESS:
+      return { ...state, user: action.payload, authLoading: false };
     case LOGOUT_SUCCESS:
-    case VERIFY_EMAIL_SUCCESS:
-      return { ...state, user: {}, loading: false };
+      return { ...state, user: {}, authLoading: false };
+    case VERIFY_EMAIL_REQUEST:
+    case LOGIN_FAILURE:
+    case REGISTER_FAILURE:
+    case LOGOUT_FAILURE:
+      return { ...state, authLoading: false, authError: action.error };
     default:
       return state;
   }

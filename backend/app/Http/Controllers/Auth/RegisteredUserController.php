@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Mail\SendVerificationCode;
 use App\Models\User;
@@ -23,35 +24,46 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(RegisterRequest $request)
     {
-        $user = User::create([
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'email' => $request->email,
-            'gender' => $request->gender,
-            'password' => Hash::make($request->string('password')),
-            'birth' => $request->birth,
+        // BƯỚC 1: Kiểm tra mã xác nhận TRƯỚC khi tạo user
+        $verifyRecord = VerifyCode::where('email', $request->email)->first();
+
+        // Kiểm tra xem có bản ghi mã xác nhận không và mã có khớp không
+        if (!$verifyRecord || $verifyRecord->verification_code !== $request->verificationCode) {
+            return response()->json([
+                'message' => 'Vui lòng nhập đúng mã xác nhận!',
+            ], 400); // Trả về Bad Request
+        }
+
+        // BƯỚC 2: Chuẩn bị dữ liệu
+        $userData = $request->only([
+            'first_name',
+            'last_name',
+            'email',
+            'birth',
+            'gender'
         ]);
 
-        $verifyCode = VerifyCode::where('email', $request->email)->first()["verification_code"];
+        // Thêm password đã mã hóa vào mảng
+        $userData['password'] = Hash::make($request->password);
 
-        // event(new Registered($user));
+        // BƯỚC 3: Tạo User
+        $user = User::create($userData);
 
+        // BƯỚC 4: Đăng nhập và tạo token
         Auth::login($user);
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        if ($verifyCode == $request->verificationCode) {
-            return response()->json([
-                'message' => 'Đăng ký thành công',
-                'user' => new UserResource($user),
-                'token' => $user->createToken('auth_token')->plainTextToken,
-                'verification_code' => $verifyCode
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Vui lòng nhập đúng mã xác nhận đã gửi đến email của bạn!',
-            ]);
-        }
+        // (Tùy chọn) Xóa mã xác nhận sau khi đã dùng xong để tránh dùng lại
+        // $verifyRecord->delete(); 
+
+        return response()->json([
+            'message' => 'Đăng ký thành công',
+            'user' => new UserResource($user),
+            'token' => $token,
+            // Không cần trả lại verification_code cho client ở bước này
+        ], 200);
     }
 
     public function sendVerificationCode(Request $request)

@@ -69,7 +69,6 @@ function RenderDateTime(props) {
 }
 
 function RenderStock(props) {
-  const theme = useTheme();
   const { value, row } = props;
   const [status, setStatus] = React.useState({
     title: "",
@@ -124,6 +123,7 @@ function RenderStock(props) {
 }
 
 function RenderAction(props) {
+  const theme = useTheme();
   const { row } = props;
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);

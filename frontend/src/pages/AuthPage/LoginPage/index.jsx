@@ -19,7 +19,7 @@ const LoginPage = ({ open, handleClose, navigate }) => {
     password: "",
   });
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.user);
+  const { authLoading, authError } = useSelector((state) => state.user);
 
   return (
     <Dialog
@@ -135,6 +135,7 @@ const LoginPage = ({ open, handleClose, navigate }) => {
                 placeholder="Nhập mật khẩu"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
+                type="password"
               />
               <Icon icon="solar:lock-bold" width="16" height="16" />
             </Stack>
@@ -156,9 +157,15 @@ const LoginPage = ({ open, handleClose, navigate }) => {
               variant="contained"
               sx={{ borderRadius: "99px" }}
               type="submit"
+              loading={authLoading}
             >
               Đăng nhập
             </Button>
+            {authError && (
+              <Typography variant="body2" color="error">
+                {authError}
+              </Typography>
+            )}
             <Typography
               sx={{
                 ".sign-up": {

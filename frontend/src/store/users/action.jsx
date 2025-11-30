@@ -46,7 +46,7 @@ export const login =
         onSuccess(data.data);
       })
       .catch((e) => {
-        dispatch({ type: LOGIN_FAILURE, error: e });
+        dispatch({ type: LOGIN_FAILURE, error: e.response.data.message });
       });
   };
 
@@ -62,7 +62,7 @@ export const register =
         onSuccess(data.data);
       })
       .catch((e) => {
-        dispatch({ type: REGISTER_FAILURE, error: e });
+        dispatch({ type: REGISTER_FAILURE, error: e.response.data.message });
       });
   };
 

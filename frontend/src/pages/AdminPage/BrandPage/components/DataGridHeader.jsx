@@ -40,7 +40,6 @@ function RenderDateTime(props) {
 
 function RenderProduct(props) {
   const { row } = props;
-  const theme = useTheme();
 
   return (
     <Box
@@ -75,6 +74,7 @@ function RenderAction(props) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

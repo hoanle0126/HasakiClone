@@ -13,7 +13,6 @@ import ProductSection from "./ProductSection";
 const LandingPage = () => {
   return (
     <div>
-      a
       <BannerSection />
       <Stack
         sx={{
