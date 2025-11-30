@@ -27,14 +27,12 @@ const ClientHeader = () => {
   const [onDanhMuc, setOnDanhMuc] = React.useState(false);
   const dispatch = useDispatch();
   const categoriesReducer = useSelector((store) => store.categories);
-  const { user } = useSelector((store) => store.user);
   const [categoriesChildren, setCategoriesChildren] = React.useState({
     children: [],
   });
 
   React.useEffect(() => {
     dispatch(getAllCategories());
-    user.email == null && dispatch(getUser());
   }, []);
 
   React.useEffect(() => {

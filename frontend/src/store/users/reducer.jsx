@@ -8,6 +8,7 @@ import {
   ADD_ORDER_SUCCESS,
   DELETE_ADDRESS_REQUEST,
   DELETE_ADDRESS_SUCCESS,
+  GET_USER_FAILURE,
   GET_USER_REQUEST,
   GET_USER_SUCCESS,
   LOGIN_FAILURE,
@@ -43,7 +44,6 @@ export const userReducers = (state = initialState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
-    case LOGOUT_REQUEST:
       return {
         ...state,
         authLoading: true,
@@ -55,6 +55,7 @@ export const userReducers = (state = initialState, action) => {
     case UPDATE_ADDRESS_REQUEST:
     case DELETE_ADDRESS_REQUEST:
     case ADD_ORDER_REQUEST:
+    case LOGOUT_REQUEST:
       return {
         ...state,
         loading: true,
@@ -72,12 +73,14 @@ export const userReducers = (state = initialState, action) => {
     case REGISTER_SUCCESS:
       return { ...state, user: action.payload, authLoading: false };
     case LOGOUT_SUCCESS:
-      return { ...state, user: {}, authLoading: false };
+      return { ...state, user: {}, loading: false };
     case VERIFY_EMAIL_REQUEST:
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
     case LOGOUT_FAILURE:
       return { ...state, authLoading: false, authError: action.error };
+    case GET_USER_FAILURE:
+      return { ...state, user: {}, loading: false };
     default:
       return state;
   }

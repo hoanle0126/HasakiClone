@@ -97,10 +97,16 @@ export const logout =
   };
 
 export const getUser = () => async (dispatch) => {
+  console.log("Get user");
   dispatch({ type: GET_USER_REQUEST });
-  axiosClient.get("/user").then((data) => {
-    dispatch({ type: GET_USER_SUCCESS, payload: data.data });
-  });
+  axiosClient
+    .get("/user")
+    .then((data) => {
+      dispatch({ type: GET_USER_SUCCESS, payload: data.data });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
 };
 
 export const addCart = (cart) => async (dispatch) => {
