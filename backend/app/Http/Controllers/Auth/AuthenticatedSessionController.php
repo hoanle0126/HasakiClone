@@ -21,7 +21,7 @@ class AuthenticatedSessionController extends Controller
 
         // 2. Kiểm tra đăng nhập
         // Auth::attempt sẽ tự động so sánh Email và Hash Password
-        if (!Auth::attempt($credentials)) {
+        if (!Auth::guard('web')->attempt($credentials)) {
             // Nếu sai => Trả về lỗi 401 Unauthorized
             return response()->json([
                 'message' => 'Email hoặc mật khẩu không chính xác',
