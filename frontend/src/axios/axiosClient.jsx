@@ -4,8 +4,9 @@ export const axiosClient = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
   headers: {
     "Content-Type": "application/json",
-    'Accept': 'application/json',
+    Accept: "application/json",
   },
+  withCredentials: true,
 });
 
 axiosClient.interceptors.request.use((config) => {
@@ -16,7 +17,7 @@ axiosClient.interceptors.request.use((config) => {
 
 axiosClient.interceptors.response.use(
   (response) => {
-    return response;  
+    return response;
   },
   (error) => {
     const { response } = error;

@@ -21,6 +21,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         //
+        $middleware->validateCsrfTokens(except: [
+            'api/*',           // Tắt CSRF cho toàn bộ API (Khuyên dùng nếu bạn làm SPA tách biệt)
+            // 'api/verify-email', // Hoặc chỉ tắt riêng route này nếu muốn
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
