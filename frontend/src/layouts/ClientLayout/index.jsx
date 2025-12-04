@@ -21,7 +21,7 @@ const ClientLayout = () => {
 
   return (
     <div>
-      {loading && (
+      {/* {loading && (
         <Stack
           sx={{
             position: "fixed",
@@ -36,7 +36,7 @@ const ClientLayout = () => {
         >
           <CircularProgress size={60} />
         </Stack>
-      )}
+      )} */}
       <ClientHeader />
       <Outlet />
       <ClientFooter />
