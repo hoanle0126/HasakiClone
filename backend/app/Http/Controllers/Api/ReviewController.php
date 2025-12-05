@@ -76,7 +76,7 @@ class ReviewController extends Controller
     public function saveAiReply(Request $request)
     {
         // 1. Lưu vào DB (Giữ nguyên code cũ)
-        $review = Review::where("id",$request->review_id)->first();
+        $review = Review::find($request->review_id);
         $review->update([
             "reply" => $request->reply_content,
             "updated_at"=> now()
@@ -84,21 +84,21 @@ class ReviewController extends Controller
 
         // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
         // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
-        try {
-            $client = new Client();
+        // try {
+        //     $client = new Client();
 
-            // Gửi data tới Node Socket server
-            $client->post('http://localhost:3001/notify-new-review', [
-                'json' => [
-                    'product_id' => $request->product_id,
-                    'data' => [
-                        'message' => $request->reply_content
-                    ]
-                ]
-            ]);
-        } catch (\Exception $e) {
-            \Log::error("Lỗi gọi Socket: " . $e->getMessage());
-        }
+        //     // Gửi data tới Node Socket server
+        //     $client->post('http://localhost:3001/notify-new-review', [
+        //         'json' => [
+        //             'product_id' => $request->product_id,
+        //             'data' => [
+        //                 'message' => $request->reply_content
+        //             ]
+        //         ]
+        //     ]);
+        // } catch (\Exception $e) {
+        //     \Log::error("Lỗi gọi Socket: " . $e->getMessage());
+        // }
 
         return response()->json(['status' => 'OK']);
     }
