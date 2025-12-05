@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Http\Controllers\Controller;
 use Auth;
+use GuzzleHttp\Client;
 use Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +53,8 @@ class ReviewController extends Controller
         ]);
 
         try {
-            Http::timeout(2)->post('https://n8n.tuantran.io.vn/webhook/ai-review-reply', [
+            $client = new Client();
+            $client->post('https://n8n.tuantran.io.vn/webhook/ai-review-reply', [
                 'description' => $request->description,
                 'user' => $user,
                 'product_id' => $request['product_id'],

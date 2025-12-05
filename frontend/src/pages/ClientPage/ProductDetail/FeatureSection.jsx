@@ -154,7 +154,7 @@ const FeatureSection = ({ action }) => {
       console.log("Connected to socket:", socket.id);
     });
 
-    socket.on("notify-new-review", (data) => {
+    socket.on("product_review_" + product?.id, (data) => {
       console.log("Server ping:", data);
     });
 
@@ -551,9 +551,7 @@ const FeatureSection = ({ action }) => {
                   >
                     <span>Hasaki</span> - {formatDate(item.updated_at)}
                   </Typography>
-                  <Typography variant="body2">
-                    {item?.reply}
-                  </Typography>
+                  <Typography variant="body2">{item?.reply}</Typography>
                 </Stack>
               )}
             </Stack>
