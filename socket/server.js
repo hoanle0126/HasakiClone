@@ -5,24 +5,47 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json());
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "*", // trong production bạn thay bằng domain thật
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
 
-// Khi client kết nối
+// ========================
+// 1️⃣ ĐẶT ROUTE TRƯỚC listen
+// ========================
+app.post('/notify-new-review', (req, res) => {
+    const {product_id,data} = req.body;
+    console.log('📢 Review mới cho SP:', data+product_id);
+
+    io.emit("product_"+product_id, data);
+
+    return res.json({ status: 'ok' });
+});
+
+app.post("/sends", (req, res) => {
+    const message = req.body;
+    console.log("Received from Laravel:", message);
+
+    io.emit("message", message);
+
+    return res.json({ status: "ok" });
+});
+
+// ========================
+// 2️⃣ SOCKET.IO
+// ========================
 io.on("connection", (socket) => {
     console.log("Client connected:", socket.id);
 
     socket.on("message", (data) => {
         console.log("Message received:", data);
-        io.emit("message", data); // broadcast lại cho tất cả client
+        io.emit("message", data);
     });
 
     socket.on("disconnect", () => {
@@ -30,27 +53,11 @@ io.on("connection", (socket) => {
     });
 });
 
+// ========================
+// 3️⃣ BẮT SERVER CUỐI CÙNG
+// ========================
 const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
     console.log(`Socket.io server running on port ${PORT}`);
-});
-
-// API Laravel sẽ gọi route này
-app.post("/send", (req, res) => {
-    const message = req.body.message;
-    console.log("Received from Laravel:", message);
-
-    io.emit("message", message); // Gửi cho tất cả client
-    return res.json({ status: "ok" });
-});
-
-app.post('/notify-new-review', (req, res) => {
-    const { product_id, data } = req.body;
-    console.log('📢 Có review mới + câu trả lời AI cho SP:', product_id);
-    
-    // Bắn tin hiệu ra cho Frontend (kênh product_review_ID)
-    io.emit(`product_review_${product_id}`, data);
-    
-    res.json({ status: 'ok' });
 });

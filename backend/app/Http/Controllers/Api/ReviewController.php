@@ -56,7 +56,7 @@ class ReviewController extends Controller
             // Thêm timeout=2s để lỡ n8n bị lag thì web của bạn không bị treo theo
             $client = new Client(['timeout' => 2.0]);
 
-            $client->post('https://n8n.tuantran.io.vn/webhook/ai-review-reply', [
+            $client->post('https://n8n.tuantran.io.vn/webhook/auto-reply', [
                 'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
                     'description' => $request['description'] ?? 'Sản phẩm tốt',
                     'user' => $request['user'], // Gửi tên thôi cho nhẹ, gửi cả obj $user cũng được
@@ -84,13 +84,15 @@ class ReviewController extends Controller
         // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
         // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
         try {
-            Http::post('http://localhost:3001/notify-new-review', [
-                'channel' => 'product.' . $review->product_id, // Tên kênh
-                'event' => 'ReviewReplied',                  // Tên sự kiện
-                'data' => [
-                    'review_id' => $review->id,
-                    'reply' => $request->reply_content,
-                    'updated_at' => $review->updated_at->toISOString()
+            $client = new Client();
+
+            // Gửi data tới Node Socket server
+            $client->post('http://localhost:3001/notify-new-review', [
+                'json' => [
+                    'product_id' => $request->product_id,
+                    'data' => [
+                        'message' => $request->reply_content
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {

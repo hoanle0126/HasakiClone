@@ -102,10 +102,12 @@ Route::get('/test-socket', function () {
 
         // Gửi data tới Node Socket server
         $client->post('http://localhost:3001/notify-new-review', [
-            'channel' => 'product.' . 123232,
-            'event' => 'ReviewReplied',    
             'json' => [
-                'message' => 'Hello from Laravel!a'
+                'product_id' => 201937,
+                'data' => [
+                    'event' => 'ReviewReplied',
+                    'message' => 'Hello from Laravel!a'
+                ]
             ]
         ]);
 

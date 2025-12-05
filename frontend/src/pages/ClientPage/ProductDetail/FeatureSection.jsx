@@ -151,26 +151,28 @@ const FeatureSection = ({ action }) => {
   }, [product?.id]);
 
   React.useEffect(() => {
+  const reviewChannel = "product";
     socket.on("connect", () => {
       console.log("Connected to socket:", socket.id);
     });
 
-    socket.on("product_review_" + product?.id, (data) => {
+    socket.on("product_"+product.id, (data) => {
       console.log("Server ping:", data);
     });
 
     socket.on("message", (msg) => {
-      console.log("New message from socket:", msg);
+      console.log("New message from sockets:", msg);
     });
 
     return () => {
-      socket.off("connect");
-      socket.off("ping-from-server");
+    socket.off("connect");
+    socket.off(reviewChannel);
+    socket.off("message");
     };
   }, []);
 
   return (
-    <>
+    <>{product?.id}
       {isVisible && (
         <DetailHeader
           tab={tab}
