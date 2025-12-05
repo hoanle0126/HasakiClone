@@ -77,9 +77,10 @@ class ReviewController extends Controller
     {
         // 1. Lưu vào DB (Giữ nguyên code cũ)
         $review = Review::where("id",$request->review_id)->first();
-        $review->reply = $request->reply_content;
-        $review->updated_at = now(); // Cập nhật thời gian
-        $review->save();
+        $review->update([
+            "reply" => $request->reply_content,
+            "updated_at"=> now()
+        ]);
 
         // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
         // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
