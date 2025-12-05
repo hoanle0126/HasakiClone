@@ -148,7 +148,7 @@ const FeatureSection = ({ action }) => {
 
   React.useEffect(() => {
     setListReviews(product?.reviews);
-  }, [product?.id]);
+  }, [product?.id,product?.reviews]);
 
   React.useEffect(() => {
     socket.on("connect", () => {
