@@ -25,6 +25,7 @@ import { addReview } from "@/store/products/action";
 import { formatDate } from "@/Function/formatDate";
 import { formatTime } from "@/Function/formatTime";
 import { io } from "socket.io-client";
+import socket from "@/socket";
 
 const FeatureSection = ({ action }) => {
   const dispatch = useDispatch();
@@ -149,53 +150,23 @@ const FeatureSection = ({ action }) => {
   }, [product?.id]);
 
   React.useEffect(() => {
-    // 1. Kiểm tra nếu chưa có ID sản phẩm thì chưa kết nối
-    if (!product?.id) return;
-
-    // 2. Kết nối tới Socket Server
-    // (Lấy URL từ file .env hoặc điền cứng https://api.hasaki-clone.io.vn)
-    const socket = io(
-      import.meta.env.VITE_SOCKET_URL || "https://api.hasaki-clone.io.vn",
-      {
-        transports: ["websocket"],
-        withCredentials: true,
-      }
-    );
-
-    console.log("🔌 Đang lắng nghe kênh:", `product_review_${product.id}`);
-
-    // 3. Lắng nghe sự kiện "Có review mới / Update review"
-    socket.on(`product_review_${product.id}`, (updatedReview) => {
-      console.log("📩 Nhận dữ liệu socket:", updatedReview);
-
-      // 4. Cập nhật State (Danh sách reviews)
-      setListReviews((prevProduct) => {
-        // Copy danh sách cũ
-        let newReviews = [...prevProduct.reviews];
-
-        // Kiểm tra xem review này đã có trong list chưa
-        const index = newReviews.findIndex((r) => r.id === updatedReview.id);
-
-        if (index !== -1) {
-          // TRƯỜNG HỢP 1: Review đã tồn tại (Ví dụ: AI vừa trả lời xong)
-          // -> Thay thế review cũ bằng review mới (có admin_reply)
-          newReviews[index] = updatedReview;
-        } else {
-          // TRƯỜNG HỢP 2: Review hoàn toàn mới (Khách vừa post)
-          // -> Thêm lên đầu danh sách
-          newReviews.unshift(updatedReview);
-        }
-
-        // Trả về object product mới với list review đã update
-        return { ...prevProduct, reviews: newReviews };
-      });
+    socket.on("connect", () => {
+      console.log("Connected to socket:", socket.id);
     });
 
-    // 5. Dọn dẹp khi thoát trang (Ngắt kết nối để đỡ tốn RAM)
+    socket.on("notify-new-review", (data) => {
+      console.log("Server ping:", data);
+    });
+
+    socket.on("message", (msg) => {
+      console.log("New message from socket:", msg);
+    });
+
     return () => {
-      socket.disconnect();
+      socket.off("connect");
+      socket.off("ping-from-server");
     };
-  }, [listReviews?.id]);
+  }, []);
 
   return (
     <>
