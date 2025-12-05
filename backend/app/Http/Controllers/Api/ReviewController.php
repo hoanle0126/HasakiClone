@@ -56,7 +56,7 @@ class ReviewController extends Controller
             // Thêm timeout=2s để lỡ n8n bị lag thì web của bạn không bị treo theo
             $client = new Client(['timeout' => 2.0]);
 
-            $client->post('https://n8n.tuantran.io.vn/webhook-test/auto-reply', [
+            $client->post('https://n8n.tuantran.io.vn/webhook/auto-reply', [
                 'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
                     'description' => $request['description'] ?? 'Sản phẩm tốt',
                     'user' => $request['user'], // Gửi tên thôi cho nhẹ, gửi cả obj $user cũng được
