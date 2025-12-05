@@ -1,11 +1,11 @@
-name: Monorepo Deploy (Sequential - No Conflict)
+name: Monorepo Deploy (Full Stack + Socket)
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  # --- JOB 1: BACKEND (Đi trước mở đường) ---
+  # --- JOB 1: BACKEND (Đi trước mở đường - Kéo Code & Setup Laravel) ---
   deploy-backend:
     name: 🚀 Deploy Backend & Pull Code
     runs-on: ubuntu-latest
@@ -45,11 +45,42 @@ jobs:
           
           echo "✅ Backend Code Updated!"
 
-  # --- JOB 2: FRONTEND (Chạy sau khi Backend xong) ---
+  # --- JOB 2: SOCKET SERVER (Thêm mới - Chạy ngay sau khi có Code) ---
+  deploy-socket:
+    name: 🔌 Deploy Socket Server
+    runs-on: ubuntu-latest
+    needs: deploy-backend # <--- Đợi Backend kéo code xong là chạy ngay
+    
+    steps:
+    - name: SSH & Restart Socket
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          set -e
+          echo "---- 4. DEPLOY SOCKET SERVER ----"
+          # Di chuyển vào thư mục socket
+          cd /var/www/hasaki/socket
+          
+          # Cài đặt thư viện (nếu có update package.json)
+          npm install --production
+          
+          # Restart PM2
+          # Logic: Thử restart, nếu chưa có process tên 'hasaki-socket' thì tạo mới
+          pm2 restart hasaki-socket || pm2 start server.js --name "hasaki-socket"
+          
+          # Lưu trạng thái PM2 để lỡ VPS khởi động lại thì nó tự chạy
+          pm2 save
+          
+          echo "✅ Socket Server Updated & Restarted!"
+
+  # --- JOB 3: FRONTEND (Chạy song song hoặc sau Backend) ---
   deploy-frontend:
     name: 🎨 Build Frontend
     runs-on: ubuntu-latest
-    needs: deploy-backend # <--- DÒNG QUAN TRỌNG NHẤT: Bắt phải đợi Backend xong mới chạy
+    needs: deploy-backend # Vẫn đợi Backend xong code
     
     steps:
     - name: SSH & Build ReactJS
@@ -60,8 +91,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           set -e
-          echo "---- 4. BUILD FRONTEND ----"
-          # Không cần git pull nữa vì Backend đã kéo code mới về rồi
+          echo "---- 5. BUILD FRONTEND ----"
           
           cd /var/www/hasaki/frontend
           npm install
@@ -75,16 +105,16 @@ jobs:
           
           echo "✅ Frontend Re-built!"
 
-  # --- JOB 3: NOTIFY (Báo cáo) ---
+  # --- JOB 4: NOTIFY (Báo cáo tổng) ---
   notify:
     name: 🔔 Notify n8n
     runs-on: ubuntu-latest
-    needs: [deploy-backend, deploy-frontend]
+    # Đợi cả 3 ông kẹ kia xong mới báo
+    needs: [deploy-backend, deploy-socket, deploy-frontend]
     if: always()
     steps:
       - name: Send Notification
         run: |
-           # Tôi giữ nguyên phần gán cứng URL của bạn để đảm bảo chạy được
            curl -X POST "https://n8n.tuantran.io.vn/webhook/deploy-success" \
            -H "Content-Type: application/json" \
-           -d '{"message": "🚀 Hasaki Update: Full Flow hoàn tất (Backend -> Frontend)!", "author": "${{ github.actor }}"}'
+           -d '{"message": "🚀 Hasaki Update: Full Flow (Backend + Socket + Frontend) hoàn tất!", "author": "${{ github.actor }}"}'
