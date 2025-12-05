@@ -38,6 +38,7 @@ import HotDealClientPage from "@/pages/ClientPage/HotDealPage";
 import CategoriesPage from "@/pages/AdminPage/CategoriesPage";
 import CategoriesAddPage from "@/pages/AdminPage/CategoriesPage/AddPage";
 import CategoriesViewPage from "@/pages/AdminPage/CategoriesPage/ViewPage";
+import ContactPage from "@/pages/ClientPage/ContactPage";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -63,6 +64,10 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/thuong-hieu",
         element: <BrandClientPage />,
+      },
+      {
+        path: "/lien-lac",
+        element: <ContactPage />,
       },
       {
         path: "/thuong-hieu/:id",

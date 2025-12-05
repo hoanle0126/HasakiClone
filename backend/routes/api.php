@@ -101,7 +101,9 @@ Route::get('/test-socket', function () {
         $client = new Client();
 
         // Gửi data tới Node Socket server
-        $client->post('http://localhost:3001/send', [
+        $client->post('http://localhost:3001/notify-new-review', [
+            'channel' => 'product.' . 123232,
+            'event' => 'ReviewReplied',    
             'json' => [
                 'message' => 'Hello from Laravel!a'
             ]
@@ -113,3 +115,22 @@ Route::get('/test-socket', function () {
         return 'Error: ' . $e->getMessage();
     }
 });
+
+Route::post('/contact', function (Request $request) { {
+    try {
+            // Thêm timeout=2s để lỡ n8n bị lag thì web của bạn không bị treo theo
+            $client = new Client(['timeout' => 2.0]);
+
+            $client->post('https://n8n.tuantran.io.vn/webhook-test/ai-review-reply', [
+                'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
+                    'name' => $request['name'],
+                    'email' => $request['email'], // Gửi tên thôi cho nhẹ, gửi cả obj $user cũng được
+                    'message' => $request['message'],
+                ]
+            ]);
+        } catch (\Exception $e) {
+            // Ghi log nếu lỗi, nhưng không chặn người  
+            \Log::error("Lỗi gửi Webhook n8n: " . $e->getMessage());
+        }
+
+}});

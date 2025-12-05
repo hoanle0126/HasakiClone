@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Tâm Hỗ Trợ Khách Hàng</title>
+    <style>
+        /* --- CSS STYLE START --- */
+        
+        /* Cài đặt gốc */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        /* CONTAINER CHÍNH */
+        .support-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .support-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .support-header h1 {
+            font-size: 32px;
+            color: #2f3542;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .support-header p {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        /* CARD CHUNG (FAQ và Form) */
+        .support-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ nhàng */
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* SEARCH BAR */
+        .search-box {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #ced4da;
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            padding: 12px 25px;
+            background-color: #007bff; /* Màu chủ đạo */
+            color: white;
+            border: none;
+            border-radius: 0 6px 6px 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-box button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* FAQ ACCORDION (Dùng thẻ details/summary) */
+        .faq-section h2 {
+            font-size: 24px;
+            color: #2f3542;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        details {
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+        
+        details[open] {
+            background-color: #f7f9fc; /* Nền nhẹ khi mở */
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.05);
+        }
+
+        summary {
+            padding: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            list-style: none; /* Ẩn dấu mũi tên mặc định */
+            display: flex;
+            align-items: center;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        summary::after {
+            content: '+';
+            font-size: 24px;
+            color: #007bff;
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        
+        details[open] summary::after {
+            content: '-';
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 15px;
+            padding-top: 0;
+            font-size: 14px;
+            color: #555;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        /* CONTACT FORM */
+        .contact-section h2 {
+            font-size: 20px;
+            color: #2f3542;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #444;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Nút Gửi */
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745; /* Màu xanh lá nổi bật cho nút gửi */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .submit-btn:hover {
+            background-color: #1e7e34;
+            transform: translateY(-1px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .support-header h1 {
+                font-size: 26px;
+            }
+            .support-card {
+                padding: 20px;
+            }
+        }
+        /* --- CSS STYLE END --- */
+    </style>
+</head>
+<body>
+
+    <div class="support-container">
+        
+        <header class="support-header">
+            <h1>Trung Tâm Hỗ Trợ Khách Hàng</h1>
+            <p>Chúng tôi luôn sẵn lòng giải đáp mọi thắc mắc của bạn.</p>
+        </header>
+        
+        <div class="support-card faq-section">
+            Hasaki xin chào!\n\nHasaki chào anh/chị Lê Văn Xuân Hoan ạ,\n\nCảm ơn anh/chị đã liên hệ đến Hasaki.\n\nHasaki đã nhận được tin nhắn từ anh/chị. Tuy nhiên, nội dung tin nhắn có thể đã bị lỗi trong quá trình gửi nên Hasaki chưa hiểu rõ vấn đề anh/chị đang cần hỗ trợ.\n\nAnh/chị vui lòng chia sẻ lại thông tin hoặc câu hỏi cụ thể hơn để Hasaki có thể tư vấn và hỗ trợ mình một cách tốt nhất nhé ạ.\n\nHasaki luôn sẵn sàng lắng nghe. Chúc anh/chị một ngày vui vẻ!\n\nTrân trọng,\nBộ phận CSKH Hasaki.
+        </div>
+        
+    </div>
+
+</body>
+</html>
