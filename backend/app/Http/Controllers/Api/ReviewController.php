@@ -100,7 +100,7 @@ class ReviewController extends Controller
         //     \Log::error("Lỗi gọi Socket: " . $e->getMessage());
         // }
 
-        return response()->json(['status' => $request['review_id']]);
+        return response()->json(['status' => $request['review_id'], "all" => Review::all(), "review" => $review]);
     }
 
     /**
