@@ -79,7 +79,7 @@ class ReviewController extends Controller
         $review = Review::find($request->review_id);
         $review->update([
             "reply" => $request->reply_content,
-            "updated_at"=> now()
+            "updated_at" => now()
         ]);
 
         // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
@@ -92,7 +92,8 @@ class ReviewController extends Controller
                 'json' => [
                     'product_id' => $request->product_id,
                     'data' => [
-                        'message' => $request->reply_content
+                        'message' => $request->reply_content,
+                        "reviews" => Review::all()
                     ]
                 ]
             ]);
