@@ -147,7 +147,7 @@ const FeatureSection = ({ action }) => {
   }, []);
 
   React.useEffect(() => {
-    setListReviews(product.reviews);
+    setListReviews(product?.reviews);
   }, [product?.id]);
 
   React.useEffect(() => {
@@ -516,7 +516,7 @@ const FeatureSection = ({ action }) => {
             },
           }}
         >
-          {product.reviews?.map((item, index) => (
+          {listReviews?.map((item, index) => (
             <Stack gap="4px" key={index} className="review__item">
               <Stack direction="row" alignItems="center" gap="8px">
                 <Rating size="small" />
