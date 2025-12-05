@@ -77,10 +77,10 @@ class ReviewController extends Controller
     {
         // 1. Lưu vào DB (Giữ nguyên code cũ)
         $review = Review::find($request->review_id);
-        $review->update([
-            "reply" => $request->reply_content,
-            "updated_at"=> now()
-        ]);
+        // $review->update([
+        //     "reply" => $request->reply_content,
+        //     "updated_at"=> now()
+        // ]);
 
         // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
         // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
@@ -100,7 +100,7 @@ class ReviewController extends Controller
         //     \Log::error("Lỗi gọi Socket: " . $e->getMessage());
         // }
 
-        return response()->json(['status' => 'OK']);
+        return response()->json(['status' => $review]);
     }
 
     /**
