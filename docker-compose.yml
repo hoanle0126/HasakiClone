@@ -1,0 +1,50 @@
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    environment:
+      API_URL: ${API_URL}
+      SOCKET_URL: ${SOCKET_URL}
+    depends_on:
+      - backend
+      - socket
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/var/www
+    depends_on:
+      - mysql
+
+  backend-nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./backend:/var/www
+      - ./backend/backend-nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+
+  socket:
+    build: ./socket
+    environment:
+      PORT: 3001
+      CLIENT_URL: ${CLIENT_URL}
+    ports:
+      - "3001:3001"
+
+  mysql:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  mysql_data:

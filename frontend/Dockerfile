@@ -1,32 +1,31 @@
-FROM node:18-alpine AS build
+# FRONTEND Dockerfile
+FROM node:20.19.5-alpine AS builder
 
 WORKDIR /app
 
-# Copy package.json và lock file để tận dụng cache
+# Copy package và lockfile
 COPY package*.json ./
 
-# Cài đặt dependencies
-RUN npm install
+# Set registry tránh lỗi npm 500
+RUN npm config set registry https://registry.npmmirror.com
 
-# Copy toàn bộ mã nguồn
+# Cài dependencies dùng npm ci (chuẩn cho production)
+RUN npm ci
+
+# Copy source
 COPY . .
-# Build ứng dụng ra các file tĩnh
+
+# Build
 RUN npm run build
 
-# ----- Stage 2: Phục vụ file tĩnh bằng Nginx -----
-FROM nginx:1.25-alpine
-WORKDIR /usr/share/nginx/html
-# *** DÒNG SỬA LỖI ĐÂY ***
-# Cài đặt 'gettext' để có lệnh 'envsubst'
-RUN apk add --no-cache gettext
-# Xóa file config mặc định của Nginx
-RUN rm /etc/nginx/conf.d/default.conf
+# Serve bằng nginx
+FROM nginx:alpine
 
-# Copy file build từ Stage 1
-COPY --from=build /app/dist .
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy file config Nginx production của chúng ta
-# (Xem Bước 3 để tạo file này)
-COPY nginx.prod.conf /etc/nginx/conf.d/default.conf
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ["/bin/sh", "-c", "envsubst '$API_URL $PORT' < /etc/nginx/conf.d/default.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

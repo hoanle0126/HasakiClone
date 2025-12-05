@@ -92,6 +92,7 @@ export const logout =
         onSuccess();
       })
       .catch((e) => {
+        console.log("Error",e)
         dispatch({ type: LOGOUT_FAILURE, error: e });
       });
   };

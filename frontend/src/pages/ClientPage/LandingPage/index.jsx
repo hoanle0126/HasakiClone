@@ -9,8 +9,27 @@ import TopSellSection from "./TopSellSection";
 import ServiceSection from "./ServiceSection";
 import TopSearchSection from "./TopSearchSection";
 import ProductSection from "./ProductSection";
+import socket from "@/socket";
 
 const LandingPage = () => {
+  React.useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to socket:", socket.id);
+    });
+
+    socket.on("ping-from-server", (data) => {
+      console.log("Server ping:", data);
+    });
+
+    socket.on("message", (msg) => {
+      console.log("New message from socket:", msg);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("ping-from-server");
+    };
+  }, []);
   return (
     <div>
       <BannerSection />

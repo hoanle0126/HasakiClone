@@ -1,0 +1,9 @@
+node_modules
+dist
+build
+vendor
+.git
+.env
+.idea
+.vscode
+storage/*.key

@@ -27,12 +27,9 @@ use App\Models\District;
 use App\Models\HotDeal;
 use App\Models\Product;
 use App\Models\Ward;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
 
 Route::apiResource("/categories", CategoriesController::class);
 Route::apiResource("/brands", BrandController::class);
@@ -96,3 +93,23 @@ Route::get("/list_cities", function () {
     return CityResource::collection(City::all());
 });
 require __DIR__ . '/auth.php';
+
+
+Route::get('/test-socket', function () {
+    try {
+
+        $client = new Client();
+
+        // Gửi data tới Node Socket server
+        $client->post('http://localhost:3001/send', [
+            'json' => [
+                'message' => 'Hello from Laravel!'
+            ]
+        ]);
+
+        return 'Socket event sent!';
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return 'Error: ' . $e->getMessage();
+    }
+});
