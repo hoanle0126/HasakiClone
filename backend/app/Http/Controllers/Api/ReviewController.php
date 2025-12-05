@@ -75,77 +75,31 @@ class ReviewController extends Controller
 
     public function saveAiReply(Request $request)
     {
-        // Validate input trước
-        $request->validate([
-            'review_id' => 'required|exists:reviews,id',
-            'reply_content' => 'required|string',
-            'product_id' => 'required'
-        ]);
+        // 1. Lưu vào DB (Giữ nguyên code cũ)
+        $review = Review::where("id",$request->review_id)->first();
+        $review->reply = $request->reply_content;
+        $review->updated_at = now(); // Cập nhật thời gian
+        $review->save();
 
+        // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
+        // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
         try {
-            // 1. Tìm review (dùng findOrFail để throw exception nếu không tìm thấy)
-            $review = Review::findOrFail($request->review_id);
+            $client = new Client();
 
-            // Cập nhật reply
-            $review->reply = $request->reply_content;
-            $review->updated_at = now();
-            $review->save();
-
-            // 2. Gửi notification sang Socket.IO
-            try {
-                $client = new Client(['timeout' => 5]);
-
-                $client->post('http://localhost:3001/notify-new-review', [
-                    'json' => [
-                        'product_id' => $request->product_id,
-                        'data' => [
-                            'review_id' => $review->id,
-                            'product_id' => $request->product_id,
-                            'message' => $request->reply_content,
-                            'updated_at' => $review->updated_at->toIso8601String()
-                        ]
+            // Gửi data tới Node Socket server
+            $client->post('http://localhost:3001/notify-new-review', [
+                'json' => [
+                    'product_id' => $request->product_id,
+                    'data' => [
+                        'message' => $request->reply_content
                     ]
-                ]);
-
-                \Log::info("✅ Socket notification sent for review #{$review->id}");
-
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
-                // Socket server không chạy hoặc không kết nối được
-                \Log::warning("⚠️ Cannot connect to Socket server: " . $e->getMessage());
-                // Không throw lỗi, vẫn trả về success vì đã lưu DB
-
-            } catch (\Exception $e) {
-                \Log::error("❌ Socket notification error: " . $e->getMessage());
-            }
-
-            return response()->json([
-                'status' => 'OK',
-                'message' => 'AI reply saved successfully',
-                'data' => [
-                    'review_id' => $review->id,
-                    'reply' => $review->reply
                 ]
             ]);
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Review không tồn tại
-            \Log::error("Review not found: " . $request->review_id);
-
-            return response()->json([
-                'status' => 'ERROR',
-                'message' => 'Review not found'
-            ], 404);
-
         } catch (\Exception $e) {
-            // Lỗi khác
-            \Log::error("Error saving AI reply: " . $e->getMessage());
-
-            return response()->json([
-                'status' => 'ERROR',
-                'message' => 'Failed to save AI reply',
-                'error' => $e->getMessage()
-            ], 500);
+            \Log::error("Lỗi gọi Socket: " . $e->getMessage());
         }
+
+        return response()->json(['status' => 'OK']);
     }
 
     /**
