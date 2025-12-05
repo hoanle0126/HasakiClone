@@ -32,7 +32,7 @@ const LandingPage = () => {
   }, []);
   return (
     <div>
-      {/* <BannerSection /> */}
+      <BannerSection />
       <Stack
         sx={{
           paddingX: "120px",
