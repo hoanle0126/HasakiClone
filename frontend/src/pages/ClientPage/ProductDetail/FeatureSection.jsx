@@ -331,7 +331,7 @@ const FeatureSection = ({ action }) => {
           <Grid size={4}>
             <Stack sx={{ alignItems: "center", gap: "4px" }}>
               <Typography variant="h1" color="secondary.main">
-                {product.rating?.value.toFixed(2)}
+                {product.rating?.value?.toFixed(2)}
               </Typography>
               <Rating
                 value={product.rating?.value}
