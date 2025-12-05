@@ -22,20 +22,20 @@ jobs:
       # 2. Build & Push Backend
       - name: Build Backend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app-backend:latest ./backend
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-app-backend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/hasaki-backend:latest ./backend
+          docker push ${{ secrets.DOCKER_USERNAME }}/hasaki-backend:latest
 
       # 3. Build & Push Frontend
       - name: Build Frontend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app-frontend:latest ./frontend
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-app-frontend:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/hasaki-frontend:latest ./frontend
+          docker push ${{ secrets.DOCKER_USERNAME }}/hasaki-frontend:latest
 
       # 4. Build & Push Socket
       - name: Build Socket Server
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app-socket:latest ./socket
-          docker push ${{ secrets.DOCKER_USERNAME }}/my-app-socket:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/hasaki-socket:latest ./socket
+          docker push ${{ secrets.DOCKER_USERNAME }}/hasaki-socket:latest
 
   deploy-to-vps:
     needs: build-and-push
@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /root/my-project
+            cd /root/hasaki
 
             echo "→ Pull latest docker images"
             docker compose pull
