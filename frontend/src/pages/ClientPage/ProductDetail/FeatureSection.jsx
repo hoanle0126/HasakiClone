@@ -24,6 +24,7 @@ import DetailHeader from "./DetailHeader";
 import { addReview } from "@/store/products/action";
 import { formatDate } from "@/Function/formatDate";
 import { formatTime } from "@/Function/formatTime";
+import { io } from "socket.io-client";
 
 const FeatureSection = ({ action }) => {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ const FeatureSection = ({ action }) => {
   const { product } = useSelector((store) => store.products);
   const [isVisible, setIsVisible] = React.useState(false);
   const [openReview, setOpenReview] = React.useState(false);
+  const [listReviews, setListReviews] = React.useState([]);
   const [reviewForm, setReviewForm] = React.useState({
     rating: 5,
     description: "",
@@ -141,6 +143,59 @@ const FeatureSection = ({ action }) => {
       clearTimeout(timeout);
     };
   }, []);
+
+  React.useEffect(() => {
+    setListReviews(product.reviews);
+  }, [product?.id]);
+
+  React.useEffect(() => {
+    // 1. Kiểm tra nếu chưa có ID sản phẩm thì chưa kết nối
+    if (!product?.id) return;
+
+    // 2. Kết nối tới Socket Server
+    // (Lấy URL từ file .env hoặc điền cứng https://api.hasaki-clone.io.vn)
+    const socket = io(
+      import.meta.env.VITE_SOCKET_URL || "https://api.hasaki-clone.io.vn",
+      {
+        transports: ["websocket"],
+        withCredentials: true,
+      }
+    );
+
+    console.log("🔌 Đang lắng nghe kênh:", `product_review_${product.id}`);
+
+    // 3. Lắng nghe sự kiện "Có review mới / Update review"
+    socket.on(`product_review_${product.id}`, (updatedReview) => {
+      console.log("📩 Nhận dữ liệu socket:", updatedReview);
+
+      // 4. Cập nhật State (Danh sách reviews)
+      setListReviews((prevProduct) => {
+        // Copy danh sách cũ
+        let newReviews = [...prevProduct.reviews];
+
+        // Kiểm tra xem review này đã có trong list chưa
+        const index = newReviews.findIndex((r) => r.id === updatedReview.id);
+
+        if (index !== -1) {
+          // TRƯỜNG HỢP 1: Review đã tồn tại (Ví dụ: AI vừa trả lời xong)
+          // -> Thay thế review cũ bằng review mới (có admin_reply)
+          newReviews[index] = updatedReview;
+        } else {
+          // TRƯỜNG HỢP 2: Review hoàn toàn mới (Khách vừa post)
+          // -> Thêm lên đầu danh sách
+          newReviews.unshift(updatedReview);
+        }
+
+        // Trả về object product mới với list review đã update
+        return { ...prevProduct, reviews: newReviews };
+      });
+    });
+
+    // 5. Dọn dẹp khi thoát trang (Ngắt kết nối để đỡ tốn RAM)
+    return () => {
+      socket.disconnect();
+    };
+  }, [listReviews?.id]);
 
   return (
     <>
@@ -505,32 +560,31 @@ const FeatureSection = ({ action }) => {
                   height: 80,
                 }}
               /> */}
-              <Stack
-                paddingLeft="20px"
-                paddingTop="12px"
-                alignItems="start"
-                gap="8px"
-              >
-                <Typography
-                  variant="captiontext"
-                  sx={{
-                    span: {
-                      padding: "2px 6px",
-                      bgcolor: "primary.main",
-                      color: "background.paper",
-                      borderRadius: "4px",
-                    },
-                  }}
+              {item?.reply && (
+                <Stack
+                  paddingLeft="20px"
+                  paddingTop="12px"
+                  alignItems="start"
+                  gap="8px"
                 >
-                  <span>Hasaki</span> - 2025-06-16
-                </Typography>
-                <Typography variant="body2">
-                  Hasaki xin chào! Hasaki cảm ơn Thu Hoa đã dành thời gian đánh
-                  giá. Sự hài lòng của khách hàng là động lực to lớn để Hasaki
-                  ngày càng phát triển hơn nữa về chất lượng dịch vụ. Cảm ơn bạn
-                  đã tin tưởng và mua sắm tại Hasaki!
-                </Typography>
-              </Stack>
+                  <Typography
+                    variant="captiontext"
+                    sx={{
+                      span: {
+                        padding: "2px 6px",
+                        bgcolor: "primary.main",
+                        color: "background.paper",
+                        borderRadius: "4px",
+                      },
+                    }}
+                  >
+                    <span>Hasaki</span> - {formatDate(item.updated_at)}
+                  </Typography>
+                  <Typography variant="body2">
+                    {item?.reply}
+                  </Typography>
+                </Stack>
+              )}
             </Stack>
           ))}
         </Stack>

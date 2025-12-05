@@ -44,3 +44,13 @@ app.post("/send", (req, res) => {
     io.emit("message", message); // Gửi cho tất cả client
     return res.json({ status: "ok" });
 });
+
+app.post('/notify-new-review', (req, res) => {
+    const { product_id, data } = req.body;
+    console.log('📢 Có review mới + câu trả lời AI cho SP:', product_id);
+    
+    // Bắn tin hiệu ra cho Frontend (kênh product_review_ID)
+    io.emit(`product_review_${product_id}`, data);
+    
+    res.json({ status: 'ok' });
+});

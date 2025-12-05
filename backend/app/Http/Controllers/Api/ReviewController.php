@@ -42,6 +42,7 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $review = Review::create([
             'user_id' => Auth::id(),
             'product_id' => $request['product_id'],
@@ -51,10 +52,11 @@ class ReviewController extends Controller
         ]);
 
         try {
-            Http::timeout(2)->post('https://n8n.tuantran.io.vn/webhook/ai-review-reply', [
+            Http::timeout(2)->post('https://n8n.tuantran.io.vn/webhook-test/ai-review-reply', [
                 'description' => $request->description,
-                'product_id' => $request->product_id,
-                "review_id" => $review->id
+                'user' => $user,
+                "review_id" => $review->id,
+                'rating'=>$request['rating']
             ]);
         } catch (\Exception $e) {
             // Ghi log nếu lỗi, nhưng không chặn người  
@@ -75,7 +77,7 @@ class ReviewController extends Controller
         // 2. --- THAY THẾ PUSHER BẰNG SOCKET.IO ---
         // Gọi sang Node.js đang chạy ở localhost:6001 trên VPS
         try {
-            Http::post('http://localhost:6001/broadcast', [
+            Http::post('http://localhost:3001/notify-new-review', [
                 'channel' => 'product.' . $review->product_id, // Tên kênh
                 'event' => 'ReviewReplied',                  // Tên sự kiện
                 'data' => [
