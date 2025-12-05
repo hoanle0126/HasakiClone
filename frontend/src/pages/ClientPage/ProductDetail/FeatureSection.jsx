@@ -38,6 +38,7 @@ const FeatureSection = ({ action }) => {
   const ingredientRef = React.useRef(null);
   const guideRef = React.useRef(null);
   const reviewRef = React.useRef(null);
+  const { user } = useSelector((store) => store.user);
   const { product } = useSelector((store) => store.products);
   const [isVisible, setIsVisible] = React.useState(false);
   const [openReview, setOpenReview] = React.useState(false);
@@ -330,7 +331,7 @@ const FeatureSection = ({ action }) => {
           <Grid size={4}>
             <Stack sx={{ alignItems: "center", gap: "4px" }}>
               <Typography variant="h1" color="secondary.main">
-                {product.rating?.value}
+                {product.rating?.value.toFixed(2)}
               </Typography>
               <Rating
                 value={product.rating?.value}
@@ -469,7 +470,11 @@ const FeatureSection = ({ action }) => {
                 onClick={() => {
                   dispatch(
                     addReview({
-                      review: { ...reviewForm, product_id: product.id },
+                      review: {
+                        ...reviewForm,
+                        product_id: product.id,
+                        user: user,
+                      },
                     })
                   );
                 }}

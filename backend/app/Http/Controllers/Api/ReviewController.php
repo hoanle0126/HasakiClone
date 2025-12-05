@@ -45,7 +45,7 @@ class ReviewController extends Controller
     {
         $user = Auth::user();
         $review = Review::create([
-            'user_id' => Auth::id(),
+            'user_id' => $request['user']['id'],
             'product_id' => $request['product_id'],
             'rating' => $request['rating'],
             'description' => $request['description'] ?? '',
@@ -53,13 +53,17 @@ class ReviewController extends Controller
         ]);
 
         try {
-            $client = new Client();
+            // Thêm timeout=2s để lỡ n8n bị lag thì web của bạn không bị treo theo
+            $client = new Client(['timeout' => 2.0]);
+
             $client->post('https://n8n.tuantran.io.vn/webhook/ai-review-reply', [
-                'description' => $request->description,
-                'user' => $user,
-                'product_id' => $request['product_id'],
-                "review_id" => $review->id,
-                'rating' => $request['rating']
+                'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
+                    'description' => $request['description'] ?? 'Sản phẩm tốt',
+                    'user' => $request['user'], // Gửi tên thôi cho nhẹ, gửi cả obj $user cũng được
+                    'product_id' => $request['product_id'],
+                    'review_id' => $review->id,
+                    'rating' => $request['rating']
+                ]
             ]);
         } catch (\Exception $e) {
             // Ghi log nếu lỗi, nhưng không chặn người  
