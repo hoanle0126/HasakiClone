@@ -3,9 +3,6 @@ services:
     build: ./frontend
     ports:
       - "3000:80"
-    environment:
-      API_URL: ${API_URL}
-      SOCKET_URL: ${SOCKET_URL}
     depends_on:
       - backend
       - socket
@@ -33,7 +30,6 @@ services:
     build: ./socket
     environment:
       PORT: 3001
-      CLIENT_URL: ${CLIENT_URL}
     ports:
       - "3001:3001"
 
