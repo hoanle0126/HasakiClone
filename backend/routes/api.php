@@ -103,7 +103,7 @@ Route::get('/test-socket', function () {
         // Gửi data tới Node Socket server
         $client->post('http://localhost:3001/send', [
             'json' => [
-                'message' => 'Hello from Laravel!'
+                'message' => 'Hello from Laravel!a'
             ]
         ]);
 
