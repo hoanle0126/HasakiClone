@@ -51,7 +51,7 @@ class ReviewController extends Controller
         ]);
 
         try {
-            Http::timeout(2)->post('https://n8n.tuantran.io.vn/webhook-test/ai-review-reply', [
+            Http::timeout(2)->post('https://n8n.tuantran.io.vn/webhook/ai-review-reply', [
                 'description' => $request->description,
                 'product_id' => $request->product_id,
                 "review_id" => $review->id
