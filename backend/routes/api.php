@@ -136,3 +136,22 @@ Route::post('/contact', function (Request $request) { {
         }
 
 }});
+
+Route::get('/test-socket2', function () {
+    try {
+
+        $client = new Client();
+
+        // Gửi data tới Node Socket server
+        $client->post('http://localhost:3001/sends', [
+            'json' => [
+                'message' => 'Hello from Laravel!a'
+            ]
+        ]);
+
+        return 'Socket event sent!';
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+        return 'Error: ' . $e->getMessage();
+    }
+});
