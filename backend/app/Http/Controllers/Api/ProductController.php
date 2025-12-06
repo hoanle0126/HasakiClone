@@ -47,7 +47,7 @@ class ProductController extends Controller
 
             // Nếu thành công, trả về index
             return $this->index();
-
+                
         } catch (Exception $e) {
             // Nếu có lỗi, trả về object lỗi (JSON)
             return response()->json([
