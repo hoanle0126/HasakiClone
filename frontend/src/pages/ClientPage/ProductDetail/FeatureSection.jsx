@@ -520,9 +520,9 @@ const FeatureSection = ({ action }) => {
           {listReviews?.map((item, index) => (
             <Stack gap="4px" key={index} className="review__item">
               <Stack direction="row" alignItems="center" gap="8px">
-                <Rating size="small" value={listReviews.rating} readOnly/>
+                <Rating size="small" value={item.rating} readOnly/>
                 <Typography variant="subtitle2" color="primary.main">
-                  Hoàn Lê
+                  {product?.first_name+" "+product?.last_name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {product.name}

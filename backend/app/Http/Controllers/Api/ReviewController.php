@@ -60,7 +60,7 @@ class ReviewController extends Controller
             $client->post('https://n8n.tuantran.io.vn/webhook/auto-reply', [
                 'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
                     'description' => $request['description'] ?? 'Sản phẩm tốt',
-                    'user' => $request['user'], // Gửi tên thôi cho nhẹ, gửi cả obj $user cũng được
+                    'user' => $request['user'],
                     'product_id' => $request['product_id'],
                     'review_id' => $review->id,
                     'rating' => $request['rating']
