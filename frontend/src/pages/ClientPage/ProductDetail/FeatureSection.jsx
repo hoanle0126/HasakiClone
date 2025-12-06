@@ -520,7 +520,7 @@ const FeatureSection = ({ action }) => {
           {listReviews?.map((item, index) => (
             <Stack gap="4px" key={index} className="review__item">
               <Stack direction="row" alignItems="center" gap="8px">
-                <Rating size="small" />
+                <Rating size="small" value={listReviews.rating} readOnly/>
                 <Typography variant="subtitle2" color="primary.main">
                   Hoàn Lê
                 </Typography>

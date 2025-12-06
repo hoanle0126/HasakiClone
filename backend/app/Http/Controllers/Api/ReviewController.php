@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Events\ReviewReplied;
 use App\Http\Requests\ReviewRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ReviewResource;
 use App\Models\Product;
 use App\Models\Review;
 use App\Http\Controllers\Controller;
@@ -93,7 +94,7 @@ class ReviewController extends Controller
                     'product_id' => $request->product_id,
                     'data' => [
                         'message' => $request->reply_content,
-                        "reviews" => Product::where("id", $request->product_id)->first()["reviews"]
+                        "reviews" => ReviewResource::collection(Product::where("id", $request->product_id)->first()["reviews"])
                     ]
                 ]
             ]);
