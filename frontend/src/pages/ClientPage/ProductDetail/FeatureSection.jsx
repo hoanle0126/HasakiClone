@@ -157,6 +157,7 @@ const FeatureSection = ({ action }) => {
 
     const reviewChannel = "product_" + product.id;
     socket.on(reviewChannel, (data) => {
+      setListReviews(data.reviews)
       console.log("Server ping:", data);
     });
 
