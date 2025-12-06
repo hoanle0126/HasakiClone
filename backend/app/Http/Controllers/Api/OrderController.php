@@ -58,7 +58,7 @@ class OrderController extends Controller
         try {
             $client = new Client(['timeout' => 2.0]);
 
-            $client->post('https://n8n.tuantran.io.vn/webhook/order-success', [
+            $client->post('https://n8n.tuantran.io.vn/webhook-test/order-success', [
                 'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
                     'payments' => $request->payments,
                     "user" => Auth::user(),
