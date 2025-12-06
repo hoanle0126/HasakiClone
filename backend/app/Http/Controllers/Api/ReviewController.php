@@ -93,7 +93,7 @@ class ReviewController extends Controller
                     'product_id' => $request->product_id,
                     'data' => [
                         'message' => $request->reply_content,
-                        "reviews" => Review::where("product_id",$request->product_id)
+                        "reviews" => Product::where("id", $request->product_id)->first()["reviews"]
                     ]
                 ]
             ]);
