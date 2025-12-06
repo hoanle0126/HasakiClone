@@ -51,6 +51,7 @@ class ReviewController extends Controller
             'rating' => $request['rating'],
             'description' => $request['description'] ?? '',
             'images' => $request['images'] ?? [],
+            "name" => $request['user']['first_name']
         ]);
 
         try {
@@ -94,7 +95,7 @@ class ReviewController extends Controller
                     'product_id' => $request->product_id,
                     'data' => [
                         'message' => $request->reply_content,
-                        "reviews" => ReviewResource::collection(Product::where("id", $request->product_id)->first()["reviews"])
+                        "reviews" => Product::where("id", $request->product_id)->first()["reviews"]
                     ]
                 ]
             ]);

@@ -522,7 +522,7 @@ const FeatureSection = ({ action }) => {
               <Stack direction="row" alignItems="center" gap="8px">
                 <Rating size="small" value={item.rating} readOnly/>
                 <Typography variant="subtitle2" color="primary.main">
-                  {product?.first_name+" "+product?.last_name}
+                  {item.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {product.name}
