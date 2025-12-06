@@ -19,7 +19,7 @@ class ProductResource extends JsonResource
         $this->withoutWrapping();
         return [
             'id' => $this->id,
-            "reviews" => $this->reviews ? new ReviewResource($this->reviews) : [],
+            "reviews" => $this->reviews,
             "rating" => [
                 "value" => collect($this->reviews)->average(function ($item) {
                     return $item->rating;
@@ -71,7 +71,7 @@ class ProductResource extends JsonResource
             "brand_id" => $this->brand_id,
             "created_at" => $this->created_at,
             "search_count" => $this->search_count,
-
+            
         ];
     }
 }
