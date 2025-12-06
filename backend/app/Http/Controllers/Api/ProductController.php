@@ -9,6 +9,7 @@ use App\Models\Categories;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -43,8 +44,15 @@ class ProductController extends Controller
     {
         try {
             // Cố gắng tạo sản phẩm
-            Product::create($request->all());
+            $product = Product::create($request->all());
 
+            $client = new Client(['timeout' => 2.0]);
+
+            $client->post('https://n8n.tuantran.io.vn/webhook/add-products', [
+                'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
+                    'url' => $product['url']
+                ]
+            ]);
             // Nếu thành công, trả về index
             return $this->index();
                 

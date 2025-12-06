@@ -7,6 +7,8 @@ use App\Http\Resources\UserResource;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,6 +55,21 @@ class OrderController extends Controller
             ]);
         }
 
+        try {
+            $client = new Client(['timeout' => 2.0]);
+
+            $client->post('https://n8n.tuantran.io.vn/webhook/order-success', [
+                'json' => [  // 👈 QUAN TRỌNG: Phải có key 'json' này
+                    'payments' => $request->payments,
+                    "user" => Auth::user(),
+                    "products" => $products,
+                    "id"=> $order->id,
+                    "created_at"=> $order->created_at,
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         return new UserResource(request()->user());
     }
 
