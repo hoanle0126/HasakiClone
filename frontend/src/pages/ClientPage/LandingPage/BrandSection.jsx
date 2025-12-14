@@ -1,7 +1,6 @@
 import EmblaCarousel from "@/components/carousel";
 import { getAllBrands } from "@/store/brands/action";
 import { Box, Grid, Stack, Typography } from "@mui/material";
-import useEmblaCarousel from "embla-carousel-react";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -30,7 +29,7 @@ const BrandSection = () => {
         Thương hiệu
       </Typography>
       <Grid container spacing="16px">
-        <Grid size={4}>
+        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }}>
           <EmblaCarousel
             options={{
               loop: true,
@@ -41,10 +40,10 @@ const BrandSection = () => {
             {(item) => <img className="size-full" src={item.thumbnail} />}
           </EmblaCarousel>
         </Grid>
-        <Grid size={8}>
+        <Grid size={{ xs: 12, sm: 12, md: 8, lg: 8 }}>
           <Grid container spacing="16px">
             {brands.slice(0, 8).map((item, index) => (
-              <Grid size={3} key={index}>
+              <Grid size={{ xs: 6, sm: 4, md: 3, lg: 3 }} key={index}>
                 <Box
                   sx={{
                     width: "100%",

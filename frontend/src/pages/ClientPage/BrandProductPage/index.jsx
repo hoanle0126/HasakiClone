@@ -63,7 +63,12 @@ const BrandProductPage = () => {
       <Stack
         sx={{
           backgroundColor: "background.paper",
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           boxShadow: "custom.card",
         }}
       >
@@ -112,7 +117,12 @@ const BrandProductPage = () => {
       </Stack>
       <Stack
         sx={{
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
         }}
       >
         <Grid

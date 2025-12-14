@@ -36,18 +36,31 @@ const EmblaCarousel = ({ lists, options, children, size, spacing }) => {
             marginLeft: `calc(${spacing || "0px"} * -1)`,
           }}
         >
-          {lists.map((item, index) => (
-            <Stack
-              sx={{
-                flex: `0 0 calc(100%/${size || 1})`,
-                paddingLeft: spacing || "0px",
-              }}
-              className="embla__slide  "
-              key={index}
-            >
-              {children(item)}
-            </Stack>
-          ))}
+          {lists.map((item, index) => {
+            const getFlexValue = () => {
+              if (typeof size === 'object') {
+                const flexObj = {};
+                Object.keys(size).forEach((breakpoint) => {
+                  flexObj[breakpoint] = `0 0 calc(100%/${size[breakpoint]})`;
+                });
+                return flexObj;
+              }
+              return `0 0 calc(100%/${size || 1})`;
+            };
+
+            return (
+              <Stack
+                sx={{
+                  flex: getFlexValue(),
+                  paddingLeft: spacing || "0px",
+                }}
+                className="embla__slide  "
+                key={index}
+              >
+                {children(item)}
+              </Stack>
+            );
+          })}
         </Box>
       </div>
       <Stack

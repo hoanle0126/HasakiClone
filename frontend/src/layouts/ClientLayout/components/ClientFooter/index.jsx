@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const ClientFooter = () => {
   return (
@@ -8,14 +9,22 @@ const ClientFooter = () => {
       <Grid
         container
         sx={{
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           borderTop: "2px solid black",
           borderColor: "primary.main",
           paddingY: "16px",
         }}
         spacing="32px"
       >
-        <Grid size={7}>
+        <Grid size={{
+          xs: 12,
+          md: 7,
+        }}>
           <Stack direction="row" gap="32px">
             {[
               {
@@ -49,7 +58,10 @@ const ClientFooter = () => {
             ))}
           </Stack>
         </Grid>
-        <Grid size={5}>
+        <Grid size={5} display={{
+          xs: "none",
+          md: "block",
+        }}>
           <Stack direction="row" gap="32px" justifyContent="end">
             <Stack gap="8px" alignItems="center" color="primary.main">
               <Stack direction="row" alignItems="center" gap="8px">
@@ -95,13 +107,26 @@ const ClientFooter = () => {
         </Grid>
       </Grid>
       <Stack
-        direction="row"
+        direction={
+          {
+            xs: "column",
+            md: "row",
+          }
+        }
         sx={{
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           paddingY: "16px",
           backgroundColor: "primary.main",
           color: "grey.0",
-          gap: "100px",
+          gap: {
+            xs: "20px",
+            md: "100px",
+          },
         }}
       >
         <Stack gap="12px">
@@ -116,7 +141,19 @@ const ClientFooter = () => {
               (miễn phí , 08-22h kể cả T7, CN)
             </Typography>
             <Typography variant="body2">Các câu hỏi thường gặp</Typography>
-            <Typography variant="body2">Gửi yêu cầu hỗ trợ</Typography>
+            <Link to="/lien-lac" style={{ textDecoration: "none", color: "inherit" }}>
+              <Typography 
+                variant="body2"
+                sx={{
+                  cursor: "pointer",
+                  "&:hover": {
+                    color: "primary.main",
+                  },
+                }}
+              >
+                Gửi yêu cầu hỗ trợ
+              </Typography>
+            </Link>
             <Typography variant="body2">Hướng dẫn đặt hàng</Typography>
             <Typography variant="body2">Phương thức vận chuyển</Typography>
             <Typography variant="body2">Chính sách đổi trả</Typography>

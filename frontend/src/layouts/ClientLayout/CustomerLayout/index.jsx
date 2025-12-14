@@ -16,7 +16,12 @@ const CustomerLayout = ({ children }) => {
     <Grid
       container
       sx={{
-        paddingX: "120px",
+        paddingX: {
+          xs: "20px",
+          sm: "40px",
+          md: "80px",
+          lg: "120px",
+        },
         paddingTop: "12px",
         paddingBottom: "40px",
         backgroundColor: "background.neutral",

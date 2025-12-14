@@ -112,7 +112,12 @@ const CheckoutPage = () => {
     <Grid
       sx={{
         paddingBottom: "40px",
-        paddingX: "120px",
+        paddingX: {
+          xs: "20px",
+          sm: "40px",
+          md: "80px",
+          lg: "120px",
+        },
         bgcolor: "background.neutral",
         paddingTop: "20px",
       }}

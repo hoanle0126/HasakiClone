@@ -32,7 +32,9 @@ const ProductSection = () => {
         direction="row"
         gap="12px"
         bgcolor="background.neutral"
-        paddingX="120px"
+        sx={{
+          paddingX: { xs: "20px", sm: "40px", md: "80px", lg: "120px" },
+        }}
       >
         {[
           {
@@ -77,13 +79,13 @@ const ProductSection = () => {
         sx={{
           borderTop: "1px solid black",
           borderTopColor: "divider",
-          paddingX: "120px",
+          paddingX: { xs: "20px", sm: "40px", md: "80px", lg: "120px" },
           paddingY: "16px",
         }}
       >
         <Grid container spacing="16px">
           {products.map((item, index) => (
-            <Grid size={2} key={index}>
+            <Grid size={{xs: 6, sm: 4, md: 3, lg: 2}} key={index}>
               <Stack
                 sx={{
                   borderWidth: "1px",

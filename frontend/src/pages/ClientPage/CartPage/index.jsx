@@ -36,7 +36,12 @@ const CartPage = () => {
     >
       <Stack
         sx={{
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           gap: "4px",
           paddingTop: "8px",
           paddingBottom: "12px",
@@ -65,13 +70,22 @@ const CartPage = () => {
           </Typography>
         </Stack>
       </Stack>
-      <Grid container paddingX={"120px"} spacing={"32px"}>
-        <Grid size={9}>
+      <Grid
+        container
+        paddingX={{
+          xs: "20px",
+          sm: "40px",
+          md: "80px",
+          lg: "120px",
+        }}
+        spacing={"32px"}
+      >
+        <Grid size={{xs: 12, md: 9}}>
           <Box>
             <CardDataGrid />
           </Box>
         </Grid>
-        <Grid size={3}>
+        <Grid size={{xs: 12, md: 3}}>
           <Stack
             sx={{
               borderTop: "2px solid black",

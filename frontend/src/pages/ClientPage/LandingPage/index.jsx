@@ -6,8 +6,6 @@ import SubBannerSection from "./SubBannerSection";
 import CategoriesSection from "./CategoriesSection";
 import BrandSection from "./BrandSection";
 import TopSellSection from "./TopSellSection";
-import ServiceSection from "./ServiceSection";
-import TopSearchSection from "./TopSearchSection";
 import ProductSection from "./ProductSection";
 import socket from "@/socket";
 
@@ -35,12 +33,18 @@ const LandingPage = () => {
       <BannerSection />
       <Stack
         sx={{
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           paddingY: "20px",
           gap: "20px",
           backgroundColor: "background.neutral",
         }}
       >
+        <SalesSection />
         <SubBannerSection />
         <CategoriesSection />
         <BrandSection />

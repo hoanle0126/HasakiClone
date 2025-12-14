@@ -16,7 +16,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories, getCategoryById } from "@/store/categories/action";
 import MainSection from "./MainSection";
-import { getUser } from "@/store/users/action";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ClientHeader = () => {
@@ -47,11 +46,12 @@ const ClientHeader = () => {
         sx={{
           flexDirection: "row",
           backgroundColor: "primary.light",
-          paddingX: "120px",
+          paddingX: { xs: "20px", sm: "40px", md: "80px", lg: "120px" },
           color: "primary.main",
           gap: "8px",
           alignItems: "center",
           height: "36px",
+          display: { xs: "none", sm: "flex" },
         }}
       >
         <Stack
@@ -87,8 +87,6 @@ const ClientHeader = () => {
           { title: "thương hiệu", to: "/thuong-hieu" },
           { title: "hàng mới về" },
           { title: "bán chạy" },
-          { title: "clinic & spa" },
-          { title: "dermahair" },
         ].map((item, index) => (
           <Link to={item.to} key={index}>
             <Typography
@@ -102,31 +100,20 @@ const ClientHeader = () => {
           </Link>
         ))}
         <div className="flex-1"></div>
-        {[{ title: "Tra cứu đơn hàng" }, { title: "Tải ứng dụng" }].map(
-          (item, index) => (
-            <Typography key={index} variant="captiontext">
-              {item.title} |
-            </Typography>
-          )
-        )}
-        <Stack direction="row" gap="4px" alignItems="center">
-          <Icon icon="solar:map-point-bold" width="24" height="24" />
-          <Typography variant="captiontext" fontWeight={600}>
-            Chọn khu vực của bạn
-          </Typography>
-        </Stack>
       </Stack>
-      <Grid
-        container
-        sx={{
-          paddingX: "120px",
-          position: "absolute",
-          width: "100%",
-          zIndex: "10000",
-        }}
-      >
+      {(onDanhMuc || categoriesChildren?.children?.length > 0) && (
+        <Grid
+          container
+          sx={{
+            paddingX: { xs: "20px", sm: "40px", md: "80px", lg: "120px" },
+            position: "absolute",
+            width: "100%",
+            zIndex: "10000",
+            display: { xs: "none", sm: "flex" },
+          }}
+        >
         {onDanhMuc && (
-          <Grid size={2}>
+          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
             <Stack
               sx={{
                 border: "1px solid black",
@@ -199,55 +186,11 @@ const ClientHeader = () => {
                   />
                 </Stack>
               ))}
-              <Stack
-                sx={{
-                  padding: "8px 12px",
-                  flexDirection: "row",
-                  cursor: "pointer",
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                    color: "grey.0",
-                  },
-                }}
-              >
-                <Typography
-                  variant="captiontext"
-                  fontWeight={600}
-                  textTransform="capitalize"
-                >
-                  Hasaki clinic & spa
-                </Typography>
-                <div className="flex-1"></div>
-                <Icon
-                  icon="solar:alt-arrow-right-linear"
-                  width="20"
-                  height="20"
-                />
-              </Stack>
-              <Stack
-                sx={{
-                  padding: "8px 12px",
-                  flexDirection: "row",
-                  cursor: "pointer",
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                    color: "grey.0",
-                  },
-                }}
-              >
-                <Typography
-                  variant="captiontext"
-                  fontWeight={600}
-                  textTransform="capitalize"
-                >
-                  Dermahair
-                </Typography>
-              </Stack>
             </Stack>
           </Grid>
         )}
         {categoriesChildren?.children?.length > 0 && (
-          <Grid size={6}>
+          <Grid size={{ xs: 12, sm: 6, md: 8, lg: 6 }}>
             <Grid
               container
               sx={{
@@ -264,13 +207,13 @@ const ClientHeader = () => {
                 setCategoriesChildren({ children: [] });
               }}
             >
-              <Grid size={8}>
+              <Grid size={{ xs: 12, sm: 12, md: 8, lg: 8 }}>
                 <Box
                   ref={containerRef}
                   sx={{
                     paddingY: "16px",
                     maxHeight: "392px",
-                    columnCount: 2,
+                    columnCount: { xs: 1, sm: 1, md: 2, lg: 2 },
                     overflowX: "auto",
                     "&::-webkit-scrollbar": {
                       display: "none", // Chrome, Safari
@@ -330,13 +273,14 @@ const ClientHeader = () => {
                   ))}
                 </Box>
               </Grid>
-              <Grid size={4}>
+              <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4 }}>
                 <Stack
                   sx={{
                     position: "relative",
                     flexDirection: "column",
                     alignItems: "end",
                     height: "100%",
+                    display: { xs: "none", md: "flex" },
                   }}
                 >
                   <img
@@ -349,7 +293,8 @@ const ClientHeader = () => {
             </Grid>
           </Grid>
         )}
-      </Grid>
+        </Grid>
+      )}
     </>
   );
 };

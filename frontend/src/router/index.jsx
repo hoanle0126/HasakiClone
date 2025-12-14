@@ -39,6 +39,10 @@ import CategoriesPage from "@/pages/AdminPage/CategoriesPage";
 import CategoriesAddPage from "@/pages/AdminPage/CategoriesPage/AddPage";
 import CategoriesViewPage from "@/pages/AdminPage/CategoriesPage/ViewPage";
 import ContactPage from "@/pages/ClientPage/ContactPage";
+import LoginPage from "@/pages/AuthPage/LoginPage";
+import RegisterPage from "@/pages/AuthPage/RegisterPage";
+import ForgotPasswordPage from "@/pages/AuthPage/ForgotPasswordPage";
+import AuthLayout from "@/layouts/AuthLayout";
 
 export const MainRouter = createBrowserRouter([
   {
@@ -93,6 +97,24 @@ export const MainRouter = createBrowserRouter([
           { path: "repurchase-product", element: <RepurchasePage /> },
           { path: "question", element: <QuestionPage /> },
         ],
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "/dang-nhap",
+        element: <LoginPage />,
+      },
+      {
+        path: "/dang-ky",
+        element: <RegisterPage />,
+      },
+      {
+        path: "/quen-mat-khau",
+        element: <ForgotPasswordPage />,
       },
     ],
   },

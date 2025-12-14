@@ -1,5 +1,3 @@
-import LoginPage from "@/pages/AuthPage/LoginPage";
-import RegisterPage from "@/pages/AuthPage/RegisterPage";
 import { logout } from "@/store/users/action";
 import { MuiTheme } from "@/theme";
 import { Icon } from "@iconify/react";

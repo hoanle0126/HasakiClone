@@ -79,7 +79,13 @@ const ProductDetail = () => {
       <Stack
         sx={{
           backgroundColor: "background.neutral",
-          padding: "8px 120px",
+          paddingTop:"8px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           paddingBottom: "40px",
           position: "relative",
         }}
@@ -112,7 +118,7 @@ const ProductDetail = () => {
           </Typography>
         </Breadcrumbs>
         <Grid container spacing="12px" height="100%">
-          <Grid size={9.5}>
+          <Grid size={{xs: 12, md: 9.5}}>
             <Stack
               className="size-full"
               sx={{
@@ -131,10 +137,11 @@ const ProductDetail = () => {
               >
                 <Stack
                   sx={{
-                    flexDirection: "row",
+                    flexDirection: {xs: "column", md: "row"},
                     gap: "12px",
                     justifyContent: "start",
                     alignItems: "start",
+                    overflow: "hidden",
                   }}
                 >
                   <Stack direction="row" gap="8px">
@@ -344,7 +351,7 @@ const ProductDetail = () => {
               />
             </Stack>
           </Grid>
-          <Grid size={2.5}>
+          <Grid size={{xs: 12, md: 2.5}}>
             <Stack sx={{ gap: "12px", height: "100%" }}>
               <Stack
                 sx={{

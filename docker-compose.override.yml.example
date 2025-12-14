@@ -1,0 +1,16 @@
+# Copy this file to docker-compose.override.yml and customize for local development
+# This file will be automatically merged with docker-compose.yml
+
+version: '3.8'
+
+services:
+  backend:
+    environment:
+      - APP_DEBUG=true
+      - RUN_SEEDERS=true
+
+  frontend:
+    environment:
+      - VITE_BACKEND_URL=http://localhost:8000/api
+      - VITE_SOCKET_URL=http://localhost:3001
+

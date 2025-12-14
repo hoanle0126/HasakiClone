@@ -1,0 +1,158 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: hasaki_mysql_dev
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-hasaki}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+      MYSQL_USER: ${DB_USERNAME:-hasaki}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-root}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data_dev:/var/lib/mysql
+    networks:
+      - hasaki_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: hasaki_redis_dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_dev:/data
+    networks:
+      - hasaki_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend (Laravel) - Development
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: hasaki_backend_dev
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT:-8000}:80"
+    volumes:
+      - ./backend:/var/www/html
+      - backend_storage_dev:/var/www/html/storage
+      - backend_cache_dev:/var/www/html/bootstrap/cache
+    environment:
+      - APP_NAME=HasakiClone
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_URL=http://localhost:8000
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-hasaki}
+      - DB_USERNAME=${DB_USERNAME:-hasaki}
+      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - BROADCAST_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - RUN_SEEDERS=${RUN_SEEDERS:-false}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - hasaki_network
+    command: >
+      sh -c "php-fpm -D && nginx -g 'daemon off;'"
+
+  # Frontend (React) - Development with hot reload
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: hasaki_frontend_dev
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_BACKEND_URL=${BACKEND_URL:-http://localhost:8000}/api
+      - VITE_SOCKET_URL=${SOCKET_URL:-http://localhost:3001}
+    depends_on:
+      - backend
+      - socket
+    networks:
+      - hasaki_network
+    command: npm run dev -- --host
+
+  # Socket Server
+  socket:
+    build:
+      context: ./socket
+      dockerfile: Dockerfile
+    container_name: hasaki_socket_dev
+    restart: unless-stopped
+    ports:
+      - "${SOCKET_PORT:-3001}:3001"
+    volumes:
+      - ./socket:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - NODE_ENV=development
+    networks:
+      - hasaki_network
+    command: node server.js
+
+  # n8n Workflow Automation - Development
+  n8n:
+    build:
+      context: ./n8n
+      dockerfile: Dockerfile
+    container_name: hasaki_n8n_dev
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE:-false}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD:-admin}
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - NODE_ENV=development
+    volumes:
+      - n8n_data_dev:/home/node/.n8n
+    networks:
+      - hasaki_network
+
+volumes:
+  mysql_data_dev:
+  redis_data_dev:
+  backend_storage_dev:
+  backend_cache_dev:
+  n8n_data_dev:
+
+networks:
+  hasaki_network:
+    driver: bridge
+

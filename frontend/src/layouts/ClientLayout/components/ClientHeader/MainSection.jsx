@@ -1,6 +1,5 @@
-import LoginPage from "@/pages/AuthPage/LoginPage";
-import RegisterPage from "@/pages/AuthPage/RegisterPage";
 import { logout } from "@/store/users/action";
+import { getCategoryById } from "@/store/categories/action";
 import { MuiTheme } from "@/theme";
 import { Icon } from "@iconify/react";
 import {
@@ -8,35 +7,37 @@ import {
   Badge,
   Button,
   ButtonBase,
+  Drawer,
+  IconButton,
   Popover,
   Stack,
   TextField,
   Typography,
   useTheme,
+  Divider,
 } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const MainSection = () => {
   const location = useLocation();
-  const [openAuthEl, setOpenAuthEl] = React.useState(null);
+  const navigate = useNavigate();
   const [openUserEl, setOpenUserEl] = React.useState(null);
-  const [openLogin, setOpenLogin] = React.useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = React.useState(false);
   const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const theme = useTheme();
 
   React.useEffect(() => {
     if (user.email) {
-      setOpenAuthEl(null);
       setOpenUserEl(null);
     }
   }, [user]);
 
   React.useEffect(() => {
-    setOpenAuthEl(null);
     setOpenUserEl(null);
+    setOpenMobileMenu(false);
   }, [location.pathname]);
 
   return (
@@ -53,7 +54,7 @@ const MainSection = () => {
         sx={{
           alignItems: "end",
           height: "84px",
-          paddingX: "120px",
+          paddingX: { xs: "20px", sm: "40px", md: "80px", lg: "120px" },
           gap: "24px",
           paddingBottom: "16px",
         }}
@@ -64,24 +65,24 @@ const MainSection = () => {
             className="h-[42px] w-[180px]"
           />
         </Link>
-        <Stack gap="4px" flex={1}>
-          <Stack direction="row" gap="12px">
-            {[
-              "Kem chống nắng",
-              "Tẩy trang",
-              "Sửa rửa mặt",
-              "Tẩy tế bào chết",
-              "Kem chống nắng Sunplay",
-            ].map((item, index) => (
-              <Typography
-                key={index}
-                variant="captiontext"
-                color="background.paper"
-              >
-                {item}
-              </Typography>
-            ))}
-          </Stack>
+        {/* Mobile Menu Button */}
+        <IconButton
+          sx={{
+            display: { xs: "flex", sm: "none" },
+            color: "background.paper",
+            marginLeft: "auto",
+          }}
+          onClick={() => setOpenMobileMenu(true)}
+        >
+          <Icon icon="solar:hamburger-menu-outline" width="32" height="32" />
+        </IconButton>
+        <Stack 
+          gap="4px" 
+          flex={1}
+          sx={{
+            display: { xs: "none", sm: "flex" },
+          }}
+        >
           <Stack
             sx={{
               flexDirection: "row",
@@ -132,8 +133,12 @@ const MainSection = () => {
           onClick={(e) =>
             user.email
               ? setOpenUserEl(e.currentTarget)
-              : setOpenAuthEl(e.currentTarget)
+              : navigate("/dang-nhap")
           }
+          sx={{
+            display: { xs: "none", sm: "flex" },
+            cursor: "pointer",
+          }}
         >
           <Icon icon="solar:user-circle-outline" width="32" height="32" />
           {user.first_name ? (
@@ -156,29 +161,38 @@ const MainSection = () => {
             </Stack>
           )}
         </Stack>
-        {/* Đăng nhập / Đăng ký */}
-        <Stack direction="row" gap="12px" alignItems="center">
-          <Icon icon="solar:shop-linear" width="32" height="32" />
-          <Stack>
-            <Typography variant="captiontext">Hệ thống</Typography>
-            <Typography variant="captiontext">cửa hàng</Typography>
+        {/* Hỗ trợ */}
+        <Link
+          to="/lien-lac"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Stack 
+            direction="row" 
+            gap="12px" 
+            alignItems="center"
+            sx={{
+              display: { xs: "none", sm: "flex" },
+              cursor: "pointer",
+              "&:hover": {
+                opacity: 0.8,
+              },
+            }}
+          >
+            <Icon icon="solar:phone-bold" width="32" height="32" />
+            <Stack>
+              <Typography variant="captiontext">Hỗ trợ</Typography>
+              <Typography variant="captiontext">khách hàng</Typography>
+            </Stack>
           </Stack>
-        </Stack>
-        <Stack direction="row" gap="12px" alignItems="center">
-          <Icon icon="solar:shield-check-bold" width="32" height="32" />
-          <Stack>
-            <Typography variant="captiontext">Bảo</Typography>
-            <Typography variant="captiontext">hành</Typography>
-          </Stack>
-        </Stack>
-        <Stack direction="row" gap="12px" alignItems="center">
-          <Icon icon="solar:phone-bold" width="32" height="32" />
-          <Stack>
-            <Typography variant="captiontext">Hỗ trợ</Typography>
-            <Typography variant="captiontext">khách hàng</Typography>
-          </Stack>
-        </Stack>
-        <Stack justifyContent="end" height="100%">
+        </Link>
+        {/* Giỏ hàng */}
+        <Stack 
+          justifyContent="end" 
+          height="100%"
+          sx={{
+            display: { xs: "none", sm: "flex" },
+          }}
+        >
           <Link to="/checkout/cart">
             <Badge badgeContent={user.cart?.length || 0} color="error">
               <Icon
@@ -190,70 +204,6 @@ const MainSection = () => {
           </Link>
         </Stack>
       </Stack>
-      <Popover
-        open={Boolean(openAuthEl)}
-        anchorEl={openAuthEl}
-        onClose={() => setOpenAuthEl(null)}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        <Stack>
-          <Stack
-            padding="12px 20px"
-            gap="4px"
-            borderBottom="1px solid black"
-            borderColor="divider"
-          >
-            <Typography variant="body2" color="text.secondary">
-              Đăng nhập với
-            </Typography>
-            <Stack direction="row" gap="12px">
-              <ButtonBase>
-                <img
-                  src="https://hasaki.vn/images/graphics/img_login_fb.jpg"
-                  alt=""
-                />
-              </ButtonBase>
-              <ButtonBase>
-                <img
-                  src="https://hasaki.vn/images/graphics/img_login_gg.jpg"
-                  alt=""
-                />
-              </ButtonBase>
-            </Stack>
-          </Stack>
-          <Stack
-            paddingX="20px"
-            paddingY="8px"
-            gap="12px"
-            alignItems="center"
-            sx={{
-              span: {
-                color: "primary.main",
-                textTransform: "uppercase",
-                cursor: "pointer",
-              },
-            }}
-          >
-            <Typography variant="body2">
-              Hoặc đăng nhập với Hasaki.vn
-            </Typography>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => setOpenLogin("dang-nhap")}
-            >
-              Đăng nhập
-            </Button>
-            <Typography variant="body2">
-              Bạn chưa có tài khoản?{" "}
-              <span onClick={() => setOpenLogin("dang-ki")}>Đăng kí ngay</span>
-            </Typography>
-          </Stack>
-        </Stack>
-      </Popover>
       <Popover
         open={Boolean(openUserEl)}
         anchorEl={openUserEl}
@@ -319,20 +269,208 @@ const MainSection = () => {
           </Stack>
         </Stack>
       </Popover>
-      {openLogin === "dang-nhap" && (
-        <LoginPage
-          open={openLogin}
-          handleClose={() => setOpenLogin(false)}
-          navigate={(url) => setOpenLogin(url)}
-        />
-      )}
-      {openLogin === "dang-ki" && (
-        <RegisterPage
-          open={openLogin}
-          handleClose={() => setOpenLogin(false)}
-          navigate={(url) => setOpenLogin(url)}
-        />
-      )}
+      {/* Mobile Drawer Menu */}
+      <Drawer
+        anchor="right"
+        open={openMobileMenu}
+        onClose={() => setOpenMobileMenu(false)}
+        sx={{
+          display: { xs: "block", sm: "none" },
+        }}
+      >
+        <Stack
+          sx={{
+            width: 280,
+            padding: "20px",
+            gap: "16px",
+            height: "100%",
+          }}
+        >
+          {/* Header */}
+          <Stack direction="row" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6">Menu</Typography>
+            <IconButton onClick={() => setOpenMobileMenu(false)}>
+              <Icon icon="solar:close-circle-outline" width="24" height="24" />
+            </IconButton>
+          </Stack>
+          <Divider />
+          
+          {/* Search Bar */}
+          <Stack
+            sx={{
+              flexDirection: "row",
+              width: "100%",
+              height: "36px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "36px",
+              alignItems: "center",
+              paddingRight: "8px",
+            }}
+          >
+            <TextField
+              placeholder="Tìm sản phẩm..."
+              sx={{
+                flex: 1,
+                "& input::placeholder": {
+                  fontSize: "12px",
+                },
+                "& input": {
+                  fontSize: "12px",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    border: "none",
+                  },
+                  "&:hover fieldset": {
+                    border: "none",
+                  },
+                  "&.Mui-focused fieldset": {
+                    border: "none",
+                  },
+                },
+              }}
+            />
+            <Icon
+              icon="eva:search-fill"
+              width="24"
+              height="24"
+              color={theme.palette.primary.main}
+            />
+          </Stack>
+          
+          <Divider />
+          
+          {/* User Section */}
+          <Stack
+            gap="12px"
+            onClick={() => {
+              setOpenMobileMenu(false);
+              if (user.email) {
+                setOpenUserEl(document.body);
+              } else {
+                navigate("/dang-nhap");
+              }
+            }}
+            sx={{
+              cursor: "pointer",
+              padding: "12px",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
+            }}
+          >
+            <Stack direction="row" gap="12px" alignItems="center">
+              <Icon icon="solar:user-circle-outline" width="32" height="32" />
+              {user.first_name ? (
+                <Stack>
+                  <Typography variant="body2">
+                    Chào {user.first_name}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Tài khoản
+                  </Typography>
+                </Stack>
+              ) : (
+                <Stack>
+                  <Typography variant="body2">Đăng nhập / Đăng ký</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Tài khoản
+                  </Typography>
+                </Stack>
+              )}
+            </Stack>
+          </Stack>
+          
+          <Divider />
+          
+          {/* Cart */}
+          <Link to="/checkout/cart" onClick={() => setOpenMobileMenu(false)}>
+            <Stack
+              direction="row"
+              gap="12px"
+              alignItems="center"
+              sx={{
+                padding: "12px",
+                borderRadius: "8px",
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <Badge badgeContent={user.cart?.length || 0} color="error">
+                <Icon
+                  icon="solar:cart-large-minimalistic-linear"
+                  width="32"
+                  height="32"
+                />
+              </Badge>
+              <Typography variant="body2">Giỏ hàng</Typography>
+            </Stack>
+          </Link>
+          
+          <Divider />
+          
+          {/* Sức Khỏe - Làm Đẹp */}
+          <Stack
+            direction="row"
+            gap="12px"
+            alignItems="center"
+            onClick={() => {
+              setOpenMobileMenu(false);
+              dispatch(
+                getCategoryById({
+                  id: "suc-khoe-lam-dep",
+                  onSuccess: () => {
+                    navigate("/danh-muc/suc-khoe-lam-dep");
+                  },
+                })
+              );
+            }}
+            sx={{
+              cursor: "pointer",
+              padding: "12px",
+              borderRadius: "8px",
+              "&:hover": {
+                backgroundColor: "action.hover",
+              },
+            }}
+          >
+            <Icon icon="solar:health-outline" width="32" height="32" />
+            <Typography variant="body2">Sức Khỏe - Làm Đẹp</Typography>
+          </Stack>
+          
+          <Divider />
+          
+          {/* Support */}
+          <Link
+            to="/lien-lac"
+            onClick={() => setOpenMobileMenu(false)}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Stack
+              direction="row"
+              gap="12px"
+              alignItems="center"
+              sx={{
+                padding: "12px",
+                borderRadius: "8px",
+                "&:hover": {
+                  backgroundColor: "action.hover",
+                },
+              }}
+            >
+              <Icon icon="solar:phone-bold" width="32" height="32" />
+              <Stack>
+                <Typography variant="body2">Hỗ trợ</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  khách hàng
+                </Typography>
+              </Stack>
+            </Stack>
+          </Link>
+        </Stack>
+      </Drawer>
     </AppBar>
   );
 };

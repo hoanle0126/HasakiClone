@@ -31,7 +31,8 @@ const BannerSection = () => {
   return (
     <Box
       sx={{
-        paddingX: "120px",
+        paddingX: { xs: "20px", sm: "40px", md: "80px", lg: "120px" },
+        paddingTop: { xs: "20px", sm: "40px", md: "0px" },
         backgroundColor: "background.paper",
         boxShadow: "0px 2px 5px 0px rgba(0,0,0,0.1)",
         zIndex: "100",
@@ -39,7 +40,14 @@ const BannerSection = () => {
       }}
     >
       <Grid container className="w-full" spacing="8px">
-        <Grid size={8}>
+        <Grid size={
+          {
+            xs: 12,
+            sm: 6,
+            md: 8,
+            lg: 8,
+          }
+        }>
             <EmblaCarousel
               lists={hot_deals}
               options={{ loop: true, align: "start" }}
@@ -50,7 +58,12 @@ const BannerSection = () => {
               )}
             </EmblaCarousel>
         </Grid>
-        <Grid size={4}>
+        <Grid size={{
+          xs: 12,
+          sm: 6,
+          md: 4,
+          lg: 4,
+        }}>
           <Stack gap="8px" height="260px">
             <img
               src="https://media.hcdn.vn/hsk/1739420045nowfree-4-846x250-13022025.jpg"
@@ -80,20 +93,8 @@ const BannerSection = () => {
                 title: "Nước Hoa Chính Hãng",
               },
               {
-                src: "https://media.hcdn.vn/hsk/icon/hasaki-clinic.png",
-                title: "Clinic & S.P.A",
-              },
-              {
-                src: "https://media.hcdn.vn/hsk/icon/hsk-icon-clinic-deals-12-12-2024.png",
-                title: "Clinic Deals",
-              },
-              {
                 src: "https://media.hcdn.vn/hsk/icon/hsk-icon-mua-la-co-qua.png",
                 title: "Mua Là Có Quà",
-              },
-              {
-                src: "https://media.hcdn.vn/hsk/icon/hasaki-dat-hen.png",
-                title: "Đặt Hẹn",
               },
               {
                 src: "https://media.hcdn.vn/hsk/icon/hasaki-cam-nang.png",
@@ -121,7 +122,7 @@ const BannerSection = () => {
                   alt=""
                   className="size-[50px] duration-300"
                 />
-                <Typography variant="body2">{item.title}</Typography>
+                <Typography variant="body2" textAlign="center">{item.title}</Typography>
               </Stack>
             ))}
           </Stack>

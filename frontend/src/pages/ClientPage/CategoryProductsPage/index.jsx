@@ -1,5 +1,4 @@
 import ProductCard from "@/components/productCard";
-import getParamToObject from "@/Function/getParamToObject";
 import { getCategoryById } from "@/store/categories/action";
 import { Icon } from "@iconify/react";
 import {
@@ -8,8 +7,10 @@ import {
   ButtonBase,
   Checkbox,
   Divider,
+  Drawer,
   FormControl,
   Grid,
+  IconButton,
   InputLabel,
   List,
   MenuItem,
@@ -24,28 +25,31 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Link,
-  useLocation,
   useParams,
   useSearchParams,
 } from "react-router-dom";
 
 const CategoryProductsPage = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const { id } = useParams();
   const { category, meta } = useSelector((store) => store.categories);
   const [openShowPopover, setOpenShowPopover] = React.useState(null);
-  const objectParam = getParamToObject(location.search);
+  const [openMobileMenu, setOpenMobileMenu] = React.useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
   React.useEffect(() => {
-    dispatch(getCategoryById(id));
-  }, [id]);
+    if (id) {
+      dispatch(getCategoryById(id));
+    }
+  }, [id, dispatch]);
 
   return (
     <Stack
       sx={{
-        paddingX: "120px",
+        paddingX: {
+          xs: "20px",
+          md: "120px",
+        },
         backgroundColor: "background.neutral",
         paddingBottom: "40px",
         gap: "20px",
@@ -78,6 +82,10 @@ const CategoryProductsPage = () => {
             padding: "12px 20px",
             gap: "20px",
             flexDirection: "row",
+            display: {
+              xs: "none",
+              md: "flex",
+            },
           }}
         >
           {category.brands?.slice(0, 7).map((item, index) => (
@@ -107,7 +115,14 @@ const CategoryProductsPage = () => {
           },
         }}
       >
-        <Grid size={2} className="grid__section">
+        <Grid
+          size={2}
+          display={{
+            xs: "none",
+            md: "block",
+          }}
+          className="grid__section"
+        >
           <Stack
             sx={{
               gap: "12px",
@@ -220,13 +235,28 @@ const CategoryProductsPage = () => {
             </Stack>
           </Stack>
         </Grid>
-        <Grid size={10} className="grid__section">
+        <Grid
+          size={{
+            xs: 12,
+            md: 10,
+          }}
+          className="grid__section"
+        >
           <Stack
             sx={{
               gap: "8px",
             }}
           >
             <Stack direction="row" alignItems="center" gap="8px">
+              <IconButton
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  padding: "8px",
+                }}
+                onClick={() => setOpenMobileMenu(true)}
+              >
+                <Icon icon="solar:filter-bold" width="24" height="24" />
+              </IconButton>
               <Typography variant="h6">{category.name}</Typography>
               <Typography variant="body2" color="text.secondary">
                 ({category.product_count} sản phẩm)
@@ -234,6 +264,10 @@ const CategoryProductsPage = () => {
             </Stack>
             <Stack
               direction="row"
+              display={{
+                xs: "none",
+                md: "flex",
+              }}
               alignItems="center"
               gap="8px"
               sx={{
@@ -288,9 +322,21 @@ const CategoryProductsPage = () => {
                 <Icon icon="solar:alt-arrow-down-bold" width="18" height="18" />
               </ButtonBase>
             </Stack>
-            <Grid container spacing="29px">
+            <Grid
+              container
+              spacing={{
+                xs: "16px",
+                md: "29px",
+              }}
+            >
               {category?.products?.map((item) => (
-                <Grid size={3} key={item.id}>
+                <Grid
+                  size={{
+                    xs: 6,
+                    md: 3,
+                  }}
+                  key={item.id}
+                >
                   <Stack
                     sx={{
                       "&:hover": {
@@ -305,7 +351,7 @@ const CategoryProductsPage = () => {
                 </Grid>
               ))}
               <Grid size={12}>
-                <Stack alignItems="center">
+                <Stack alignItems="center" width="100%">
                   <Pagination count={meta?.last_page} />
                 </Stack>
               </Grid>
@@ -346,6 +392,167 @@ const CategoryProductsPage = () => {
           </MenuItem>
         </List>
       </Popover>
+      {/* Mobile Filter Drawer */}
+      <Drawer
+        anchor="left"
+        open={openMobileMenu}
+        onClose={() => setOpenMobileMenu(false)}
+        sx={{
+          display: { xs: "block", md: "none" },
+        }}
+      >
+        <Stack
+          sx={{
+            width: 280,
+            padding: "20px",
+            gap: "16px",
+            height: "100%",
+            overflowY: "auto",
+          }}
+        >
+          {/* Header */}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6">Bộ lọc</Typography>
+            <IconButton onClick={() => setOpenMobileMenu(false)}>
+              <Icon icon="solar:close-circle-outline" width="24" height="24" />
+            </IconButton>
+          </Stack>
+          <Divider />
+
+          {/* Category Families */}
+          {category.families?.parent && (
+            <>
+              <Typography variant="subtitle1" textTransform="uppercase">
+                {category.families?.parent?.name}
+              </Typography>
+              <Stack
+                sx={{
+                  gap: "4px",
+                }}
+              >
+                {category.families?.brother.map((item) => (
+                  <Stack key={item.id}>
+                    <Link
+                      to={item.product_count !== 0 && "/danh-muc/" + item.url}
+                      style={{
+                        cursor: item.product_count === 0 && "default",
+                      }}
+                      onClick={() => setOpenMobileMenu(false)}
+                    >
+                      <Typography
+                        variant={
+                          item.id === category.id ? "subtitle2" : "body2"
+                        }
+                        color={item.id === category.id && "primary.main"}
+                      >
+                        {item.name}
+                      </Typography>
+                    </Link>
+                    <Stack
+                      sx={{
+                        gap: "4px",
+                        paddingLeft: "12px",
+                      }}
+                    >
+                      {item.id === category.id &&
+                        category.families?.children.map((item) => (
+                          <Link
+                            key={item.id}
+                            to={
+                              item.product_count !== 0 &&
+                              "/danh-muc/" + item.url
+                            }
+                            style={{
+                              cursor: item.product_count === 0 && "default",
+                            }}
+                            onClick={() => setOpenMobileMenu(false)}
+                          >
+                            <Typography
+                              variant={
+                                item.id === category.id ? "subtitle2" : "body2"
+                              }
+                              color={item.id === category.id && "primary.main"}
+                            >
+                              {item.name}
+                            </Typography>
+                          </Link>
+                        ))}
+                    </Stack>
+                  </Stack>
+                ))}
+              </Stack>
+              <Divider />
+            </>
+          )}
+
+          {/* Price Range */}
+          <Typography variant="subtitle1" textTransform="uppercase">
+            Khoảng giá
+          </Typography>
+          <Stack gap="8px">
+            <Stack direction="row" gap="12px" alignItems="center">
+              <OutlinedInput
+                sx={{
+                  flex: 1,
+                }}
+                size="small"
+                placeholder="Từ"
+              />
+              -
+              <OutlinedInput
+                sx={{
+                  flex: 1,
+                }}
+                size="small"
+                placeholder="Đến"
+              />
+            </Stack>
+            <Button variant="contained" color="secondary">
+              Áp dụng
+            </Button>
+          </Stack>
+          <Divider />
+
+          {/* Sort Options */}
+          <Typography variant="subtitle1" textTransform="uppercase">
+            Sắp xếp
+          </Typography>
+          <Stack gap="8px">
+            {[
+              { name: "Mới nhất", to: "new" },
+              { name: "Bán chạy", to: "top_sale" },
+              { name: "Giá thấp đến cao", to: "price_asc" },
+              { name: "Giá cao đến thấp", to: "price_desc" },
+            ].map((item, index) => (
+              <Button
+                key={index}
+                variant={
+                  searchParams.get("sort") === item.to
+                    ? "contained"
+                    : "outlined"
+                }
+                color={
+                  searchParams.get("sort") === item.to ? "primary" : "inherit"
+                }
+                onClick={() => {
+                  searchParams.set("sort", item.to);
+                  setSearchParams(searchParams);
+                  setOpenMobileMenu(false);
+                }}
+                sx={{
+                  justifyContent: "flex-start",
+                }}
+              >
+                {item.name}
+              </Button>
+            ))}
+          </Stack>
+        </Stack>
+      </Drawer>
     </Stack>
   );
 };

@@ -148,7 +148,7 @@ const FeatureSection = ({ action }) => {
 
   React.useEffect(() => {
     setListReviews(product?.reviews);
-  }, [product?.id,product?.reviews]);
+  }, [product?.id, product?.reviews]);
 
   React.useEffect(() => {
     socket.on("connect", () => {
@@ -157,7 +157,7 @@ const FeatureSection = ({ action }) => {
 
     const reviewChannel = "product_" + product.id;
     socket.on(reviewChannel, (data) => {
-      setListReviews(data.reviews)
+      setListReviews(data.reviews);
       console.log("Server ping:", data);
     });
 
@@ -332,8 +332,14 @@ const FeatureSection = ({ action }) => {
         <Typography variant="h6">Đánh giá</Typography>
         <Typography variant="body2">Đánh giá trung bình</Typography>
         <Grid container spacing="12px">
-          <Grid size={4}>
-            <Stack sx={{ alignItems: "center", gap: "4px" }}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Stack
+              sx={{
+                alignItems: "center",
+                gap: "4px",
+                justifyContent: "center",
+              }}
+            >
               <Typography variant="h1" color="secondary.main">
                 {product.rating?.value?.toFixed(2)}
               </Typography>
@@ -348,8 +354,14 @@ const FeatureSection = ({ action }) => {
               </Typography>
             </Stack>
           </Grid>
-          <Grid size={4}>
-            <Stack sx={{ alignItems: "center", gap: "4px" }}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Stack
+              sx={{
+                alignItems: "center",
+                gap: "4px",
+                justifyContent: "center",
+              }}
+            >
               {[
                 {
                   name: "5 sao",
@@ -399,7 +411,7 @@ const FeatureSection = ({ action }) => {
               ))}
             </Stack>
           </Grid>
-          <Grid size={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Stack
               sx={{
                 alignItems: "center",
@@ -492,7 +504,7 @@ const FeatureSection = ({ action }) => {
           sx={{
             padding: "6px 12px",
             backgroundColor: "background.neutral",
-            flexDirection: "row",
+            flexDirection: {xs: "column", md: "row"},
             alignItems: "center",
             gap: "12px",
           }}
@@ -520,7 +532,7 @@ const FeatureSection = ({ action }) => {
           {listReviews?.map((item, index) => (
             <Stack gap="4px" key={index} className="review__item">
               <Stack direction="row" alignItems="center" gap="8px">
-                <Rating size="small" value={item.rating} readOnly/>
+                <Rating size="small" value={item.rating} readOnly />
                 <Typography variant="subtitle2" color="primary.main">
                   {item.name}
                 </Typography>

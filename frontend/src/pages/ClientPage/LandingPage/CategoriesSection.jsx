@@ -85,7 +85,7 @@ const CategoriesSection = () => {
         {
           <EmblaCarousel
             lists={categoriesChildren}
-            size={8}
+            size={{ xs: 2, sm: 4, md: 6, lg: 8 }}
             spacing="16px"
             options={{
               align: "start",

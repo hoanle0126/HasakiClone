@@ -23,7 +23,12 @@ const DetailHeader = ({ action, tabLists, tab, setTab }) => {
     >
       <Stack
         sx={{
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           paddingY: "8px",
           boxShadow: "custom.z1",
           flexDirection: "row",
@@ -84,7 +89,12 @@ const DetailHeader = ({ action, tabLists, tab, setTab }) => {
         sx={{
           width: "100%",
           flex: 1,
-          paddingX: "120px",
+          paddingX: {
+            xs: "20px",
+            sm: "40px",
+            md: "80px",
+            lg: "120px",
+          },
           alignItems: "center",
           flexDirection: "row",
           "& .tab__item": {

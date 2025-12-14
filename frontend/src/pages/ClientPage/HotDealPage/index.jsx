@@ -15,7 +15,10 @@ const HotDealClientPage = () => {
   return (
     <Stack
       sx={{
-        paddingX: "120px",
+        paddingX: {
+          xs: "20px",
+          md: "120px",
+        },
         backgroundColor: "background.neutral",
         paddingBottom: "40px",
       }}
@@ -30,7 +33,10 @@ const HotDealClientPage = () => {
         }}
       >
         {hot_deals?.map((item) => (
-          <Grid size={6} key={item.id}>
+          <Grid size={{
+            xs: 12,
+            md: 6,
+          }} key={item.id}>
             <Link to={"/campaign/" + item.url}>
               <Stack gap="8px">
                 <img

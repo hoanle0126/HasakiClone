@@ -69,7 +69,10 @@ const BrandClientPage = () => {
   return (
     <Stack
       sx={{
-        paddingX: "120px",
+        paddingX: {
+          xs: "20px",
+          md: "120px",
+        },
         paddingBottom: "40px",
       }}
     >
@@ -104,6 +107,7 @@ const BrandClientPage = () => {
             borderTopWidth: 1,
             borderBottomWidth: 1,
             borderColor: "divider",
+            flexWrap: "wrap",
           }}
         >
           {brandGroups?.map((item, index) => (
@@ -136,7 +140,7 @@ const BrandClientPage = () => {
             </Stack>
             <Grid container columnSpacing="20px" rowSpacing="40px">
               {groups.items.map((item) => (
-                <Grid size={2} key={item.id}>
+                <Grid size={{xs: 6, sm: 4, md: 3, lg: 2}} key={item.id}>
                   <Link to={"/thuong-hieu/" + item.url}>
                     <Stack
                       sx={{
