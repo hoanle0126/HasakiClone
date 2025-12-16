@@ -474,7 +474,7 @@ make shell-socket
 ```bash
 # Kiểm tra MySQL container
 docker-compose ps
-docker-compose logs mysql
+docker-compose logs mysq
 
 # Kiểm tra kết nối từ backend container
 docker exec -it hasaki_backend bash
