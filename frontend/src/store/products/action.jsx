@@ -23,23 +23,20 @@ export const getAllProducts =
   ({ paginate = 18, page = 1, search = "", excluding = [] }) =>
   async (dispatch) => {
     dispatch({ type: GET_ALL_PRODUCTS_REQUEST });
-    await axiosClient
-      .get(
-        "/products?paginate=" +
-          paginate +
-          "&page=" +
-          page +
-          "&search=" +
-          search +
-          "&excluding=" +
-          excluding
-      )
-      .then((data) => {
-        dispatch({ type: GET_ALL_PRODUCTS_SUCCESS, payload: data.data });
-      })
-      .catch((error) => {
-        dispatch({ type: GET_ALL_PRODUCTS_FAILURE, payload: error });
+    try {
+      const { data } = await axiosClient.get(
+        `/products?paginate=${paginate}&page=${page}&search=${search}&excluding=${excluding}`
+      );
+      dispatch({
+        type: GET_ALL_PRODUCTS_SUCCESS,
+        payload: {
+          data: data?.data ?? data ?? [],
+          meta: data?.meta ?? null,
+        },
       });
+    } catch (error) {
+      dispatch({ type: GET_ALL_PRODUCTS_FAILURE, payload: error });
+    }
   };
 
 export const addProduct =

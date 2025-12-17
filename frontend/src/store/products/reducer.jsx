@@ -36,8 +36,12 @@ export const productReducer = (state = initialState, action) => {
     case DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
-        products: action.payload.data,
-        meta: action.payload.meta,
+        products: Array.isArray(action.payload?.data)
+          ? action.payload.data
+          : Array.isArray(action.payload)
+            ? action.payload
+            : [],
+        meta: action.payload?.meta ?? { total: action.payload?.data?.length ?? 0 },
         loading: false,
       };
     case GET_PRODUCT_BY_ID_SUCCESS:
