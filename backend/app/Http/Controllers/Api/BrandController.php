@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Resources\BrandResource;
 use App\Models\Brand;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -15,7 +16,9 @@ class BrandController extends Controller
     public function index()
     {
         return BrandResource::collection(
-            Brand::orderBy('created_at', 'desc')->get()
+            Cache::remember("brands:index", 60, function () {
+                return Brand::orderBy('created_at', 'desc')->get();
+            })
         );
     }
 
@@ -40,6 +43,7 @@ class BrandController extends Controller
             "banner" => $request->banner
         ]);
 
+        Cache::forget("brands:index");
         return $this->index();
     }
 
@@ -48,7 +52,12 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        $products = $brand->products();
+        $products = $brand->products()->with([
+            // Eager-load để tránh N+1 cho các trường trong ProductResource
+            "reviews",
+            "categories",
+            "brand",
+        ]);
         $sort = request()->query("sort");
         $paginate = request()->query("limit");
         switch ($sort) {
@@ -93,6 +102,7 @@ class BrandController extends Controller
             "banner" => $request->banner
         ]);
 
+        Cache::forget("brands:index");
         return $this->index();
     }
 
@@ -103,6 +113,7 @@ class BrandController extends Controller
     {
         $brand->delete();
 
+        Cache::forget("brands:index");
         return $this->index();
     }
 }

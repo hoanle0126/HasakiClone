@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\FlashDeal;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 class FlashDealController extends Controller
@@ -16,7 +17,16 @@ class FlashDealController extends Controller
      */
     public function index()
     {
-        return new FlashDealResource(FlashDeal::first());
+        $flashDeal = Cache::remember("flash_deal:first", 60, function () {
+            return FlashDeal::with([
+                // Eager-load để tránh N+1 khi build ProductResource
+                "products.reviews",
+                "products.categories",
+                "products.brand",
+            ])->first();
+        });
+
+        return new FlashDealResource($flashDeal);
     }
 
     /**
@@ -48,7 +58,13 @@ class FlashDealController extends Controller
             }
         }
 
-        return new FlashDealResource(FlashDeal::first());
+        Cache::forget("flash_deal:first"); // Làm mới cache sau khi cập nhật
+
+        return new FlashDealResource(FlashDeal::with([
+            "products.reviews",
+            "products.categories",
+            "products.brand",
+        ])->first());
     }
 
     /**

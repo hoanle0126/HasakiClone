@@ -29,6 +29,7 @@ use App\Models\Product;
 use App\Models\Ward;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource("/categories", CategoriesController::class);
@@ -78,11 +79,13 @@ Route::apiResource("/flash-deals", FlashDealController::class);
 Route::apiResource("/discount-codes", DiscountCodeController::class);
 Route::apiResource("/reviews", ReviewController::class);
 Route::get('/categories-children', function (Request $request) {
-    $categories = Categories::where("type", "Heath & Beauty")
-        ->get()
-        ->filter(function ($item) {
-            return $item->children->isEmpty();
-        });
+    $categories = Cache::remember("categories:children", 60, function () {
+        return Categories::with("children")->where("type", "Heath & Beauty")
+            ->get()
+            ->filter(function ($item) {
+                return $item->children->isEmpty();
+            });
+    });
     return CategoriesResource::collection($categories);
 });
 

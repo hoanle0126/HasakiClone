@@ -6,6 +6,7 @@ use App\Http\Requests\DiscountCodeRequest;
 use App\Http\Resources\DiscountCodeResource;
 use App\Models\DiscountCode;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 class DiscountCodeController extends Controller
@@ -15,7 +16,14 @@ class DiscountCodeController extends Controller
      */
     public function index()
     {
-        return DiscountCodeResource::collection(DiscountCode::all());
+        $discountCodes = Cache::remember("discount_codes:all", 60, function () {
+            return DiscountCode::with([
+                "products",
+                "brands",
+            ])->get();
+        });
+
+        return DiscountCodeResource::collection($discountCodes);
     }
 
     /**
@@ -46,7 +54,11 @@ class DiscountCodeController extends Controller
             $code->Brands()->attach($brand['id']);
         }
 
-        return DiscountCodeResource::collection(DiscountCode::all());
+        Cache::forget("discount_codes:all"); // Làm mới cache sau khi tạo
+
+        return DiscountCodeResource::collection(
+            DiscountCode::with(["products", "brands"])->get()
+        );
     }
 
     /**
@@ -87,7 +99,11 @@ class DiscountCodeController extends Controller
             $discountCode->Brands()->attach($brand['id']);
         }
 
-        return DiscountCodeResource::collection(DiscountCode::all());
+        Cache::forget("discount_codes:all"); // Làm mới cache sau khi cập nhật
+
+        return DiscountCodeResource::collection(
+            DiscountCode::with(["products", "brands"])->get()
+        );
     }
 
     /**
@@ -97,6 +113,7 @@ class DiscountCodeController extends Controller
     {
         $discountCode->delete();
 
+        Cache::forget("discount_codes:all"); // Làm mới cache sau khi xóa
         return $this->index();
     }
 }

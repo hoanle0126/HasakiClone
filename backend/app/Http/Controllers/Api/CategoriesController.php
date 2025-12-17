@@ -7,6 +7,7 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Categories;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -17,7 +18,12 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Categories::where("name", "Sức Khỏe - Làm Đẹp")->first();
-        return CategoriesResource::collection(Categories::where("parent_id",$categories->id)->get());
+        return CategoriesResource::collection(Cache::remember("categories:index", 60, function () use ($categories) {
+            return Categories::with([
+                "children",
+                "products",
+            ])->where("parent_id", $categories->id)->get();
+        }));
     }
 
     /**
@@ -25,7 +31,12 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return CategoriesResource::collection(Categories::where("type", "Heath & Beauty")->get());
+        return CategoriesResource::collection(Cache::remember("categories:create", 60, function () {
+            return Categories::with([
+                "children",
+                "products",
+            ])->where("type", "Heath & Beauty")->get();
+        }));
     }
 
     /**
@@ -39,6 +50,10 @@ class CategoriesController extends Controller
             "type" => $request['type'],
             "parent_id" => $parentId
         ]);
+        Cache::forget("categories:index");
+        Cache::forget("categories:create");
+        Cache::forget("categories:children");
+        // Cache chi tiết theo slug/page sẽ tự hết hạn; dùng flush nhỏ này cho các key chính
 
         // // Đệ quy thêm children nếu có
         // $children = $request['children'] ?? [];
@@ -60,8 +75,15 @@ class CategoriesController extends Controller
      */
     public function show($categories)
     {
-        $category = Categories::where("url", $categories)->first();
-        $productChildren = Product::whereIn("categories_id", $category->getAllChildIds())->paginate(40);
+        $cacheKey = "categories:show:" . $categories . ":page_" . request()->query("page", 1);
+        [$category, $productChildren] = Cache::remember($cacheKey, 60, function () use ($categories) {
+            $category = Categories::with([
+                "children",
+                "products",
+            ])->where("url", $categories)->first();
+            $productChildren = Product::whereIn("categories_id", $category->getAllChildIds())->paginate(40);
+            return [$category, $productChildren];
+        });
 
         return response()->json([
             "products" => $productChildren,
@@ -88,6 +110,9 @@ class CategoriesController extends Controller
             "thumbnail" => $request['thumbnail'],
             "type" => $request['type']
         ]);
+        Cache::forget("categories:index");
+        Cache::forget("categories:create");
+        Cache::forget("categories:children");
 
         // // Đệ quy thêm children nếu có
         $children = $request['children'] ?? [];
@@ -116,6 +141,9 @@ class CategoriesController extends Controller
         $category->delete();
         $this->deleteChildren($category);
 
+        Cache::forget("categories:index");
+        Cache::forget("categories:create");
+        Cache::forget("categories:children");
         return $this->index();
     }
 

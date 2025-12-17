@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Categories;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -20,13 +21,37 @@ class ProductController extends Controller
     public function index()
     {
         $paginate = request()->query("paginate");
-        $search = request()->query("search");
+        $search = trim((string) request()->query("search", ""));
         $excludingParam = request()->query("excluding");
         $excluding = $excludingParam ? explode(",", $excludingParam) : [];
-        return ProductResource::collection(Product::where("name", "like", "%{$search}%")
-            ->whereNotIn("id", $excluding)
-            ->orderBy("created_at", "desc")
-            ->paginate($paginate));
+
+        $cacheKey = sprintf(
+            "products_index:%s:%s:%s",
+            $paginate ?? "null",
+            $search ?: "_",
+            implode("-", $excluding)
+        );
+
+        $products = Cache::remember($cacheKey, 60, function () use ($paginate, $search, $excluding) {
+            $query = Product::query()
+                ->with([
+                    // Eager-load tối thiểu để tránh N+1 nhưng không tải khối lượng lớn
+                    "reviews",
+                    "categories:id,name,url,thumbnail,parent_id",
+                    "brand:id,name,logo",
+                ])
+                ->whereNotIn("id", $excluding)
+                ->orderBy("created_at", "desc");
+
+            if ($search !== "") {
+                // Chỉ lọc khi có chuỗi search để tránh full table scan không cần thiết
+                $query->where("name", "like", "%{$search}%");
+            }
+
+            return $query->paginate($paginate);
+        });
+
+        return ProductResource::collection($products);
     }
 
     /**
@@ -45,6 +70,7 @@ class ProductController extends Controller
         try {
             // Cố gắng tạo sản phẩm
             $product = Product::create($request->all());
+            Cache::flush(); // Xóa cache để dữ liệu mới hiển thị ngay
 
             $client = new Client(['timeout' => 2.0]);
 
@@ -88,6 +114,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $product->update($request->all());
+        Cache::flush(); // Làm mới cache sau khi cập nhật
         return $this->index();
     }
 
@@ -97,6 +124,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
+        Cache::flush(); // Làm mới cache sau khi xóa
         return $this->index();
     }
 }

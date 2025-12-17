@@ -7,6 +7,7 @@ use App\Http\Resources\HotDealResource;
 use App\Models\HotDeal;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 
 class HotDealController extends Controller
@@ -16,7 +17,16 @@ class HotDealController extends Controller
      */
     public function index()
     {
-        return HotDealResource::collection(HotDeal::all());
+        $hotDeals = Cache::remember("hot_deals:all", 60, function () {
+            return HotDeal::with([
+                // Eager-load toàn bộ depth cần thiết để tránh N+1
+                "dates.products.reviews",
+                "dates.products.categories",
+                "dates.products.brand",
+            ])->get();
+        });
+
+        return HotDealResource::collection($hotDeals);
     }
 
     /**
@@ -49,6 +59,7 @@ class HotDealController extends Controller
             }
         }
 
+        Cache::forget("hot_deals:all"); // Làm mới cache sau khi tạo
         return $this->index();
     }
 
@@ -91,6 +102,7 @@ class HotDealController extends Controller
             }
         }
 
+        Cache::forget("hot_deals:all"); // Làm mới cache sau khi cập nhật
         return $this->index();
     }
 
@@ -101,6 +113,7 @@ class HotDealController extends Controller
     {
         $hotDeal->delete();
 
+        Cache::forget("hot_deals:all"); // Làm mới cache sau khi xóa
         return $this->index();
     }
 }

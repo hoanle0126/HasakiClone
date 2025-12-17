@@ -42,8 +42,14 @@ class ProductResource extends JsonResource
             ],
             'name' => $this->name,
             'url' => $this->url,
-            'categories' => $this->categories['ancestors'],
-            'recommends' => $this->categories['products']->reject(fn($product) => $product->id === $this->id)->take(5)->values(),
+            'categories' => $this->categories ? $this->categories['ancestors'] : [],
+            // Lấy gợi ý trực tiếp, giới hạn 5 để tránh tải toàn bộ sản phẩm của category
+            'recommends' => $this->categories
+                ? $this->categories->products()
+                    ->where('products.id', '<>', $this->id)
+                    ->limit(5)
+                    ->get(['id', 'name', 'thumbnail', 'price', 'sales', 'url'])
+                : [],
             'thumbnail' => $this->thumbnail,
             "parameters" => $this->parameters ? $this->parameters : ["test" => ""],
             "price" => $this->price,
@@ -66,7 +72,13 @@ class ProductResource extends JsonResource
                 "id" => $this->brand['id'],
                 "name" => $this->brand['name'],
                 "logo" => $this->brand['logo'],
-                "products" => $this->brand['products']->reject(fn($product) => $product->id === $this->id)->take(5)->values(),
+                // Giới hạn 5 sản phẩm cùng brand để tránh tải toàn bộ
+                "products" => $this->brand
+                    ? $this->brand->products()
+                        ->where('products.id', '<>', $this->id)
+                        ->limit(5)
+                        ->get(['id', 'name', 'thumbnail', 'price', 'sales', 'url'])
+                    : [],
             ],
             "brand_id" => $this->brand_id,
             "created_at" => $this->created_at,
