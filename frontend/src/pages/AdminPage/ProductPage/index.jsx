@@ -36,7 +36,7 @@ const ProductPage = () => {
         page: paginationModel.page + 1,
       })
     );
-  }, [paginationModel.page, paginationModel.pageSize]);
+  }, [dispatch, paginationModel.page, paginationModel.pageSize]);
   const theme = useTheme();
 
   return (
@@ -80,7 +80,7 @@ const ProductPage = () => {
             },
           },
         }}
-        rowCount={meta.total}
+        rowCount={meta?.total ?? products?.length ?? 0}
         paginationModel={paginationModel}
         paginationMode="server"
         onPaginationModelChange={setPaginationModel}

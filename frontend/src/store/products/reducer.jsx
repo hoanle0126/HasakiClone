@@ -31,9 +31,6 @@ export const productReducer = (state = initialState, action) => {
     case ADD_REVIEW_REQUEST:
       return { ...state, loading: true };
     case GET_ALL_PRODUCTS_SUCCESS:
-    case ADD_PRODUCT_SUCCESS:
-    case UPDATE_PRODUCT_SUCCESS:
-    case DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
         products: Array.isArray(action.payload?.data)
@@ -44,6 +41,11 @@ export const productReducer = (state = initialState, action) => {
         meta: action.payload?.meta ?? { total: action.payload?.data?.length ?? 0 },
         loading: false,
       };
+    case ADD_PRODUCT_SUCCESS:
+    case UPDATE_PRODUCT_SUCCESS:
+    case DELETE_PRODUCT_SUCCESS:
+      // Không thay đổi danh sách hiện tại; nơi gọi nên refetch để giữ phân trang chuẩn
+      return { ...state, loading: false };
     case GET_PRODUCT_BY_ID_SUCCESS:
     case ADD_REVIEW_SUCCESS:
       return { ...state, loading: false, product: action.payload };
