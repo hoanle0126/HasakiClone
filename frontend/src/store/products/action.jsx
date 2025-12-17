@@ -70,13 +70,16 @@ export const getProductById =
   };
 
 export const updateProduct =
-  ({ products, id, onSuccess = () => {} }) =>
+  ({ products, id, onSuccess = () => {}, refreshParams }) =>
   async (dispatch) => {
     dispatch({ type: UPDATE_PRODUCT_REQUEST });
     await axiosClient
       .put("/products/" + id, products)
-      .then((data) => {
+      .then(async (data) => {
         dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data.data });
+        if (refreshParams) {
+          await dispatch(getAllProducts(refreshParams));
+        }
         onSuccess();
       })
       .catch((error) => {
@@ -84,17 +87,23 @@ export const updateProduct =
       });
   };
 
-export const deleteProduct = (id) => async (dispatch) => {
+export const deleteProduct =
+  ({ id, onSuccess = () => {}, refreshParams }) =>
+  async (dispatch) => {
   dispatch({ type: DELETE_PRODUCT_REQUEST });
-  await axiosClient
-    .delete("/products/" + id)
-    .then((data) =>
-      dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: data.data })
-    )
-    .catch((error) => {
-      dispatch({ type: DELETE_PRODUCT_FAILURE, error: error });
-    });
-};
+    await axiosClient
+      .delete("/products/" + id)
+      .then(async () => {
+        dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: { id } });
+        if (refreshParams) {
+          await dispatch(getAllProducts(refreshParams));
+        }
+        onSuccess();
+      })
+      .catch((error) => {
+        dispatch({ type: DELETE_PRODUCT_FAILURE, error: error });
+      });
+  };
 
 export const addReview =
   ({ review }) =>

@@ -124,7 +124,7 @@ function RenderStock(props) {
 
 function RenderAction(props) {
   const theme = useTheme();
-  const { row } = props;
+  const { row, onDeleted } = props;
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -174,7 +174,19 @@ function RenderAction(props) {
             <Icon icon="solar:eye-bold" />
             View
           </MenuItem>
-          <MenuItem onClick={() => dispatch(deleteProduct(row.url))}>
+          <MenuItem
+            onClick={() => {
+              dispatch(
+                deleteProduct({
+                  id: row.url,
+                  onSuccess: () => {
+                    handleClose();
+                    onDeleted && onDeleted();
+                  },
+                })
+              );
+            }}
+          >
             <Icon
               icon="solar:trash-bin-trash-bold"
               color={theme.palette.error.main}
@@ -189,7 +201,7 @@ function RenderAction(props) {
   );
 }
 
-const DataGridHeader = () => {
+const DataGridHeader = ({ onDeleted }) => {
   return [
     {
       field: "name",
@@ -222,7 +234,7 @@ const DataGridHeader = () => {
       headerName: "",
       sortable: false, // Disable sorting
       disableColumnMenu: true,
-      renderCell: RenderAction,
+      renderCell: (params) => <RenderAction {...params} onDeleted={onDeleted} />,
     },
   ];
 };

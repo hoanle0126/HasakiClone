@@ -29,7 +29,7 @@ const ProductPage = () => {
   const dispatch = useDispatch();
   const { products, loading, meta } = useSelector((store) => store.products);
 
-  React.useEffect(() => {
+  const handleRefresh = React.useCallback(() => {
     dispatch(
       getAllProducts({
         paginate: paginationModel.pageSize,
@@ -37,6 +37,10 @@ const ProductPage = () => {
       })
     );
   }, [dispatch, paginationModel.page, paginationModel.pageSize]);
+
+  React.useEffect(() => {
+    handleRefresh();
+  }, [handleRefresh]);
   const theme = useTheme();
 
   return (
@@ -66,7 +70,7 @@ const ProductPage = () => {
           },
         }}
         rowHeight={100}
-        columns={DataGridHeader()}
+        columns={DataGridHeader({ onDeleted: handleRefresh })}
         sx={{
           borderRadius: "12px",
           boxShadow: "custom.card",
