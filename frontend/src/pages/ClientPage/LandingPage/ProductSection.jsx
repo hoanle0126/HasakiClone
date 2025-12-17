@@ -23,8 +23,15 @@ const ProductSection = () => {
   const [paginate, setPaginate] = React.useState(18);
 
   React.useEffect(() => {
-    dispatch(getAllProducts(paginate));
-  }, [paginate]);
+    dispatch(
+      getAllProducts({
+        paginate,
+        page: 1,
+        search: "",
+        excluding: "",
+      })
+    );
+  }, [dispatch, paginate]);
 
   return (
     <Stack>
@@ -84,7 +91,7 @@ const ProductSection = () => {
         }}
       >
         <Grid container spacing="16px">
-          {products.map((item, index) => (
+          {(products ?? []).map((item, index) => (
             <Grid size={{xs: 6, sm: 4, md: 3, lg: 2}} key={index}>
               <Stack
                 sx={{
@@ -110,7 +117,7 @@ const ProductSection = () => {
               fontWeight: 600,
             }}
             onClick={() => setPaginate((prev) => prev + 6)}
-            loading={loading}
+            disabled={loading}
           >
             Xem Thêm
           </Button>
