@@ -15,11 +15,28 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return BrandResource::collection(
-            Cache::remember("brands:index", 60, function () {
-                return Brand::orderBy('created_at', 'desc')->get();
-            })
-        );
+        $limit = (int) request()->query("limit", 50);
+        $page = (int) request()->query("page", 1);
+
+        $cacheKey = "brands:index:limit_{$limit}:page_{$page}";
+
+        $brands = Cache::remember($cacheKey, 60, function () use ($limit) {
+            return Brand::select([
+                "id",
+                "name",
+                "url",
+                "description",
+                "thumbnail",
+                "banner",
+                "logo",
+                "created_at",
+                "updated_at",
+            ])
+                ->orderBy('created_at', 'desc')
+                ->paginate($limit);
+        });
+
+        return BrandResource::collection($brands);
     }
 
     /**
@@ -43,7 +60,7 @@ class BrandController extends Controller
             "banner" => $request->banner
         ]);
 
-        Cache::forget("brands:index");
+        Cache::flush();
         return $this->index();
     }
 
@@ -102,7 +119,7 @@ class BrandController extends Controller
             "banner" => $request->banner
         ]);
 
-        Cache::forget("brands:index");
+        Cache::flush();
         return $this->index();
     }
 
@@ -113,7 +130,7 @@ class BrandController extends Controller
     {
         $brand->delete();
 
-        Cache::forget("brands:index");
+        Cache::flush();
         return $this->index();
     }
 }
