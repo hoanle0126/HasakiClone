@@ -13,13 +13,20 @@ import {
 } from "./actionType";
 
 export const getAllBrands =
-  ({ onSuccess = () => {} }) =>
+  ({ onSuccess = () => {}, limit = 50, page = 1 }) =>
   async (dispatch) => {
     dispatch({ type: GET_ALL_BRANDS_REQUEST });
     try {
-      axiosClient.get("/brands").then((data) => {
-        dispatch({ type: GET_ALL_BRANDS_SUCCESS, payload: data.data });
-        onSuccess(data.data);
+      axiosClient.get(`/brands?limit=${limit}&page=${page}`).then((data) => {
+        const body = data.data || {};
+        dispatch({
+          type: GET_ALL_BRANDS_SUCCESS,
+          payload: {
+            data: body.data ?? body, // paginator returns {data,meta}; fallback to body if array
+            meta: body.meta,
+          },
+        });
+        onSuccess(body);
       });
     } catch (error) {
       // 

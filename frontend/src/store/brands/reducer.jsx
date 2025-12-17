@@ -15,6 +15,7 @@ const initialState = {
   brand: {},
   brands: [],
   loading: true,
+  meta: null,
 };
 
 export const brandReducer = (state = initialState, action) => {
@@ -32,7 +33,16 @@ export const brandReducer = (state = initialState, action) => {
     case ADD_BRAND_SUCCESS:
     case UPDATE_BRAND_SUCCESS:
     case DELETE_BRAND_SUCCESS:
-      return { ...state, loading: false, brands: action.payload };
+      return {
+        ...state,
+        loading: false,
+        brands: Array.isArray(action.payload?.data)
+          ? action.payload.data
+          : Array.isArray(action.payload)
+            ? action.payload
+            : [],
+        meta: action.payload?.meta ?? null,
+      };
     case GET_BRAND_BY_ID_SUCCESS:
       return {
         ...state,
