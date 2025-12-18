@@ -104,7 +104,7 @@ Route::get('/test-socket', function () {
         $client = new Client();
 
         // Gửi data tới Node Socket server
-        $client->post('http://localhost:3001/notify-new-review', [
+        $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-new-review', [
             'json' => [
                 'product_id' => 201937,
                 'data' => [
@@ -146,7 +146,7 @@ Route::get('/test-socket2', function () {
         $client = new Client();
 
         // Gửi data tới Node Socket server
-        $client->post('http://localhost:3001/sends', [
+        $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/sends', [
             'json' => [
                 'message' => 'Hello from Laravel!a'
             ]

@@ -6,6 +6,7 @@ import DashboardPage from "@/pages/AdminPage/DashboardPage";
 import ProductPage from "@/pages/AdminPage/ProductPage";
 import BrandPage from "@/pages/AdminPage/BrandPage";
 import OrderPage from "@/pages/AdminPage/OrderPage";
+import ViewOrderPage from "@/pages/AdminPage/OrderPage/ViewOrder";
 import BrandAddPage from "@/pages/AdminPage/BrandPage/AddPage";
 import BrandViewPage from "@/pages/AdminPage/BrandPage/ViewPage";
 import AddProductPage from "@/pages/AdminPage/ProductPage/AddPage";
@@ -181,6 +182,10 @@ export const MainRouter = createBrowserRouter([
       {
         path: "/admin/orders",
         element: <OrderPage />,
+      },
+      {
+        path: "/admin/orders/:id",
+        element: <ViewOrderPage />,
       },
       {
         path: "/admin/discounts",

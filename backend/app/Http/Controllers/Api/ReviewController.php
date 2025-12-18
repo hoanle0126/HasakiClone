@@ -90,7 +90,7 @@ class ReviewController extends Controller
             $client = new Client();
 
             // Gửi data tới Node Socket server
-            $client->post('http://localhost:3001/notify-new-review', [
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-new-review', [
                 'json' => [
                     'product_id' => $request->product_id,
                     'data' => [

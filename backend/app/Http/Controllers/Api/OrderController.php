@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
@@ -19,7 +20,29 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $paginate = request()->query("paginate");
+        $search = trim((string) request()->query("search", ""));
+
+        $query = Order::query()
+            ->with([
+                "user:id,first_name,last_name,email",
+                "products:id,name,thumbnail,price",
+                "address:id,name,phone,street_address,ward,district,province",
+                "discountCode:id,code,discount",
+            ])
+            ->orderBy("created_at", "desc");
+
+        if ($search !== "") {
+            $query->whereHas("user", function ($q) use ($search) {
+                $q->where("first_name", "like", "%{$search}%")
+                  ->orWhere("last_name", "like", "%{$search}%")
+                  ->orWhere("email", "like", "%{$search}%");
+            })->orWhere("id", "like", "%{$search}%");
+        }
+
+        $orders = $paginate ? $query->paginate($paginate) : $query->get();
+
+        return OrderResource::collection($orders);
     }
 
     /**
@@ -78,7 +101,14 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        $order->load([
+            "user:id,first_name,last_name,email",
+            "products:id,name,thumbnail,price",
+            "address:id,name,phone,street_address,ward,district,province",
+            "discountCode:id,code,discount",
+        ]);
+
+        return new OrderResource($order);
     }
 
     /**
@@ -94,7 +124,26 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        //
+        if ($request->has("payments")) {
+            $payments = $order->payments ?? [];
+            $payments = array_merge($payments, $request->payments);
+            $order->payments = $payments;
+        }
+
+        if ($request->has("note")) {
+            $order->note = $request->note;
+        }
+
+        $order->save();
+
+        $order->load([
+            "user:id,first_name,last_name,email",
+            "products:id,name,thumbnail,price",
+            "address:id,name,phone,street_address,ward,district,province",
+            "discountCode:id,code,discount",
+        ]);
+
+        return new OrderResource($order);
     }
 
     /**

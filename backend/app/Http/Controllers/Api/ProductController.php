@@ -20,14 +20,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $paginate = request()->query("paginate");
+        $paginate = (int) request()->query("paginate", 15);
+        $page = (int) request()->query("page", 1);
         $search = trim((string) request()->query("search", ""));
         $excludingParam = request()->query("excluding");
         $excluding = $excludingParam ? explode(",", $excludingParam) : [];
 
         $cacheKey = sprintf(
-            "products_index:%s:%s:%s",
-            $paginate ?? "null",
+            "products_index:%s:%s:%s:%s",
+            $paginate,
+            $page,
             $search ?: "_",
             implode("-", $excluding)
         );
@@ -40,8 +42,11 @@ class ProductController extends Controller
                     "categories:id,name,url,thumbnail,parent_id",
                     "brand:id,name,logo",
                 ])
-                ->whereNotIn("id", $excluding)
                 ->orderBy("created_at", "desc");
+
+            if (!empty($excluding)) {
+                $query->whereNotIn("id", $excluding);
+            }
 
             if ($search !== "") {
                 // Chỉ lọc khi có chuỗi search để tránh full table scan không cần thiết

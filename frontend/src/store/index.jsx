@@ -8,6 +8,7 @@ import { flashDealReducer } from "./flashDeals/reducer";
 import { userReducers } from "./users/reducer";
 import { cityReducers } from "./cities/reducer";
 import { discountCodeReducer } from "./discountCodes/reducer";
+import { orderReducer } from "./orders/reducer";
 
 const rootReducer = combineReducers({
   categories: categoryReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   user: userReducers,
   cities: cityReducers,
   codes: discountCodeReducer,
+  orders: orderReducer,
 });
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk));

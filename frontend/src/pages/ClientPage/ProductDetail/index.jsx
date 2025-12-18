@@ -62,7 +62,7 @@ const ProductDetail = () => {
         action: () => {},
       })
     );
-  }, []);
+  }, [dispatch, id]);
 
   React.useEffect(() => {
     if (openDialog) {
@@ -103,7 +103,7 @@ const ProductDetail = () => {
           <Link underline="hover" color="inherit" to="/">
             Trang chủ Test CI CD
           </Link>
-          {product?.categories?.map((item, index) => (
+          {(product?.categories ?? []).map((item, index) => (
             <Link
               underline="hover"
               color="inherit"
@@ -155,7 +155,7 @@ const ProductDetail = () => {
                         },
                       }}
                     >
-                      {product?.images?.map((item, index) => (
+                      {(product?.images ?? []).map((item, index) => (
                         <Avatar
                           key={index}
                           variant="square"
@@ -477,7 +477,7 @@ const ProductDetail = () => {
               >
                 <Typography variant="subtitle1">Sản phẩm xem cùng</Typography>
                 <Stack gap="8px">
-                  {product.recommends?.map((item, index) => (
+                  {(product?.recommends ?? []).map((item, index) => (
                     <Stack
                       key={index}
                       sx={{
@@ -505,7 +505,7 @@ const ProductDetail = () => {
                   Sản phẩm cùng thương hiệu
                 </Typography>
                 <Stack gap="8px">
-                  {product.recommends?.map((item, index) => (
+                  {(product?.recommends ?? []).map((item, index) => (
                     <Stack
                       key={index}
                       sx={{
@@ -519,7 +519,7 @@ const ProductDetail = () => {
                       }}
                     >
                       <Avatar
-                        src={item?.images[0]}
+                        src={item?.images?.[0]}
                         sx={{
                           height: "100px",
                           width: "100px",

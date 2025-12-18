@@ -106,7 +106,7 @@ export const getUser = () => async (dispatch) => {
       dispatch({ type: GET_USER_SUCCESS, payload: data.data });
     })
     .catch((e) => {
-      console.log(e);
+      dispatch({ type: GET_USER_FAILURE, error: e });
     });
 };
 

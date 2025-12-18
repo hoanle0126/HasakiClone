@@ -1,17 +1,14 @@
 import { Icon } from "@iconify/react";
-import { Box, Breadcrumbs, Button, Stack, Typography, useTheme } from "@mui/material";
+import { Box, Button, Stack, Typography, useTheme, Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 import DataGridHeader from "./components/DataGridHeader";
 import DataGridToolbar from "./components/DataGridToolbar";
-import { useNavigate } from "react-router-dom";
-import { MuiTheme } from "@/theme";
 import AdminDefaultLayout from "@/layouts/AdminLayout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCategories } from "@/store/categories/action";
-import getCategoriesByType from "@/Function/getCategoriesByType";
+import { getAllOrders } from "@/store/orders/action";
 
-const hiddenFields = ["id", "__check__", "name", "action"];
+const hiddenFields = ["id", "__check__", "action"];
 
 const getTogglableColumns = (columns) => {
   return columns
@@ -19,21 +16,123 @@ const getTogglableColumns = (columns) => {
     .map((column) => column.field);
 };
 
+// Transform order data từ backend sang format cho DataGrid
+const transformOrderData = (orders) => {
+  return orders.map((order) => ({
+    id: order.id,
+    orderId: `ORD-${String(order.id).padStart(3, "0")}`,
+    customerName: order.user
+      ? `${order.user.first_name || ""} ${order.user.last_name || ""}`.trim()
+      : "N/A",
+    customerEmail: order.user?.email || "N/A",
+    customerPhone: order.address?.phone || "N/A",
+    orderDate: order.created_at,
+    status: order.payments?.status || (order.payments?.type === "online" ? "processing" : "pending"),
+    products: order.products || [],
+    // Giữ nguyên data gốc để dùng trong detail panel
+    _original: order,
+  }));
+};
+
 const OrderPage = () => {
-  const navigate = useNavigate();
+  const navigate = React.useRef(null);
   const [filterButtonEl, setFilterButtonEl] = React.useState(null);
   const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
+  const [expandedRows, setExpandedRows] = React.useState([]);
   const [paginationModel, setPaginationModel] = React.useState({
-    pageSize: 5,
+    pageSize: 10,
     page: 0,
   });
   const dispatch = useDispatch();
-  const { categories, loading } = useSelector((store) => store.categories);
+  const { orders, loading, meta } = useSelector((store) => store.orders);
+  const theme = useTheme();
+
+  const handleRefresh = React.useCallback(() => {
+    dispatch(
+      getAllOrders({
+        paginate: paginationModel.pageSize,
+        page: paginationModel.page + 1,
+      })
+    );
+  }, [dispatch, paginationModel.page, paginationModel.pageSize]);
 
   React.useEffect(() => {
-    dispatch(getAllCategories());
+    handleRefresh();
+  }, [handleRefresh]);
+
+  const getDetailPanelContent = React.useCallback(({ row }) => {
+    const products = row.products || [];
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+          Danh sách sản phẩm - Đơn hàng {row.orderId}
+        </Typography>
+        <TableContainer component={Paper} variant="outlined">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 600 }}>Sản phẩm</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Số lượng</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Đơn giá</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Thành tiền</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {products.map((product) => (
+                <TableRow key={product.id}>
+                  <TableCell>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <Avatar
+                        src={product.thumbnail}
+                        sx={{ width: 50, height: 50, borderRadius: 2 }}
+                        variant="rounded"
+                      >
+                        {product.name?.charAt(0) || "P"}
+                      </Avatar>
+                      <Typography variant="body2">{product.name}</Typography>
+                    </Stack>
+                  </TableCell>
+                  <TableCell align="right">{product.quantity || 0}</TableCell>
+                  <TableCell align="right">
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(product.price || 0)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format((product.price || 0) * (product.quantity || 0))}
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow>
+                <TableCell colSpan={3} align="right" sx={{ fontWeight: 600 }}>
+                  Tổng cộng:
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(
+                    products.reduce(
+                      (sum, product) => sum + (product.price || 0) * (product.quantity || 0),
+                      0
+                    )
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    );
   }, []);
-  const theme = useTheme()
+
+  const getDetailPanelHeight = React.useCallback(() => {
+    return 400;
+  }, []);
 
   return (
     <AdminDefaultLayout
@@ -42,10 +141,10 @@ const OrderPage = () => {
         <Button
           variant="contained"
           color="common"
-          onClick={() => navigate("create")}
-          startIcon={<Icon icon="eva:plus-fill" />}
+          startIcon={<Icon icon="eva:refresh-fill" />}
+          onClick={handleRefresh}
         >
-          {"Create Category"}
+          {"Refresh"}
         </Button>
       }
     >
@@ -56,15 +155,21 @@ const OrderPage = () => {
         onRowSelectionModelChange={(it) => {
           setRowSelectionModel(it);
         }}
-        // rowSelectionModel={rowSelectionModel}
-        rows={categories}
+        rows={transformOrderData(orders)}
+        getRowId={(row) => row.id}
         initialState={{
           sorting: {
-            sortModel: [{ field: "created_at", sort: "desc" }],
+            sortModel: [{ field: "orderDate", sort: "desc" }],
           },
         }}
-        rowHeight={100}
+        rowHeight={80}
         columns={DataGridHeader()}
+        getDetailPanelContent={getDetailPanelContent}
+        getDetailPanelHeight={getDetailPanelHeight}
+        detailPanelExpandedRowIds={expandedRows}
+        onDetailPanelExpandedRowIdsChange={setExpandedRows}
+        rowCount={meta?.total ?? orders?.length ?? 0}
+        paginationMode="server"
         sx={{
           borderRadius: "12px",
           boxShadow: "custom.card",
@@ -80,7 +185,7 @@ const OrderPage = () => {
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        pageSizeOptions={[5, 10, 15]}
+        pageSizeOptions={[10, 25, 50]}
         slots={{
           toolbar: DataGridToolbar,
           columnSortedAscendingIcon: () => (
