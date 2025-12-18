@@ -13,6 +13,8 @@ import { getAllCategories } from "@/store/categories/action";
 import getCategoriesByType from "@/Function/getCategoriesByType";
 import CodeModal from "./CodeModal";
 import { addDiscountCode, getAllCodes } from "@/store/discountCodes/action";
+import socket from "@/socket";
+import { Snackbar, Alert } from "@mui/material";
 
 const hiddenFields = ["id", "__check__", "name", "action"];
 
@@ -34,10 +36,56 @@ const DiscountCodePage = () => {
   });
   const dispatch = useDispatch();
   const { codes, loading } = useSelector((store) => store.codes);
+  const [notification, setNotification] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const handleRefresh = React.useCallback(() => {
+    dispatch(getAllCodes());
+  }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(getAllCodes());
-  }, []);
+    handleRefresh();
+  }, [handleRefresh]);
+
+  // Socket.io integration for real-time discount code updates
+  React.useEffect(() => {
+    const handleDiscountCodesUpdated = (data) => {
+      console.log("🎫 Discount Codes updated:", data);
+
+      // Show notification
+      const actionMessages = {
+        created: `Discount code "${data.discountCode?.code || 'N/A'}" has been created`,
+        updated: `Discount code "${data.discountCode?.code || 'N/A'}" has been updated`,
+        deleted: `Discount code "${data.discountCode?.code || 'N/A'}" has been deleted`,
+      };
+
+      setNotification({
+        open: true,
+        message: actionMessages[data.action] || "Discount codes list updated",
+        severity: data.action === "deleted" ? "warning" : "success",
+      });
+
+      // Refresh discount codes list
+      handleRefresh();
+    };
+
+    socket.on("discount_codes_updated", handleDiscountCodesUpdated);
+
+    return () => {
+      socket.off("discount_codes_updated", handleDiscountCodesUpdated);
+    };
+  }, [dispatch, handleRefresh]);
+
+  // Handle notification close
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setNotification({ ...notification, open: false });
+  };
 
   return (
     <AdminDefaultLayout
@@ -53,6 +101,23 @@ const DiscountCodePage = () => {
         </Button>
       }
     >
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          icon={<Icon icon="solar:bell-bing-bold-duotone" />}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
       <DataGrid
       loading={loading}
         checkboxSelection

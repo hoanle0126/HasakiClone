@@ -1,120 +1,120 @@
-name: Monorepo Deploy (Full Stack + Socket)
+# name: Monorepo Deploy (Full Stack + Socket)
 
-on:
-  push:
-    branches: [ "main" ]
+# on:
+#   push:
+#     branches: [ "main" ]
 
-jobs:
+# jobs:
   # --- JOB 1: BACKEND (Đi trước mở đường - Kéo Code & Setup Laravel) ---
-  deploy-backend:
-    name: 🚀 Deploy Backend & Pull Code
-    runs-on: ubuntu-latest
-    steps:
-    - name: SSH & Deploy Laravel
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          set -e
-          echo "---- 1. DỌN DẸP & PHÁ KHÓA GIT ----"
-          cd /var/www/hasaki
+  # deploy-backend:
+  #   name: 🚀 Deploy Backend & Pull Code
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: SSH & Deploy Laravel
+  #     uses: appleboy/ssh-action@master
+  #     with:
+  #       host: ${{ secrets.HOST }}
+  #       username: ${{ secrets.USERNAME }}
+  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #       script: |
+  #         set -e
+  #         echo "---- 1. DỌN DẸP & PHÁ KHÓA GIT ----"
+  #         cd /var/www/hasaki
           
-          # Xóa mọi loại khóa có thể gây lỗi
-          rm -f .git/index.lock
-          rm -rf .git/refs/remotes/origin/main
+  #         # Xóa mọi loại khóa có thể gây lỗi
+  #         rm -f .git/index.lock
+  #         rm -rf .git/refs/remotes/origin/main
           
-          git config --global --add safe.directory /var/www/hasaki
+  #         git config --global --add safe.directory /var/www/hasaki
           
-          echo "---- 2. KÉO CODE (CHỈ LÀM 1 LẦN TẠI ĐÂY) ----"
-          git fetch --all
-          git reset --hard origin/main
+  #         echo "---- 2. KÉO CODE (CHỈ LÀM 1 LẦN TẠI ĐÂY) ----"
+  #         git fetch --all
+  #         git reset --hard origin/main
           
-          echo "---- 3. CHẠY LARAVEL ----"
-          cd backend
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          php artisan migrate --force
-          php artisan optimize:clear
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
+  #         echo "---- 3. CHẠY LARAVEL ----"
+  #         cd backend
+  #         composer install --no-interaction --prefer-dist --optimize-autoloader
+  #         php artisan migrate --force
+  #         php artisan optimize:clear
+  #         php artisan config:cache
+  #         php artisan route:cache
+  #         php artisan view:cache
           
-          # Cấp quyền storage
-          sudo chown -R www-data:www-data /var/www/hasaki/backend/storage
+  #         # Cấp quyền storage
+  #         sudo chown -R www-data:www-data /var/www/hasaki/backend/storage
           
-          echo "✅ Backend Code Updated!"
+  #         echo "✅ Backend Code Updated!"
 
   # --- JOB 2: SOCKET SERVER (Thêm mới - Chạy ngay sau khi có Code) ---
-  deploy-socket:
-    name: 🔌 Deploy Socket Server
-    runs-on: ubuntu-latest
-    needs: deploy-backend # <--- Đợi Backend kéo code xong là chạy ngay
+  # deploy-socket:
+  #   name: 🔌 Deploy Socket Server
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-backend # <--- Đợi Backend kéo code xong là chạy ngay
     
-    steps:
-    - name: SSH & Restart Socket
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          set -e
-          echo "---- 4. DEPLOY SOCKET SERVER ----"
-          # Di chuyển vào thư mục socket
-          cd /var/www/hasaki/socket
+  #   steps:
+  #   - name: SSH & Restart Socket
+  #     uses: appleboy/ssh-action@master
+  #     with:
+  #       host: ${{ secrets.HOST }}
+  #       username: ${{ secrets.USERNAME }}
+  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #       script: |
+  #         set -e
+  #         echo "---- 4. DEPLOY SOCKET SERVER ----"
+  #         # Di chuyển vào thư mục socket
+  #         cd /var/www/hasaki/socket
           
-          # Cài đặt thư viện (nếu có update package.json)
-          npm install --production
+  #         # Cài đặt thư viện (nếu có update package.json)
+  #         npm install --production
           
-          # Restart PM2
-          # Logic: Thử restart, nếu chưa có process tên 'hasaki-socket' thì tạo mới
-          pm2 restart hasaki-socket || pm2 start server.js --name "hasaki-socket"
+  #         # Restart PM2
+  #         # Logic: Thử restart, nếu chưa có process tên 'hasaki-socket' thì tạo mới
+  #         pm2 restart hasaki-socket || pm2 start server.js --name "hasaki-socket"
           
-          # Lưu trạng thái PM2 để lỡ VPS khởi động lại thì nó tự chạy
-          pm2 save
+  #         # Lưu trạng thái PM2 để lỡ VPS khởi động lại thì nó tự chạy
+  #         pm2 save
           
-          echo "✅ Socket Server Updated & Restarted!"
+  #         echo "✅ Socket Server Updated & Restarted!"
 
   # --- JOB 3: FRONTEND (Chạy song song hoặc sau Backend) ---
-  deploy-frontend:
-    name: 🎨 Build Frontend
-    runs-on: ubuntu-latest
-    needs: deploy-backend # Vẫn đợi Backend xong code
+  # deploy-frontend:
+  #   name: 🎨 Build Frontend
+  #   runs-on: ubuntu-latest
+  #   needs: deploy-backend # Vẫn đợi Backend xong code
     
-    steps:
-    - name: SSH & Build ReactJS
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          set -e
-          echo "---- 5. BUILD FRONTEND ----"
+  #   steps:
+  #   - name: SSH & Build ReactJS
+  #     uses: appleboy/ssh-action@master
+  #     with:
+  #       host: ${{ secrets.HOST }}
+  #       username: ${{ secrets.USERNAME }}
+  #       key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #       script: |
+  #         set -e
+  #         echo "---- 5. BUILD FRONTEND ----"
           
-          cd /var/www/hasaki/frontend
-          npm install
+  #         cd /var/www/hasaki/frontend
+  #         npm install
           
-          # Fix RAM & Build
-          export NODE_OPTIONS="--max-old-space-size=4096"
-          npm run build
+  #         # Fix RAM & Build
+  #         export NODE_OPTIONS="--max-old-space-size=4096"
+  #         npm run build
           
-          # Cấp quyền cho thư mục dist
-          sudo chown -R www-data:www-data /var/www/hasaki/frontend/dist
+  #         # Cấp quyền cho thư mục dist
+  #         sudo chown -R www-data:www-data /var/www/hasaki/frontend/dist
           
-          echo "✅ Frontend Re-built!"
+  #         echo "✅ Frontend Re-built!"
 
   # --- JOB 4: NOTIFY (Báo cáo tổng) ---
-  notify:
-    name: 🔔 Notify n8n
-    runs-on: ubuntu-latest
-    # Đợi cả 3 ông kẹ kia xong mới báo
-    needs: [deploy-backend, deploy-socket, deploy-frontend]
-    if: always()
-    steps:
-      - name: Send Notification
-        run: |
-           curl -X POST "https://n8n.tuantran.io.vn/webhook/deploy-success" \
-           -H "Content-Type: application/json" \
-           -d '{"message": "🚀 Hasaki Update: Full Flow (Backend + Socket + Frontend) hoàn tất!", "author": "${{ github.actor }}"}'
+  # notify:
+  #   name: 🔔 Notify n8n
+  #   runs-on: ubuntu-latest
+  #   # Đợi cả 3 ông kẹ kia xong mới báo
+  #   needs: [deploy-backend, deploy-socket, deploy-frontend]
+  #   if: always()
+  #   steps:
+  #     - name: Send Notification
+  #       run: |
+  #          curl -X POST "https://n8n.tuantran.io.vn/webhook/deploy-success" \
+  #          -H "Content-Type: application/json" \
+  #          -d '{"message": "🚀 Hasaki Update: Full Flow (Backend + Socket + Frontend) hoàn tất!", "author": "${{ github.actor }}"}'

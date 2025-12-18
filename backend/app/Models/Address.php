@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\SyncsToSlaveDatabase;
 use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
+    use SyncsToSlaveDatabase;
     protected $fillable = [
         "name",
         "phone",

@@ -72,12 +72,12 @@ function RenderCustomer(props) {
 function RenderOrderDate(props) {
   const { row } = props;
   const date = row.orderDate ? new Date(row.orderDate) : new Date();
-  const formattedDate = date.toLocaleDateString("vi-VN", {
+  const formattedDate = date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
   });
-  const formattedTime = date.toLocaleTimeString("vi-VN", {
+  const formattedTime = date.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
   });
@@ -125,15 +125,15 @@ function RenderStatus(props) {
   const getStatusLabel = (status) => {
     switch (status) {
       case "pending":
-        return "Chờ xử lý";
+        return "Pending";
       case "processing":
-        return "Đang xử lý";
+        return "Processing";
       case "shipped":
-        return "Đã giao hàng";
+        return "Shipped";
       case "completed":
-        return "Hoàn thành";
+        return "Completed";
       case "cancelled":
-        return "Đã hủy";
+        return "Cancelled";
       default:
         return status;
     }
@@ -201,7 +201,7 @@ function RenderAction(props) {
           <MenuItem onClick={() => navigate("/admin/orders/" + row.id)}>
             <Icon icon="solar:eye-bold" />
             <Typography variant="body2" sx={{ ml: 1 }}>
-              Xem chi tiết
+              View Details
             </Typography>
           </MenuItem>
           <MenuItem>
@@ -210,7 +210,7 @@ function RenderAction(props) {
               color={theme.palette.primary.main}
             />
             <Typography variant="body2" sx={{ ml: 1 }}>
-              Xử lý đơn hàng
+              Process Order
             </Typography>
           </MenuItem>
         </MenuList>
@@ -223,26 +223,26 @@ const DataGridHeader = () => {
   return [
     {
       field: "orderId",
-      headerName: "Mã đơn hàng",
+      headerName: "Order ID",
       width: 180,
       renderCell: RenderOrderId,
     },
     {
       field: "customer",
-      headerName: "Khách hàng",
+      headerName: "Customer",
       flex: 1,
       minWidth: 250,
       renderCell: RenderCustomer,
     },
     {
       field: "orderDate",
-      headerName: "Ngày đặt",
+      headerName: "Order Date",
       width: 150,
       renderCell: RenderOrderDate,
     },
     {
       field: "status",
-      headerName: "Trạng thái",
+      headerName: "Status",
       width: 150,
       renderCell: RenderStatus,
     },

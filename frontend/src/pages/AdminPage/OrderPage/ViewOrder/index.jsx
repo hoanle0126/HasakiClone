@@ -77,15 +77,15 @@ const ViewOrderPage = () => {
 
   if (loading || !order || !order.id) {
     return (
-      <AdminDefaultLayout title="Chi tiết đơn hàng">
+      <AdminDefaultLayout title="Order Details">
         <Box sx={{ p: 3, textAlign: "center" }}>
-          <Typography>Đang tải...</Typography>
+          <Typography>Loading...</Typography>
         </Box>
       </AdminDefaultLayout>
     );
   }
 
-  // Transform order data từ backend
+  // Transform order data from backend
   const orderData = {
     id: order.id,
     orderId: `ORD-${String(order.id).padStart(3, "0")}`,
@@ -99,8 +99,8 @@ const ViewOrderPage = () => {
     paymentMethod:
       order.payments?.name ||
       (order.payments?.type === "online"
-        ? "Thanh toán online"
-        : "Thanh toán khi nhận hàng"),
+        ? "Online Payment"
+        : "Cash on Delivery"),
     paymentInfo:
       order.payments?.type === "online" ? "**** **** **** 5678" : "COD",
     shippingAddress: order.address
@@ -131,7 +131,7 @@ const ViewOrderPage = () => {
       {
         status: order.payments?.status === "completed" ? "completed" : "processing",
         date: order.created_at,
-        note: "Đơn hàng được tạo",
+        note: "Order created",
       },
     ],
   };
@@ -142,7 +142,7 @@ const ViewOrderPage = () => {
   const formatDateTime = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
-    return date.toLocaleString("vi-VN", {
+    return date.toLocaleString("en-US", {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -172,17 +172,17 @@ const ViewOrderPage = () => {
   const getStatusLabel = (status) => {
     switch (status) {
       case "processing":
-        return "Đang xử lý";
+        return "Processing";
       case "completed":
-        return "Hoàn thành";
+        return "Completed";
       default:
-        return "Đang xử lý";
+        return "Processing";
     }
   };
 
   return (
     <AdminDefaultLayout
-      title="Chi tiết đơn hàng"
+      title="Order Details"
       action={
         <Stack direction="row" gap="12px" alignItems="center">
           <Chip
@@ -197,7 +197,7 @@ const ViewOrderPage = () => {
               color="common"
               onClick={handleProcessOrder}
             >
-              Xử lý đơn hàng
+              Process Order
             </Button>
           )}
         </Stack>
@@ -217,7 +217,7 @@ const ViewOrderPage = () => {
           </IconButton>
           <Stack gap="4px">
             <Typography variant="h5" color="text.primary">
-              Đơn hàng {orderData.orderId}
+              Order {orderData.orderId}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               {formatDateTime(orderData.orderDate)}
@@ -246,23 +246,23 @@ const ViewOrderPage = () => {
                   }}
                 >
                   <Typography variant="h6" color="text.primary" sx={{ mb: 2 }}>
-                    Chi tiết đơn hàng
+                    Order Details
                   </Typography>
                   <TableContainer>
                     <Table>
                       <TableHead>
                         <TableRow>
                           <TableCell sx={{ fontWeight: 600 }}>
-                            Sản phẩm
+                            Product
                           </TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            Số lượng
+                            Quantity
                           </TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            Đơn giá
+                            Unit Price
                           </TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            Thành tiền
+                            Total
                           </TableCell>
                         </TableRow>
                       </TableHead>
@@ -311,7 +311,7 @@ const ViewOrderPage = () => {
                   <Stack spacing={1}>
                     <Stack direction="row" justifyContent="space-between">
                       <Typography variant="body2" color="text.secondary">
-                        Tạm tính:
+                        Subtotal:
                       </Typography>
                       <Typography variant="body2" color="text.primary">
                         {formatCurrency(orderData.subtotal)}
@@ -320,7 +320,7 @@ const ViewOrderPage = () => {
                     {orderData.discount > 0 && (
                       <Stack direction="row" justifyContent="space-between">
                         <Typography variant="body2" color="text.secondary">
-                          Giảm giá:
+                          Discount:
                         </Typography>
                         <Typography variant="body2" color="success.main">
                           -{formatCurrency(orderData.discount)}
@@ -329,7 +329,7 @@ const ViewOrderPage = () => {
                     )}
                     <Stack direction="row" justifyContent="space-between">
                       <Typography variant="body2" color="text.secondary">
-                        Phí vận chuyển:
+                        Shipping Fee:
                       </Typography>
                       <Typography variant="body2" color="text.primary">
                         {formatCurrency(orderData.shippingFee)}
@@ -338,7 +338,7 @@ const ViewOrderPage = () => {
                     <Divider />
                     <Stack direction="row" justifyContent="space-between">
                       <Typography variant="h6" color="text.primary">
-                        Tổng cộng:
+                        Total:
                       </Typography>
                       <Typography variant="h6" color="primary.main">
                         {formatCurrency(orderData.total)}
@@ -365,7 +365,7 @@ const ViewOrderPage = () => {
                   }}
                 >
                   <Typography variant="h6" color="text.primary" sx={{ mb: 2 }}>
-                    Lịch sử đơn hàng
+                    Order History
                   </Typography>
                   <Timeline
                     sx={{
@@ -449,7 +449,7 @@ const ViewOrderPage = () => {
                   }}
                 >
                   <Typography variant="h6" color="text.primary">
-                    Thông tin khách hàng
+                    Customer Information
                   </Typography>
                   <Stack direction="row" gap="12px" alignItems="center">
                     <Avatar
@@ -485,7 +485,7 @@ const ViewOrderPage = () => {
                   }}
                 >
                   <Typography variant="h6" color="text.primary">
-                    Thông tin giao hàng
+                    Shipping Information
                   </Typography>
                   <Stack spacing={1.5}>
                     <Stack>
@@ -494,7 +494,7 @@ const ViewOrderPage = () => {
                         color="text.secondary"
                         sx={{ mb: 0.5 }}
                       >
-                        Địa chỉ:
+                        Address:
                       </Typography>
                       <Typography variant="body2" color="text.primary">
                         {orderData.shippingAddress}
@@ -506,7 +506,7 @@ const ViewOrderPage = () => {
                         color="text.secondary"
                         sx={{ mb: 0.5 }}
                       >
-                        Số điện thoại:
+                        Phone:
                       </Typography>
                       <Typography variant="body2" color="text.primary">
                         {orderData.shippingPhone}
@@ -518,7 +518,7 @@ const ViewOrderPage = () => {
                         color="text.secondary"
                         sx={{ mb: 0.5 }}
                       >
-                        Phương thức vận chuyển:
+                        Shipping Method:
                       </Typography>
                       <Typography variant="body2" color="text.primary">
                         {orderData.shippingMethod}
@@ -531,7 +531,7 @@ const ViewOrderPage = () => {
                           color="text.secondary"
                           sx={{ mb: 0.5 }}
                         >
-                          Mã vận đơn:
+                          Tracking Number:
                         </Typography>
                         <Typography
                           variant="body2"
@@ -556,7 +556,7 @@ const ViewOrderPage = () => {
                   }}
                 >
                   <Typography variant="h6" color="text.primary">
-                    Thông tin thanh toán
+                    Payment Information
                   </Typography>
                   <Stack spacing={1.5}>
                     <Stack>
@@ -565,7 +565,7 @@ const ViewOrderPage = () => {
                         color="text.secondary"
                         sx={{ mb: 0.5 }}
                       >
-                        Phương thức:
+                        Method:
                       </Typography>
                       <Typography variant="body2" color="text.primary">
                         {orderData.paymentMethod}

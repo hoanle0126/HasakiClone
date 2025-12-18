@@ -8,6 +8,8 @@ use App\Models\HotDeal;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class HotDealController extends Controller
@@ -60,6 +62,25 @@ class HotDealController extends Controller
         }
 
         Cache::forget("hot_deals:all"); // Làm mới cache sau khi tạo
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-hot-deals', [
+                'json' => [
+                    'action' => 'created',
+                    'hotDeal' => [
+                        'id' => $hotDeal->id,
+                        'name' => $hotDeal->name,
+                        'created_at' => $hotDeal->created_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Hot Deal notification sent to socket server: Hot Deal #' . $hotDeal->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send hot deal notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 
@@ -103,6 +124,25 @@ class HotDealController extends Controller
         }
 
         Cache::forget("hot_deals:all"); // Làm mới cache sau khi cập nhật
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-hot-deals', [
+                'json' => [
+                    'action' => 'updated',
+                    'hotDeal' => [
+                        'id' => $hotDeal->id,
+                        'name' => $hotDeal->name,
+                        'updated_at' => $hotDeal->updated_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Hot Deal notification sent to socket server: Hot Deal #' . $hotDeal->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send hot deal notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 
@@ -111,9 +151,29 @@ class HotDealController extends Controller
      */
     public function destroy(HotDeal $hotDeal)
     {
+        $hotDealId = $hotDeal->id;
+        $hotDealName = $hotDeal->name;
         $hotDeal->delete();
 
         Cache::forget("hot_deals:all"); // Làm mới cache sau khi xóa
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-hot-deals', [
+                'json' => [
+                    'action' => 'deleted',
+                    'hotDeal' => [
+                        'id' => $hotDealId,
+                        'name' => $hotDealName,
+                    ]
+                ]
+            ]);
+            Log::info('Hot Deal notification sent to socket server: Hot Deal #' . $hotDealId . ' deleted');
+        } catch (\Throwable $th) {
+            Log::error('Failed to send hot deal notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 }

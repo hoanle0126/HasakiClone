@@ -6,6 +6,8 @@ use App\Http\Resources\BrandResource;
 use App\Models\Brand;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class BrandController extends Controller
@@ -52,7 +54,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        Brand::create([
+        $brand = Brand::create([
             "name" => $request->name,
             "description" => $request->description,
             "thumbnail" => $request->thumbnail,
@@ -61,6 +63,29 @@ class BrandController extends Controller
         ]);
 
         Cache::flush();
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-brands', [
+                'json' => [
+                    'action' => 'created',
+                    'brand' => [
+                        'id' => $brand->id,
+                        'name' => $brand->name,
+                        'url' => $brand->url,
+                        'thumbnail' => $brand->thumbnail,
+                        'logo' => $brand->logo,
+                        'banner' => $brand->banner,
+                        'created_at' => $brand->created_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Brand notification sent to socket server: Brand #' . $brand->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send brand notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 
@@ -120,6 +145,29 @@ class BrandController extends Controller
         ]);
 
         Cache::flush();
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-brands', [
+                'json' => [
+                    'action' => 'updated',
+                    'brand' => [
+                        'id' => $brand->id,
+                        'name' => $brand->name,
+                        'url' => $brand->url,
+                        'thumbnail' => $brand->thumbnail,
+                        'logo' => $brand->logo,
+                        'banner' => $brand->banner,
+                        'updated_at' => $brand->updated_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Brand notification sent to socket server: Brand #' . $brand->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send brand notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 
@@ -128,9 +176,29 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
+        $brandId = $brand->id;
+        $brandName = $brand->name;
         $brand->delete();
 
         Cache::flush();
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-brands', [
+                'json' => [
+                    'action' => 'deleted',
+                    'brand' => [
+                        'id' => $brandId,
+                        'name' => $brandName,
+                    ]
+                ]
+            ]);
+            Log::info('Brand notification sent to socket server: Brand #' . $brandId . ' deleted');
+        } catch (\Throwable $th) {
+            Log::error('Failed to send brand notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 }

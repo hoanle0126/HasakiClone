@@ -17,6 +17,8 @@ import AdminDefaultLayout from "@/layouts/AdminLayout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "@/store/categories/action";
 import getCategoriesByType from "@/Function/getCategoriesByType";
+import socket from "@/socket";
+import { Snackbar, Alert } from "@mui/material";
 
 const hiddenFields = ["id", "__check__", "name", "action"];
 
@@ -37,10 +39,56 @@ const CategoriesPage = () => {
   });
   const dispatch = useDispatch();
   const { categories, loading } = useSelector((store) => store.categories);
+  const [notification, setNotification] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const handleRefresh = React.useCallback(() => {
+    dispatch(getAllCategories());
+  }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(getAllCategories());
-  }, []);
+    handleRefresh();
+  }, [handleRefresh]);
+
+  // Socket.io integration for real-time category updates
+  React.useEffect(() => {
+    const handleCategoriesUpdated = (data) => {
+      console.log("📁 Categories updated:", data);
+
+      // Show notification
+      const actionMessages = {
+        created: `Category "${data.category?.name || 'N/A'}" has been created`,
+        updated: `Category "${data.category?.name || 'N/A'}" has been updated`,
+        deleted: `Category "${data.category?.name || 'N/A'}" has been deleted`,
+      };
+
+      setNotification({
+        open: true,
+        message: actionMessages[data.action] || "Categories list updated",
+        severity: data.action === "deleted" ? "warning" : "success",
+      });
+
+      // Refresh categories list
+      handleRefresh();
+    };
+
+    socket.on("categories_updated", handleCategoriesUpdated);
+
+    return () => {
+      socket.off("categories_updated", handleCategoriesUpdated);
+    };
+  }, [dispatch, handleRefresh]);
+
+  // Handle notification close
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setNotification({ ...notification, open: false });
+  };
 
   return (
     <AdminDefaultLayout
@@ -56,6 +104,23 @@ const CategoriesPage = () => {
         </Button>
       }
     >
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          icon={<Icon icon="solar:bell-bing-bold-duotone" />}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
       <DataGrid
         loading={loading}
         checkboxSelection

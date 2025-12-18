@@ -8,6 +8,8 @@ use App\Models\Categories;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -54,6 +56,28 @@ class CategoriesController extends Controller
         Cache::forget("categories:create");
         Cache::forget("categories:children");
         // Cache chi tiết theo slug/page sẽ tự hết hạn; dùng flush nhỏ này cho các key chính
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-categories', [
+                'json' => [
+                    'action' => 'created',
+                    'category' => [
+                        'id' => $category->id,
+                        'name' => $category->name,
+                        'url' => $category->url,
+                        'thumbnail' => $category->thumbnail,
+                        'type' => $category->type,
+                        'parent_id' => $category->parent_id,
+                        'created_at' => $category->created_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Category notification sent to socket server: Category #' . $category->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send category notification to socket: ' . $th->getMessage());
+        }
 
         // // Đệ quy thêm children nếu có
         // $children = $request['children'] ?? [];
@@ -114,6 +138,28 @@ class CategoriesController extends Controller
         Cache::forget("categories:create");
         Cache::forget("categories:children");
 
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-categories', [
+                'json' => [
+                    'action' => 'updated',
+                    'category' => [
+                        'id' => $category->id,
+                        'name' => $category->name,
+                        'url' => $category->url,
+                        'thumbnail' => $category->thumbnail,
+                        'type' => $category->type,
+                        'parent_id' => $category->parent_id,
+                        'updated_at' => $category->updated_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Category notification sent to socket server: Category #' . $category->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send category notification to socket: ' . $th->getMessage());
+        }
+
         // // Đệ quy thêm children nếu có
         $children = $request['children'] ?? [];
         if (!empty($children)) {
@@ -138,12 +184,32 @@ class CategoriesController extends Controller
     public function destroy($categories)
     {
         $category = Categories::where("id", $categories)->first();
+        $categoryId = $category->id;
+        $categoryName = $category->name;
         $category->delete();
         $this->deleteChildren($category);
 
         Cache::forget("categories:index");
         Cache::forget("categories:create");
         Cache::forget("categories:children");
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-categories', [
+                'json' => [
+                    'action' => 'deleted',
+                    'category' => [
+                        'id' => $categoryId,
+                        'name' => $categoryName,
+                    ]
+                ]
+            ]);
+            Log::info('Category notification sent to socket server: Category #' . $categoryId . ' deleted');
+        } catch (\Throwable $th) {
+            Log::error('Failed to send category notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 

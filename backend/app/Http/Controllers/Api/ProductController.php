@@ -9,6 +9,7 @@ use App\Models\Categories;
 use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -84,6 +85,27 @@ class ProductController extends Controller
                     'url' => $product['url']
                 ]
             ]);
+
+            // Gửi thông báo socket cho admin
+            try {
+                $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-products', [
+                    'json' => [
+                        'action' => 'created',
+                        'product' => [
+                            'id' => $product->id,
+                            'name' => $product->name,
+                            'url' => $product->url,
+                            'thumbnail' => $product->thumbnail,
+                            'price' => $product->price,
+                            'created_at' => $product->created_at->toISOString(),
+                        ]
+                    ]
+                ]);
+                Log::info('Product notification sent to socket server: Product #' . $product->id);
+            } catch (\Throwable $th) {
+                Log::error('Failed to send product notification to socket: ' . $th->getMessage());
+            }
+
             // Nếu thành công, trả về index
             return $this->index();
                 
@@ -120,6 +142,28 @@ class ProductController extends Controller
     {
         $product->update($request->all());
         Cache::flush(); // Làm mới cache sau khi cập nhật
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-products', [
+                'json' => [
+                    'action' => 'updated',
+                    'product' => [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'url' => $product->url,
+                        'thumbnail' => $product->thumbnail,
+                        'price' => $product->price,
+                        'updated_at' => $product->updated_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Product notification sent to socket server: Product #' . $product->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send product notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 
@@ -128,8 +172,28 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $productId = $product->id;
+        $productName = $product->name;
         $product->delete();
         Cache::flush(); // Làm mới cache sau khi xóa
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-products', [
+                'json' => [
+                    'action' => 'deleted',
+                    'product' => [
+                        'id' => $productId,
+                        'name' => $productName,
+                    ]
+                ]
+            ]);
+            Log::info('Product notification sent to socket server: Product #' . $productId . ' deleted');
+        } catch (\Throwable $th) {
+            Log::error('Failed to send product notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 }

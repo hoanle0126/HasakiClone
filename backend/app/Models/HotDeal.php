@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\SyncsToSlaveDatabase;
 use Illuminate\Database\Eloquent\Model;
 
 class HotDeal extends Model
 {
+    use SyncsToSlaveDatabase;
     protected $fillable = [
         "name",
         "banners",

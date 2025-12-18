@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\SyncsToSlaveDatabase;
+use App\Traits\HasBelongsToManyWithSync;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    use SyncsToSlaveDatabase, HasBelongsToManyWithSync;
     protected $fillable = [
         "user_id",
         "payments",
@@ -36,6 +39,7 @@ class Order extends Model
 
     public function Products()
     {
+        // Tự động sync sang slave database nhờ trait HasBelongsToManyWithSync
         return $this->belongsToMany(Product::class)->withPivot("quantity");
     }
 }

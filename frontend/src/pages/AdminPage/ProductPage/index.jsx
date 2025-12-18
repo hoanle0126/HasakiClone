@@ -9,6 +9,8 @@ import { MuiTheme } from "@/theme";
 import AdminDefaultLayout from "@/layouts/AdminLayout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "@/store/products/action";
+import socket from "@/socket";
+import { Snackbar, Alert } from "@mui/material";
 
 const hiddenFields = ["id", "__check__", "name", "action"];
 
@@ -28,6 +30,11 @@ const ProductPage = () => {
   });
   const dispatch = useDispatch();
   const { products, loading, meta } = useSelector((store) => store.products);
+  const [notification, setNotification] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
 
   const handleRefresh = React.useCallback(() => {
     dispatch(
@@ -41,6 +48,48 @@ const ProductPage = () => {
   React.useEffect(() => {
     handleRefresh();
   }, [handleRefresh]);
+
+  // Socket.io integration for real-time product updates
+  React.useEffect(() => {
+    const handleProductsUpdated = (data) => {
+      console.log("🛍️ Products updated:", data);
+
+      // Show notification
+      const actionMessages = {
+        created: `Product "${data.product?.name || 'N/A'}" has been created`,
+        updated: `Product "${data.product?.name || 'N/A'}" has been updated`,
+        deleted: `Product "${data.product?.name || 'N/A'}" has been deleted`,
+      };
+
+      setNotification({
+        open: true,
+        message: actionMessages[data.action] || "Products list updated",
+        severity: data.action === "deleted" ? "warning" : "success",
+      });
+
+      // Refresh products list
+      if (paginationModel.page === 0) {
+        handleRefresh();
+      } else {
+        handleRefresh();
+      }
+    };
+
+    socket.on("products_updated", handleProductsUpdated);
+
+    return () => {
+      socket.off("products_updated", handleProductsUpdated);
+    };
+  }, [dispatch, paginationModel.page, paginationModel.pageSize, handleRefresh]);
+
+  // Handle notification close
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setNotification({ ...notification, open: false });
+  };
+
   const theme = useTheme();
 
   return (
@@ -57,6 +106,23 @@ const ProductPage = () => {
         </Button>
       }
     >
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          icon={<Icon icon="solar:bell-bing-bold-duotone" />}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
       <DataGrid
         checkboxSelection
         disableRowSelectionOnClick

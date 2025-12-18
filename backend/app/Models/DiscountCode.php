@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\SyncsToSlaveDatabase;
+use App\Traits\HasBelongsToManyWithSync;
 use Illuminate\Database\Eloquent\Model;
 
 class DiscountCode extends Model
 {
+    use SyncsToSlaveDatabase, HasBelongsToManyWithSync;
     protected $fillable = [
         "name",
         "discount",

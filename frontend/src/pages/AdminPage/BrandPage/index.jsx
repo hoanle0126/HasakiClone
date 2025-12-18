@@ -17,6 +17,8 @@ import AdminDefaultLayout from "@/layouts/AdminLayout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "@/store/categories/action";
 import { getAllBrands } from "@/store/brands/action";
+import socket from "@/socket";
+import { Snackbar, Alert } from "@mui/material";
 
 const hiddenFields = ["id", "__check__", "name", "action"];
 
@@ -37,14 +39,60 @@ const BrandPage = () => {
   });
   const dispatch = useDispatch();
   const { brands, loading } = useSelector((store) => store.brands);
+  const [notification, setNotification] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
 
-  React.useEffect(() => {
+  const handleRefresh = React.useCallback(() => {
     dispatch(
       getAllBrands({
         onSuccess: () => {},
       })
     );
-  }, []);
+  }, [dispatch]);
+
+  React.useEffect(() => {
+    handleRefresh();
+  }, [handleRefresh]);
+
+  // Socket.io integration for real-time brand updates
+  React.useEffect(() => {
+    const handleBrandsUpdated = (data) => {
+      console.log("🏷️ Brands updated:", data);
+
+      // Show notification
+      const actionMessages = {
+        created: `Brand "${data.brand?.name || 'N/A'}" has been created`,
+        updated: `Brand "${data.brand?.name || 'N/A'}" has been updated`,
+        deleted: `Brand "${data.brand?.name || 'N/A'}" has been deleted`,
+      };
+
+      setNotification({
+        open: true,
+        message: actionMessages[data.action] || "Brands list updated",
+        severity: data.action === "deleted" ? "warning" : "success",
+      });
+
+      // Refresh brands list
+      handleRefresh();
+    };
+
+    socket.on("brands_updated", handleBrandsUpdated);
+
+    return () => {
+      socket.off("brands_updated", handleBrandsUpdated);
+    };
+  }, [dispatch, handleRefresh]);
+
+  // Handle notification close
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setNotification({ ...notification, open: false });
+  };
 
   return (
     <AdminDefaultLayout
@@ -60,6 +108,23 @@ const BrandPage = () => {
         </Button>
       }
     >
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          icon={<Icon icon="solar:bell-bing-bold-duotone" />}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
       <DataGrid
         loading={loading}
         checkboxSelection

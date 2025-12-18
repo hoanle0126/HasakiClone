@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\SyncsToSlaveDatabase;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
 class Categories extends Model
 {
+    use SyncsToSlaveDatabase;
     protected $fillable = [
         "name",
         "thumbnail",

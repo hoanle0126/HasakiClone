@@ -7,6 +7,8 @@ use App\Http\Resources\DiscountCodeResource;
 use App\Models\DiscountCode;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class DiscountCodeController extends Controller
@@ -56,6 +58,26 @@ class DiscountCodeController extends Controller
 
         Cache::forget("discount_codes:all"); // Làm mới cache sau khi tạo
 
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-discount-codes', [
+                'json' => [
+                    'action' => 'created',
+                    'discountCode' => [
+                        'id' => $code->id,
+                        'code' => $code->code,
+                        'name' => $code->name,
+                        'discount' => $code->discount,
+                        'created_at' => $code->created_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Discount Code notification sent to socket server: Discount Code #' . $code->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send discount code notification to socket: ' . $th->getMessage());
+        }
+
         return DiscountCodeResource::collection(
             DiscountCode::with(["products", "brands"])->get()
         );
@@ -101,6 +123,26 @@ class DiscountCodeController extends Controller
 
         Cache::forget("discount_codes:all"); // Làm mới cache sau khi cập nhật
 
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-discount-codes', [
+                'json' => [
+                    'action' => 'updated',
+                    'discountCode' => [
+                        'id' => $discountCode->id,
+                        'code' => $discountCode->code,
+                        'name' => $discountCode->name,
+                        'discount' => $discountCode->discount,
+                        'updated_at' => $discountCode->updated_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Discount Code notification sent to socket server: Discount Code #' . $discountCode->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send discount code notification to socket: ' . $th->getMessage());
+        }
+
         return DiscountCodeResource::collection(
             DiscountCode::with(["products", "brands"])->get()
         );
@@ -111,9 +153,29 @@ class DiscountCodeController extends Controller
      */
     public function destroy(DiscountCode $discountCode)
     {
+        $discountCodeId = $discountCode->id;
+        $discountCodeCode = $discountCode->code;
         $discountCode->delete();
 
         Cache::forget("discount_codes:all"); // Làm mới cache sau khi xóa
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-discount-codes', [
+                'json' => [
+                    'action' => 'deleted',
+                    'discountCode' => [
+                        'id' => $discountCodeId,
+                        'code' => $discountCodeCode,
+                    ]
+                ]
+            ]);
+            Log::info('Discount Code notification sent to socket server: Discount Code #' . $discountCodeId . ' deleted');
+        } catch (\Throwable $th) {
+            Log::error('Failed to send discount code notification to socket: ' . $th->getMessage());
+        }
+
         return $this->index();
     }
 }

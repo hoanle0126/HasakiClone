@@ -18,6 +18,8 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { getFlashDeals, updateFlashDeals } from "@/store/flashDeals/action";
 import { formatCurrency } from "@/Function/formatCurrency";
+import socket from "@/socket";
+import { Snackbar, Alert } from "@mui/material";
 
 const FlashDealsPage = () => {
   const [deal, setDeal] = React.useState({
@@ -27,17 +29,74 @@ const FlashDealsPage = () => {
   const [openProductModal, setOpenProductModal] = React.useState(false);
   const dispatch = useDispatch();
   const { flashDeal, loading } = useSelector((store) => store.flashDeal);
+  const [notification, setNotification] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const handleRefresh = React.useCallback(() => {
+    dispatch(getFlashDeals());
+  }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(getFlashDeals());
-  }, []);
+    handleRefresh();
+  }, [handleRefresh]);
 
   React.useEffect(() => {
     setDeal(flashDeal);
   }, [loading]);
 
+  // Socket.io integration for real-time flash deals updates
+  React.useEffect(() => {
+    const handleFlashDealsUpdated = (data) => {
+      console.log("⚡ Flash Deals updated:", data);
+
+      // Show notification
+      setNotification({
+        open: true,
+        message: "Flash deal has been updated",
+        severity: "success",
+      });
+
+      // Refresh flash deals
+      handleRefresh();
+    };
+
+    socket.on("flash_deals_updated", handleFlashDealsUpdated);
+
+    return () => {
+      socket.off("flash_deals_updated", handleFlashDealsUpdated);
+    };
+  }, [dispatch, handleRefresh]);
+
+  // Handle notification close
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setNotification({ ...notification, open: false });
+  };
+
   return (
     <AdminDefaultLayout title="Flash Deals">
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          icon={<Icon icon="solar:bell-bing-bold-duotone" />}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
       <Stack
         alignItems="center"
         justifyContent="center"

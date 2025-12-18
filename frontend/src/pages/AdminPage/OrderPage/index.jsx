@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Box, Button, Stack, Typography, useTheme, Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Box, Button, Stack, Typography, useTheme, Avatar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Snackbar, Alert } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React from "react";
 import DataGridHeader from "./components/DataGridHeader";
@@ -7,6 +7,7 @@ import DataGridToolbar from "./components/DataGridToolbar";
 import AdminDefaultLayout from "@/layouts/AdminLayout/DefaultLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrders } from "@/store/orders/action";
+import socket from "@/socket";
 
 const hiddenFields = ["id", "__check__", "action"];
 
@@ -16,7 +17,7 @@ const getTogglableColumns = (columns) => {
     .map((column) => column.field);
 };
 
-// Transform order data từ backend sang format cho DataGrid
+// Transform order data from backend to DataGrid format
 const transformOrderData = (orders) => {
   return orders.map((order) => ({
     id: order.id,
@@ -29,7 +30,7 @@ const transformOrderData = (orders) => {
     orderDate: order.created_at,
     status: order.payments?.status || (order.payments?.type === "online" ? "processing" : "pending"),
     products: order.products || [],
-    // Giữ nguyên data gốc để dùng trong detail panel
+    // Keep original data for use in detail panel
     _original: order,
   }));
 };
@@ -42,6 +43,11 @@ const OrderPage = () => {
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: 10,
     page: 0,
+  });
+  const [notification, setNotification] = React.useState({
+    open: false,
+    message: "",
+    severity: "info",
   });
   const dispatch = useDispatch();
   const { orders, loading, meta } = useSelector((store) => store.orders);
@@ -60,21 +66,79 @@ const OrderPage = () => {
     handleRefresh();
   }, [handleRefresh]);
 
+  // Socket.io integration for real-time order updates
+  React.useEffect(() => {
+    // Listen for new order notifications
+    const handleNewOrder = (data) => {
+      console.log("📦 New order received:", data);
+      
+      // Show notification
+      setNotification({
+        open: true,
+        message: data.message || `New order #${data.order?.id || data.order?.orderId || 'N/A'} received!`,
+        severity: "success",
+      });
+
+      // Refresh orders list - if on first page, refresh to show new order
+      // Otherwise, just refresh current page
+      if (paginationModel.page === 0) {
+        // If on first page, refresh to show new order at top
+        handleRefresh();
+      } else {
+        // If on other pages, option to refresh or show notification only
+        // For now, we'll refresh anyway
+        handleRefresh();
+      }
+    };
+
+    // Listen for order updates (general)
+    const handleOrdersUpdated = (data) => {
+      console.log("📋 Orders list updated:", data);
+      
+      // Refresh the orders list
+      handleRefresh();
+    };
+
+    // Socket connection setup
+    socket.on("connect", () => {
+      console.log("✅ Connected to socket server:", socket.id);
+    });
+
+    // Listen for socket events
+    socket.on("new_order", handleNewOrder);
+    socket.on("orders_updated", handleOrdersUpdated);
+
+    // Cleanup on unmount
+    return () => {
+      socket.off("new_order", handleNewOrder);
+      socket.off("orders_updated", handleOrdersUpdated);
+      socket.off("connect");
+    };
+  }, [handleRefresh, paginationModel.page]);
+
+  // Handle notification close
+  const handleCloseNotification = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setNotification({ ...notification, open: false });
+  };
+
   const getDetailPanelContent = React.useCallback(({ row }) => {
     const products = row.products || [];
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
-          Danh sách sản phẩm - Đơn hàng {row.orderId}
+          Product List - Order {row.orderId}
         </Typography>
         <TableContainer component={Paper} variant="outlined">
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Sản phẩm</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>Số lượng</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>Đơn giá</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>Thành tiền</TableCell>
+                <TableCell sx={{ fontWeight: 600 }}>Product</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Quantity</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Unit Price</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600 }}>Total</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -109,7 +173,7 @@ const OrderPage = () => {
               ))}
               <TableRow>
                 <TableCell colSpan={3} align="right" sx={{ fontWeight: 600 }}>
-                  Tổng cộng:
+                  Total:
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 600 }}>
                   {new Intl.NumberFormat("vi-VN", {
@@ -148,6 +212,24 @@ const OrderPage = () => {
         </Button>
       }
     >
+      {/* Notification Snackbar */}
+      <Snackbar
+        open={notification.open}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+          icon={<Icon icon="solar:bell-bing-bold-duotone" />}
+        >
+          {notification.message}
+        </Alert>
+      </Snackbar>
+
       <DataGrid
         loading={loading}
         checkboxSelection

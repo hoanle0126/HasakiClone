@@ -8,6 +8,8 @@ use App\Models\FlashDeal;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class FlashDealController extends Controller
@@ -59,6 +61,25 @@ class FlashDealController extends Controller
         }
 
         Cache::forget("flash_deal:first"); // Làm mới cache sau khi cập nhật
+
+        // Gửi thông báo socket cho admin
+        try {
+            $client = new Client(['timeout' => 2.0]);
+            $client->post(env('SOCKET_URL', 'http://localhost:3001') . '/notify-flash-deals', [
+                'json' => [
+                    'action' => 'updated',
+                    'flashDeal' => [
+                        'id' => $flashDeal->id,
+                        'start_time' => $flashDeal->start_time ? Carbon::parse($flashDeal->start_time)->toISOString() : null,
+                        'end_time' => $flashDeal->end_time ? Carbon::parse($flashDeal->end_time)->toISOString() : null,
+                        'updated_at' => $flashDeal->updated_at->toISOString(),
+                    ]
+                ]
+            ]);
+            Log::info('Flash Deal notification sent to socket server: Flash Deal #' . $flashDeal->id);
+        } catch (\Throwable $th) {
+            Log::error('Failed to send flash deal notification to socket: ' . $th->getMessage());
+        }
 
         return new FlashDealResource(FlashDeal::with([
             "products.reviews",

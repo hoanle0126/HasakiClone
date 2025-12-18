@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\SyncsToSlaveDatabase;
+use App\Traits\HasBelongsToManyWithSync;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
 class Product extends Model
 {
+    use SyncsToSlaveDatabase, HasBelongsToManyWithSync;
     protected $fillable = [
         "name",
         "description",

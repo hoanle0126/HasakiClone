@@ -408,7 +408,7 @@ const CheckoutPage = () => {
               handlePayment();
             }}
           >
-            Đặt hàngas
+            Đặt hàng
           </Button>
           <Stack
             direction="row"
