@@ -1,4 +1,4 @@
-import { register, verifyEmail } from "@/store/users/action";
+import { register } from "@/store/users/action";
 import { Icon } from "@iconify/react";
 import {
   Button,
@@ -8,7 +8,6 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
-  Snackbar,
   Stack,
   Typography,
   Box,
@@ -31,7 +30,6 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { authLoading, authError, user } = useSelector((state) => state.user);
-  const [getVerificationCode, setGetVerificationCode] = React.useState(false);
 
   const [registerForm, setRegisterForm] = React.useState({
     email: "",
@@ -39,7 +37,6 @@ const RegisterPage = () => {
     first_name: "",
     last_name: "",
     gender: "male",
-    verificationCode: "",
     birth: {
       day: "",
       month: "",
@@ -258,71 +255,6 @@ const RegisterPage = () => {
                 ),
               }}
             />
-
-            {/* Verification Code Field */}
-            <Stack direction="row" gap="8px" sx={{ alignItems: "stretch" }}>
-              <TextField
-                placeholder="Mã xác nhận 6 chữ số"
-                type="number"
-                value={registerForm.verificationCode}
-                onChange={(e) =>
-                  setRegisterForm({
-                    ...registerForm,
-                    verificationCode: e.target.value,
-                  })
-                }
-                disabled={registerForm.email === ""}
-                sx={{
-                  flex: 1,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "12px",
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                    "& fieldset": {
-                      borderColor: "rgba(0, 0, 0, 0.1)",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "rgba(0, 0, 0, 0.2)",
-                    },
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#1E293B",
-                    },
-                  },
-                  "& input": {
-                    padding: "12px 16px",
-                    fontSize: "14px",
-                  },
-                }}
-              />
-              <Button
-                disabled={registerForm.email === ""}
-                variant="contained"
-                onClick={() => {
-                  dispatch(verifyEmail(registerForm));
-                  setGetVerificationCode(true);
-                }}
-                sx={{
-                  borderRadius: "12px",
-                  paddingX: "24px",
-                  backgroundColor: "#1E293B",
-                  whiteSpace: "nowrap",
-                  flexShrink: 0,
-                  "&:hover": {
-                    backgroundColor: "#0F172A",
-                  },
-                  "&.Mui-disabled": {
-                    backgroundColor: "rgba(0, 0, 0, 0.12)",
-                  },
-                }}
-              >
-                Lấy mã
-              </Button>
-              <Snackbar
-                message="Mã xác nhận đã được gửi đến email của bạn"
-                open={getVerificationCode}
-                onClose={() => setGetVerificationCode(false)}
-                autoHideDuration={3000}
-              />
-            </Stack>
 
             {/* Password Field */}
             <TextField

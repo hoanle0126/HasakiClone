@@ -27,10 +27,6 @@ Route::post('/register', [RegisteredUserController::class, 'store'])
     ->middleware('guest')
     ->name('register');
 
-Route::post('/verify-email', [RegisteredUserController::class, 'sendVerificationCode'])
-    ->middleware('guest')
-    ->name('verify-email');
-
 Route::get('/user', function () {
 
     return new UserResource(request()->user());

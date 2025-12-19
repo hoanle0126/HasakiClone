@@ -28,7 +28,6 @@ class RegisterRequest extends FormRequest
             'password' => ['required','min:8'],
             'birth' => ['required', 'date'],
             'gender' => ['required', 'string', 'in:Nam,Nữ'],
-            'verificationCode' => ['required', 'string', 'size:6'],
             'acceptTerms' => ['accepted'],
         ];
     }
@@ -45,8 +44,6 @@ class RegisterRequest extends FormRequest
             'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự',
             'birth.required' => 'Vui lòng nhập ngày sinh',
             'birth.date' => 'Ngày sinh không hợp lệ',
-            'verificationCode.required' => 'Vui lòng nhập mã xác nhận',
-            'verificationCode.size' => 'Mã xác nhận phải có đúng 6 ký tự',
             'acceptTerms.accepted' => 'Bạn phải đồng ý với các điều khoản dịch vụ',
         ];
     }

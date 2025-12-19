@@ -9,12 +9,9 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Mail\OrderConfirmation;
-use App\Mail\OrderProcessed;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -84,21 +81,13 @@ class OrderController extends Controller
             ]);
         }
 
-        // Load relationships để gửi mail và socket
+        // Load relationships để gửi socket
         $order->load([
             'user:id,first_name,last_name,email',
             'products:id,name,thumbnail,price',
             'address:id,name,phone,street_address,ward,district,province',
             'discountCode:id,code,discount',
         ]);
-
-        // Gửi email xác nhận đơn hàng cho khách hàng
-        try {
-            Mail::to($order->user->email)->send(new OrderConfirmation($order));
-            Log::info('Order confirmation email sent to: ' . $order->user->email);
-        } catch (\Throwable $th) {
-            Log::error('Failed to send order confirmation email: ' . $th->getMessage());
-        }
 
         // Gửi thông báo socket cho admin
         try {
@@ -207,16 +196,8 @@ class OrderController extends Controller
             "discountCode:id,code,discount",
         ]);
 
-        // Nếu đơn hàng được xác nhận (status = completed), gửi email và socket notification
+        // Nếu đơn hàng được xác nhận (status = completed), gửi socket notification
         if ($isStatusChanged) {
-            // Gửi email xác nhận đơn hàng đã được xử lý
-            try {
-                Mail::to($order->user->email)->send(new OrderProcessed($order));
-                Log::info('Order processed email sent to: ' . $order->user->email);
-            } catch (\Throwable $th) {
-                Log::error('Failed to send order processed email: ' . $th->getMessage());
-            }
-
             // Gửi thông báo socket cho user
             try {
                 $client = new Client(['timeout' => 2.0]);
